@@ -1,6 +1,10 @@
 project(derivation LANGUAGES CXX)
 
 cmake_minimum_required(VERSION 3.1)
+#add_definitions(-std=gnu++11)
+#add_definitions(-std=c++11)
+
+set (CMAKE_CXX_STANDARD 11)
 #set(CMAKE_CXX_STANDARD_REQUIRED 11)
 
 set(CMAKE_BUILD_TYPE DEBUG)
