@@ -11,7 +11,9 @@ set(CMAKE_BUILD_TYPE DEBUG)
 
 set(SRC
     tests.cpp
-    derivation.cpp)
+    derivation.cpp
+    celement.cpp
+    celement.h)
 
 enable_testing()
 
