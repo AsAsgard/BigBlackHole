@@ -102,20 +102,128 @@ cRational::operator double()
     return static_cast<double>(this->numer)/static_cast<double>(this->denom);
 }
 
-/*
+// bolshe
 template<typename T1, typename T2>
-bool operator>(T1 &value1, T2 &value2)
+bool operator>(T1 &rValue1, T2 &rValue2)
 {
-    if (typeof (value1) == int) {
-
-    }
-    else
+    if (is_same<T1,cRational>::value)
     {
-        return (value1>value2);
+        return (static_cast<double>(rValue1) > rValue2);
     }
+    if (is_same<T2,cRational>::value)
+    {
+        return (rValue1 > static_cast<double>(rValue2));
+    }
+    return (rValue1 > rValue2);
 }
 
-*/
+template<> bool operator>(cRational &rValue1, cRational &rValue2)
+{
+    return (static_cast<double>(rValue1) > static_cast<double>(rValue2));
+}
+
+
+// menshe
+template<typename T1, typename T2>
+bool operator<(T1 &rValue1, T2 &rValue2)
+{
+    if (is_same<T1,cRational>::value)
+    {
+        return (static_cast<double>(rValue1) < rValue2);
+    }
+    if (is_same<T2,cRational>::value)
+    {
+        return (rValue1 < static_cast<double>(rValue2));
+    }
+    return (rValue1 < rValue2);
+}
+
+template<> bool operator<(cRational &rValue1, cRational &rValue2)
+{
+    return (static_cast<double>(rValue1) < static_cast<double>(rValue2));
+}
+
+// bolshe =
+template<typename T1, typename T2>
+bool operator>=(T1 &rValue1, T2 &rValue2)
+{
+    if (is_same<T1,cRational>::value)
+    {
+        return (static_cast<double>(rValue1) >= rValue2);
+    }
+    if (is_same<T2,cRational>::value)
+    {
+        return (rValue1 >= static_cast<double>(rValue2));
+    }
+    return (rValue1 >= rValue2);
+}
+
+template<> bool operator>=(cRational &rValue1, cRational &rValue2)
+{
+    return (static_cast<double>(rValue1) >= static_cast<double>(rValue2));
+}
+
+// menshe =
+template<typename T1, typename T2>
+bool operator<=(T1 &rValue1, T2 &rValue2)
+{
+    if (is_same<T1,cRational>::value)
+    {
+        return (static_cast<double>(rValue1) <= rValue2);
+    }
+    if (is_same<T2,cRational>::value)
+    {
+        return (rValue1 <= static_cast<double>(rValue2));
+    }
+    return (rValue1 <= rValue2);
+}
+
+template<> bool operator<=(cRational &rValue1, cRational &rValue2)
+{
+    return (static_cast<double>(rValue1) <= static_cast<double>(rValue2));
+}
+
+// ==
+template<typename T1, typename T2>
+bool operator==(T1 &rValue1, T2 &rValue2)
+{
+    if (is_same<T1,cRational>::value)
+    {
+        return (static_cast<double>(rValue1) == rValue2);
+    }
+    if (is_same<T2,cRational>::value)
+    {
+        return (rValue1 == static_cast<double>(rValue2));
+    }
+    return (rValue1 == rValue2);
+}
+
+template<> bool operator==(cRational &rValue1, cRational &rValue2)
+{
+    return (static_cast<double>(rValue1) == static_cast<double>(rValue2));
+}
+
+// !=
+template<typename T1, typename T2>
+bool operator!=(T1 &rValue1, T2 &rValue2)
+{
+    if (is_same<T1,cRational>::value)
+    {
+        return (static_cast<double>(rValue1) != rValue2);
+    }
+    if (is_same<T2,cRational>::value)
+    {
+        return (rValue1 != static_cast<double>(rValue2));
+    }
+    return (rValue1 != rValue2);
+}
+
+template<> bool operator!=(cRational &rValue1, cRational &rValue2)
+{
+    return (static_cast<double>(rValue1) != static_cast<double>(rValue2));
+}
+
+// end comparison
 
 cRational& operator+(const cRational & rRational, int value)
 {

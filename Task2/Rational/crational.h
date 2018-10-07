@@ -38,17 +38,22 @@ public:
 
 // comparison
 template<typename T1, typename T2>
-bool operator>(T1 &value1, T2 &value2);
-template<typename T>
-bool operator<(cRational &rRational, T &value);
-template<typename T>
-bool operator>=(cRational &rRational, T &value);
-template<typename T>
-bool operator<=(cRational &rRational, T &value);
-template<typename T>
-bool operator==(cRational &rRational, T &value);
-template<typename T>
-bool operator!=(cRational &rRational, T &value);
+bool operator>(T1 &rValue1, T2 &rValue2);
+
+template<typename T1, typename T2>
+bool operator<(T1 &rValue1, T2 &rValue2);
+
+template<typename T1, typename T2>
+bool operator>=(T1 &rValue1, T2 &rValue2);
+
+template<typename T1, typename T2>
+bool operator<=(T1 &rValue1, T2 &rValue2);
+
+template<typename T1, typename T2>
+bool operator==(T1 &rValue1, T2 &rValue2);
+
+template<typename T1, typename T2>
+bool operator!=(T1 &rValue1, T2 &rValue2);
 
 // operators
 cRational& operator+(const cRational & rRational, int value);

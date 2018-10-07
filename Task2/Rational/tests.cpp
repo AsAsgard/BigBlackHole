@@ -41,6 +41,22 @@ TEST_CASE("Slozhenie")
     CHECK(z.GetDenom() == 15);
 }
 
+TEST_CASE("Bolshe")
+{
+    cRational x(3,8);
+    cRational y(14,4);
+    cRational z(-32,3);
+    CHECK((x>y) == false);
+    CHECK((x>z) == true);
+    CHECK((y>z) == true);
+    CHECK((x>1) == false);
+    CHECK((x>0) == true);
+    CHECK((z>-11) == true);
+    CHECK((y>2.5) == true);
+    CHECK((3>2.5) == true);
+    CHECK((0>z) == true);
+}
+
 TEST_SUITE_BEGIN("Output");
 
 TEST_SUITE_END();
