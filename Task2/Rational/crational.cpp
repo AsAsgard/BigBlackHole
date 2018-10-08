@@ -2,6 +2,7 @@
 
 cRational::cRational(int newNumer, int newDenom)
 {
+    if (newDenom == 0) throw std::invalid_argument("Division by zero!");
     this->numer = newNumer;
     if (newDenom < 0)
     {
@@ -14,8 +15,21 @@ cRational::cRational(int newNumer, int newDenom)
 
 cRational::cRational(const cRational &rRational)
 {
-    this->numer = rRational.numer;
-    this->denom = rRational.denom;
+    if (this != &rRational)
+    {
+        this->numer = rRational.numer;
+        this->denom = rRational.denom;
+    }
+}
+
+cRational::cRational(cRational &&rrRational)
+{
+    if (this != &rrRational)
+    {
+        this->numer = rrRational.numer;
+        this->denom = rrRational.denom;
+        rrRational.numer = 0; rrRational.denom = 1;
+    }
 }
 
 void cRational::RationalReduction()
@@ -40,6 +54,7 @@ void cRational::SetNumer(int newNumer)
 
 void cRational::SetDenom(int newDenom)
 {
+    if (newDenom == 0) throw std::invalid_argument("Division by zero!");
     if (newDenom < 0)
     {
         this->numer *= -1;
@@ -51,6 +66,7 @@ void cRational::SetDenom(int newDenom)
 
 void cRational::SetRational(int newNumer, int newDenom)
 {
+    if (newDenom == 0) throw std::invalid_argument("Division by zero!");
     this->numer = newNumer;
     if (newDenom < 0)
     {
@@ -59,6 +75,19 @@ void cRational::SetRational(int newNumer, int newDenom)
     }
     this->denom = newDenom;
     this->RationalReduction();
+}
+
+cRational& cRational::powMinusOne()
+{
+    if (this->numer != 0)
+    {
+        this->numer = this->numer + this->denom - (this->denom = this->numer);
+    }
+    else
+    {
+        throw std::invalid_argument("Division by zero!");
+    }
+    return (*this);
 }
 
 cRational& cRational::operator+=(int intValue)
@@ -92,159 +121,112 @@ cRational& cRational::operator/=(int intValue)
     }
     else
     {
-        std::cerr << "division by zero" << endl;
+        throw std::invalid_argument("Division by zero!");
     }
     return (*this);
 }
 
+cRational& cRational::operator+=(const cRational &rRational)
+{
+    this->numer = this->numer * rRational.GetDenom() + rRational.GetNumer() * this->denom;
+    this->denom = this->denom * rRational.GetDenom();
+    this->RationalReduction();
+    return (*this);
+}
+
+cRational& cRational::operator-=(const cRational &rRational)
+{
+    this->numer = this->numer * rRational.GetDenom() - rRational.GetNumer() * this->denom;
+    this->denom = this->denom * rRational.GetDenom();
+    this->RationalReduction();
+    return (*this);
+}
+
+cRational& cRational::operator*=(const cRational &rRational)
+{
+    this->numer *= rRational.GetNumer();
+    this->denom *= rRational.GetDenom();
+    this->RationalReduction();
+    return (*this);
+}
+
+cRational& cRational::operator/=(const cRational &rRational)
+{
+    if (rRational.GetDenom() != 0)
+    {
+        this->denom *= abs(rRational.GetNumer());
+        this->numer *= rRational.GetDenom()*(rRational.GetNumer()/abs(rRational.GetNumer()));
+        this->RationalReduction();
+    }
+    else
+    {
+        throw std::invalid_argument("Division by zero!");
+    }
+    return (*this);
+}
+
+/*
+ * cRational to double
+ * */
 cRational::operator double()
 {
     return static_cast<double>(this->numer)/static_cast<double>(this->denom);
 }
 
-// bolshe
-template<typename T1, typename T2>
-bool operator>(T1 &rValue1, T2 &rValue2)
+/*
+ * operators + - and *
+ * */
+cRational operator+(cRational RationalValue, int value) {RationalValue += value; return RationalValue;}
+cRational operator+(cRational RationalValue, const cRational & rRational) {RationalValue += rRational; return RationalValue;}
+cRational operator+(int value, cRational RationalValue) {RationalValue += value; return RationalValue;}
+
+cRational operator-(cRational RationalValue, int value) {RationalValue -= value; return RationalValue;}
+cRational operator-(cRational RationalValue, const cRational & rRational) {RationalValue -= rRational; return RationalValue;}
+cRational operator-(int value, cRational RationalValue) {RationalValue += value; return -RationalValue;}
+
+cRational operator*(cRational RationalValue, int value) {RationalValue *= value; return RationalValue;}
+cRational operator*(cRational RationalValue, const cRational & rRational) {RationalValue *= rRational; return RationalValue;}
+cRational operator*(int value, cRational RationalValue) {RationalValue *= value; return RationalValue;}
+
+/*
+ * operator /
+ * */
+
+cRational operator/(cRational RationalValue, int value)
 {
-    if (is_same<T1,cRational>::value)
-    {
-        return (static_cast<double>(rValue1) > rValue2);
+    try {
+        RationalValue /= value;
+    } catch (const std::invalid_argument & ex) {
+        throw ex;
     }
-    if (is_same<T2,cRational>::value)
-    {
-        return (rValue1 > static_cast<double>(rValue2));
+    return RationalValue;
+}
+
+cRational operator/(cRational RationalValue, const cRational & rRational)
+{
+    try {
+        RationalValue /= rRational;
+    } catch (const std::invalid_argument & ex) {
+        throw ex;
     }
-    return (rValue1 > rValue2);
+    return RationalValue;
 }
 
-template<> bool operator>(cRational &rValue1, cRational &rValue2)
+cRational operator/(int value, cRational RationalValue)
 {
-    return (static_cast<double>(rValue1) > static_cast<double>(rValue2));
-}
-
-
-// menshe
-template<typename T1, typename T2>
-bool operator<(T1 &rValue1, T2 &rValue2)
-{
-    if (is_same<T1,cRational>::value)
-    {
-        return (static_cast<double>(rValue1) < rValue2);
+    try {
+        RationalValue /= value;
+        return RationalValue.powMinusOne();
+    } catch (const std::invalid_argument & ex) {
+        throw ex;
     }
-    if (is_same<T2,cRational>::value)
-    {
-        return (rValue1 < static_cast<double>(rValue2));
-    }
-    return (rValue1 < rValue2);
 }
 
-template<> bool operator<(cRational &rValue1, cRational &rValue2)
+/*
+ * Output
+ * */
+std::ostream& operator<<(std::ostream& out, const cRational &rRational)
 {
-    return (static_cast<double>(rValue1) < static_cast<double>(rValue2));
-}
-
-// bolshe =
-template<typename T1, typename T2>
-bool operator>=(T1 &rValue1, T2 &rValue2)
-{
-    if (is_same<T1,cRational>::value)
-    {
-        return (static_cast<double>(rValue1) >= rValue2);
-    }
-    if (is_same<T2,cRational>::value)
-    {
-        return (rValue1 >= static_cast<double>(rValue2));
-    }
-    return (rValue1 >= rValue2);
-}
-
-template<> bool operator>=(cRational &rValue1, cRational &rValue2)
-{
-    return (static_cast<double>(rValue1) >= static_cast<double>(rValue2));
-}
-
-// menshe =
-template<typename T1, typename T2>
-bool operator<=(T1 &rValue1, T2 &rValue2)
-{
-    if (is_same<T1,cRational>::value)
-    {
-        return (static_cast<double>(rValue1) <= rValue2);
-    }
-    if (is_same<T2,cRational>::value)
-    {
-        return (rValue1 <= static_cast<double>(rValue2));
-    }
-    return (rValue1 <= rValue2);
-}
-
-template<> bool operator<=(cRational &rValue1, cRational &rValue2)
-{
-    return (static_cast<double>(rValue1) <= static_cast<double>(rValue2));
-}
-
-// ==
-template<typename T1, typename T2>
-bool operator==(T1 &rValue1, T2 &rValue2)
-{
-    if (is_same<T1,cRational>::value)
-    {
-        return (static_cast<double>(rValue1) == rValue2);
-    }
-    if (is_same<T2,cRational>::value)
-    {
-        return (rValue1 == static_cast<double>(rValue2));
-    }
-    return (rValue1 == rValue2);
-}
-
-template<> bool operator==(cRational &rValue1, cRational &rValue2)
-{
-    return (static_cast<double>(rValue1) == static_cast<double>(rValue2));
-}
-
-// !=
-template<typename T1, typename T2>
-bool operator!=(T1 &rValue1, T2 &rValue2)
-{
-    if (is_same<T1,cRational>::value)
-    {
-        return (static_cast<double>(rValue1) != rValue2);
-    }
-    if (is_same<T2,cRational>::value)
-    {
-        return (rValue1 != static_cast<double>(rValue2));
-    }
-    return (rValue1 != rValue2);
-}
-
-template<> bool operator!=(cRational &rValue1, cRational &rValue2)
-{
-    return (static_cast<double>(rValue1) != static_cast<double>(rValue2));
-}
-
-// end comparison
-
-cRational& operator+(const cRational & rRational, int value)
-{
-    cRational *pRational = new cRational;
-    pRational->SetNumer(rRational.GetNumer() + (rRational.GetDenom() * value));
-    pRational->SetDenom(rRational.GetDenom());
-    return *pRational;
-}
-
-cRational& operator+(int value ,const cRational & rRational)
-{
-    cRational *pRational = new cRational;
-    pRational->SetNumer(rRational.GetNumer() + (rRational.GetDenom() * value));
-    pRational->SetDenom(rRational.GetDenom());
-    return *pRational;
-}
-
-cRational& operator+(const cRational & rRational1 ,const cRational & rRational2)
-{
-    cRational *pRational = new cRational;
-    pRational->SetNumer(rRational1.GetNumer()*rRational2.GetDenom() + rRational2.GetNumer()*rRational1.GetDenom());
-    pRational->SetDenom(rRational1.GetDenom()*rRational2.GetDenom());
-    return *pRational;
+    out << rRational.GetNumer() << "/" << rRational.GetDenom();
+    return out;
 }

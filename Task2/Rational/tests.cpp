@@ -41,6 +41,41 @@ TEST_CASE("Slozhenie")
     CHECK(z.GetDenom() == 15);
 }
 
+TEST_CASE("Other math operations")
+{
+    cRational x(3,4);
+    cRational y(-2,7);
+    cRational z = x - y;
+    cRational f(29,28);
+    cRational l(-21,8);
+    cRational bzz(5,6);
+    bzz -= x;
+    z /= 2;
+    z = z* 2;
+    CHECK ((z == bzz) ==false);
+    CHECK ((z == f) == true);
+    CHECK (((z-=f) == 0) == true);
+    CHECK (((x/y) == l) == true);
+    CHECK (((x*y) == cRational(-3,14)) == true );
+    CHECK (((x*y) != cRational(-2,14)) == true );
+    CHECK (((x*4) == cRational(3,1)) == true );
+    CHECK (((4*y) == cRational(-8,7)) == true );
+    CHECK (((4/x) == cRational(16,3)) == true );
+    CHECK (((5/y) == -17.5) == true);
+    CHECK_THROWS (4/cRational(0,3));
+}
+
+TEST_CASE("OUTPUT")
+{
+    cRational x(3,4);
+    cRational y(-2,7);
+    cout << x*y << "   " << cRational(-3,14) << endl;
+    cout << 4*y << "   " << cRational(-8,7) << endl;
+    cout << 4/x << "   " << cRational(16,3) << endl;
+}
+
+TEST_SUITE_BEGIN("Comparison");
+
 TEST_CASE("Bolshe")
 {
     cRational x(3,8);
@@ -57,6 +92,25 @@ TEST_CASE("Bolshe")
     CHECK((0>z) == true);
 }
 
-TEST_SUITE_BEGIN("Output");
+TEST_CASE("All operators")
+{
+    cRational x(3,8);
+    cRational y(3,8);
+    CHECK((x>y) == false);
+    CHECK((x<y) == false);
+    CHECK((y==x) == true);
+    CHECK((y==0.375) == true);
+    CHECK((x>=0.375) == true);
+    CHECK((x>=0.376) == false);
+    CHECK((1<=y) == false);
+    CHECK((-y>0) == false);
+    CHECK((0<(+y)) == true);
+    CHECK((0<(+y+(-1))) == false);
+    CHECK((0<(+y)) == true);
+    CHECK((y!=x+1) == true);
+    CHECK((y!=x) == false);
+}
 
 TEST_SUITE_END();
+
+
