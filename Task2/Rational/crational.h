@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <stdexcept>
+#include <string>
 
 using namespace std;
 
@@ -36,8 +37,9 @@ public:
     cRational& operator+() { return (*this);}
     cRational& operator=(int intValue) { this->numer = intValue; this->denom = 1; return (*this);}
     cRational& operator=(const cRational &rRational) { this->numer = rRational.numer; this->denom = rRational.denom; return (*this);}
-    // cRational to double
+    // cRational to double and to int
     operator double();
+    explicit operator int();
     // comparison
     bool operator>(const cRational &rRational) const {return (this->GetNumer()*rRational.GetDenom() > rRational.GetNumer()*this->GetDenom());}
     bool operator<(const cRational &rRational) const {return (rRational > *this);}
@@ -71,8 +73,8 @@ cRational operator/(cRational RationalValue, int value);
 cRational operator/(cRational RationalValue, const cRational & rRational);
 cRational operator/(int value, cRational RationalValue);
 
-// output
+// output and input
 std::ostream& operator<<(std::ostream& out, const cRational &rRational);
-
+std::istream& operator>>(std::istream& in, cRational &rRational);
 
 #endif // CRATIONAL_H

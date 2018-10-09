@@ -174,6 +174,17 @@ cRational::operator double()
 }
 
 /*
+ * cRational to int
+ * */
+cRational::operator int()
+{
+    if ( (static_cast<double>(*this) - static_cast<int>(static_cast<double>(*this))) >= 0.5 ) return static_cast<int>(static_cast<double>(*this) + 1);
+    if ( (static_cast<double>(*this) - static_cast<int>(static_cast<double>(*this))) <= -0.5 ) return static_cast<int>(static_cast<double>(*this) - 1);
+    return static_cast<int>(static_cast<double>(*this));
+}
+
+
+/*
  * operators + - and *
  * */
 cRational operator+(cRational RationalValue, int value) {RationalValue += value; return RationalValue;}
@@ -229,4 +240,28 @@ std::ostream& operator<<(std::ostream& out, const cRational &rRational)
 {
     out << rRational.GetNumer() << "/" << rRational.GetDenom();
     return out;
+}
+
+/*
+ * Input
+ * */
+std::istream& operator>>(std::istream& in, cRational &rRational)
+{
+    rRational.SetRational(0,1);
+    cout << "Input rational value in format: intValue1/intValue2. intValue2 must be not a zero" << endl;
+    string str = "";
+    while (true)
+    {
+        try {
+            in >> str;
+            if (str.find("/") == string::npos) throw std::invalid_argument("Bad rational value.");
+            rRational.SetNumer( stoi( str.substr(0,str.find("/")) ) );
+            rRational.SetDenom( stoi( str.substr(str.find("/")+1) ) );
+            return in;
+        } catch (const exception &ex) {
+            cout << ex.what() <<  "  Try again."<< endl;
+            cin.clear();
+            cin.ignore();
+        }
+    }
 }

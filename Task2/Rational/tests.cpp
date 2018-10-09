@@ -74,6 +74,7 @@ TEST_CASE("OUTPUT")
     cout << 4/x << "   " << cRational(16,3) << endl;
 }
 
+
 TEST_SUITE_BEGIN("Comparison");
 
 TEST_CASE("Bolshe")
@@ -109,8 +110,51 @@ TEST_CASE("All operators")
     CHECK((0<(+y)) == true);
     CHECK((y!=x+1) == true);
     CHECK((y!=x) == false);
+    cRational z(26,5);
+    CHECK((z==5) == false);
+    CHECK((static_cast<int>(z)==5) == true);
+    CHECK((static_cast<int>(z)==6) == false);
+    z.SetRational(29,5);
+    CHECK((static_cast<int>(z)==6) == true);
+    z.SetRational(-29,5);
+    CHECK((static_cast<int>(z)==-6) == true);
+    CHECK((static_cast<int>(z)==-5) == false);
+    z.SetRational(-26,5);
+    CHECK((static_cast<int>(z)==-5) == true);
 }
 
 TEST_SUITE_END();
+
+TEST_CASE("INPUT")
+{
+    cRational x;
+    cin >> x; // 3/8
+    cRational y(3,8);
+    CHECK((x>y) == false);
+    CHECK((x<y) == false);
+    CHECK((y==x) == true);
+    CHECK((y==0.375) == true);
+    CHECK((x>=0.375) == true);
+    CHECK((x>=0.376) == false);
+    CHECK((1<=y) == false);
+    CHECK((-y>0) == false);
+    CHECK((0<(+y)) == true);
+    CHECK((0<(+y+(-1))) == false);
+    CHECK((0<(+y)) == true);
+    CHECK((y!=x+1) == true);
+    CHECK((y!=x) == false);
+    cRational z;
+    cin >> z; // 26/5
+    CHECK((z==5) == false);
+    CHECK((static_cast<int>(z)==5) == true);
+    CHECK((static_cast<int>(z)==6) == false);
+    cin >> z; // 29/5
+    CHECK((static_cast<int>(z)==6) == true);
+    cin >> z; // -29/5
+    CHECK((static_cast<int>(z)==-6) == true);
+    CHECK((static_cast<int>(z)==-5) == false);
+    cin >> z; // -26/5
+    CHECK((static_cast<int>(z)==-5) == true);
+}
 
 
