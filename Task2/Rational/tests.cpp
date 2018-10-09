@@ -146,18 +146,22 @@ TEST_CASE("INPUT")
     CHECK((y!=x+1) == true);
     CHECK((y!=x) == false);
     cRational z;
+    isstr.clear();
     isstr.str("26/5");
     isstr >> z; // 26/5
     CHECK((z==5) == false);
     CHECK((static_cast<int>(z)==5) == true);
     CHECK((static_cast<int>(z)==6) == false);
+    isstr.clear();
     isstr.str("29/5");
     isstr >> z; // 29/5
     CHECK((static_cast<int>(z)==6) == true);
+    isstr.clear();
     isstr.str("-29/5");
     isstr >> z; // -29/5
     CHECK((static_cast<int>(z)==-6) == true);
     CHECK((static_cast<int>(z)==-5) == false);
+    isstr.clear();
     isstr.str("-26/5");
     isstr >> z; // -26/5
     CHECK((static_cast<int>(z)==-5) == true);
