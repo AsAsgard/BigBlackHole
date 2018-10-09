@@ -128,7 +128,9 @@ TEST_SUITE_END();
 TEST_CASE("INPUT")
 {
     cRational x;
-    cin >> x; // 3/8
+    std::istringstream isstr;
+    isstr.str("3/8");
+    isstr >> x;
     cRational y(3,8);
     CHECK((x>y) == false);
     CHECK((x<y) == false);
@@ -144,16 +146,20 @@ TEST_CASE("INPUT")
     CHECK((y!=x+1) == true);
     CHECK((y!=x) == false);
     cRational z;
-    cin >> z; // 26/5
+    isstr.str("26/5");
+    isstr >> z; // 26/5
     CHECK((z==5) == false);
     CHECK((static_cast<int>(z)==5) == true);
     CHECK((static_cast<int>(z)==6) == false);
-    cin >> z; // 29/5
+    isstr.str("29/5");
+    isstr >> z; // 29/5
     CHECK((static_cast<int>(z)==6) == true);
-    cin >> z; // -29/5
+    isstr.str("-29/5");
+    isstr >> z; // -29/5
     CHECK((static_cast<int>(z)==-6) == true);
     CHECK((static_cast<int>(z)==-5) == false);
-    cin >> z; // -26/5
+    isstr.str("-26/5");
+    isstr >> z; // -26/5
     CHECK((static_cast<int>(z)==-5) == true);
 }
 

@@ -49,6 +49,7 @@ public:
     bool operator!=(const cRational &rRational) const {return !(*this == rRational);}
     // constructor
     cRational() : numer(0), denom(1) {}
+    explicit cRational(int newNumer) : numer(newNumer), denom(1) {}
     cRational(int newNumer, int newDenom);
     cRational(const cRational &rRational);
     cRational(cRational &&rrRational);
