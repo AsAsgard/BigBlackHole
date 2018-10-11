@@ -33,10 +33,11 @@ public:
     cRational& operator-=(const cRational &rRational);
     cRational& operator*=(const cRational &rRational);
     cRational& operator/=(const cRational &rRational);
-    cRational& operator-() { cRational *pRational = new cRational( - this->numer, this->denom); return (*pRational);}
+    cRational  operator-() { cRational RationalValue( - this->numer, this->denom); return (RationalValue);}
     cRational& operator+() { return (*this);}
     cRational& operator=(int intValue) { this->numer = intValue; this->denom = 1; return (*this);}
     cRational& operator=(const cRational &rRational) { this->numer = rRational.numer; this->denom = rRational.denom; return (*this);}
+    cRational& operator=(cRational &&rrRational) noexcept;
     // cRational to double and to int
     operator double();
     explicit operator int();
@@ -47,12 +48,14 @@ public:
     bool operator<=(const cRational &rRational) const {return !(*this > rRational);}
     bool operator==(const cRational &rRational) const {return (this->GetNumer() == rRational.GetNumer() && this->GetDenom() == rRational.GetDenom());}
     bool operator!=(const cRational &rRational) const {return !(*this == rRational);}
+    // swap
+    void Swap(cRational &rRational) noexcept;
     // constructor
-    cRational() : numer(0), denom(1) {}
+    cRational() noexcept : numer(0), denom(1) {}
     explicit cRational(int newNumer) : numer(newNumer), denom(1) {}
     cRational(int newNumer, int newDenom);
     cRational(const cRational &rRational);
-    cRational(cRational &&rrRational);
+    cRational(cRational &&rrRational) noexcept : cRational() { if (this != &rrRational) this->Swap(rrRational);}
     template<typename T1, typename T2>
     cRational(T1, T2) = delete;
 };

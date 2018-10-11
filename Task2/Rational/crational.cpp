@@ -22,16 +22,6 @@ cRational::cRational(const cRational &rRational)
     }
 }
 
-cRational::cRational(cRational &&rrRational)
-{
-    if (this != &rrRational)
-    {
-        this->numer = rrRational.numer;
-        this->denom = rrRational.denom;
-        rrRational.numer = 0; rrRational.denom = 1;
-    }
-}
-
 void cRational::RationalReduction()
 {
     int a = abs(this->numer);
@@ -44,6 +34,15 @@ void cRational::RationalReduction()
     }
     this->numer /= a;
     this->denom /= a;
+}
+
+void cRational::Swap(cRational &rRational) noexcept
+{
+    if (this != &rRational)
+    {
+        this->numer = this->numer + rRational.numer - (rRational.numer = this->numer);
+        this->denom = this->denom + rRational.denom - (rRational.denom = this->denom);
+    }
 }
 
 void cRational::SetNumer(int newNumer)
@@ -165,6 +164,13 @@ cRational& cRational::operator/=(const cRational &rRational)
     return (*this);
 }
 
+cRational& cRational::operator=(cRational &&rrRational) noexcept
+{
+    cRational tmp(std::move(rrRational));
+    this->Swap(tmp);
+    return *this;
+}
+
 /*
  * cRational to double
  * */
@@ -205,32 +211,20 @@ cRational operator*(int value, cRational RationalValue) {RationalValue *= value;
 
 cRational operator/(cRational RationalValue, int value)
 {
-    try {
-        RationalValue /= value;
-    } catch (const std::invalid_argument & ex) {
-        throw ex;
-    }
+    RationalValue /= value;
     return RationalValue;
 }
 
 cRational operator/(cRational RationalValue, const cRational & rRational)
 {
-    try {
-        RationalValue /= rRational;
-    } catch (const std::invalid_argument & ex) {
-        throw ex;
-    }
+    RationalValue /= rRational;
     return RationalValue;
 }
 
 cRational operator/(int value, cRational RationalValue)
 {
-    try {
-        RationalValue /= value;
-        return RationalValue.powMinusOne();
-    } catch (const std::invalid_argument & ex) {
-        throw ex;
-    }
+    RationalValue /= value;
+    return RationalValue.powMinusOne();
 }
 
 /*
@@ -248,20 +242,16 @@ std::ostream& operator<<(std::ostream& out, const cRational &rRational)
 std::istream& operator>>(std::istream& in, cRational &rRational)
 {
     rRational.SetRational(0,1);
-    cout << "Input rational value in format: intValue1/intValue2. intValue2 must be not a zero" << endl;
     string str = "";
-    while (true)
-    {
-        try {
-            in >> str;
-            if (str.find("/") == string::npos) throw std::invalid_argument("Bad rational value.");
-            rRational.SetNumer( stoi( str.substr(0,str.find("/")) ) );
-            rRational.SetDenom( stoi( str.substr(str.find("/")+1) ) );
-            return in;
-        } catch (const exception &ex) {
-            cout << ex.what() <<  "  Try again."<< endl;
-            cin.clear();
-            cin.ignore();
-        }
+    try {
+        in >> str;
+        if (str.find("/") == string::npos) throw std::invalid_argument("Bad rational value.");
+        rRational.SetNumer( stoi( str.substr(0,str.find("/")) ) );
+        rRational.SetDenom( stoi( str.substr(str.find("/")+1) ) );
+        return in;
+    } catch (const exception &) {
+        in.clear();
+        in.ignore();
+        throw std::invalid_argument("Bad rational value.");
     }
 }
