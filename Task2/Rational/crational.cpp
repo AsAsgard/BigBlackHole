@@ -151,7 +151,7 @@ cRational& cRational::operator*=(const cRational &rRational)
 
 cRational& cRational::operator/=(const cRational &rRational)
 {
-    if (rRational.GetDenom() != 0)
+    if (rRational.GetNumer() != 0)
     {
         this->denom *= abs(rRational.GetNumer());
         this->numer *= rRational.GetDenom()*(rRational.GetNumer()/abs(rRational.GetNumer()));
@@ -241,13 +241,12 @@ std::ostream& operator<<(std::ostream& out, const cRational &rRational)
  * */
 std::istream& operator>>(std::istream& in, cRational &rRational)
 {
-    rRational.SetRational(0,1);
     string str = "";
     try {
         in >> str;
+        if (str.length()==0)return in;
         if (str.find("/") == string::npos) throw std::invalid_argument("Bad rational value.");
-        rRational.SetNumer( stoi( str.substr(0,str.find("/")) ) );
-        rRational.SetDenom( stoi( str.substr(str.find("/")+1) ) );
+        rRational.SetRational( stoi( str.substr(0,str.find("/")) ), stoi( str.substr(str.find("/")+1) ) );
         return in;
     } catch (const exception &) {
         in.clear();
