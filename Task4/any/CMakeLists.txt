@@ -1,4 +1,10 @@
 cmake_minimum_required(VERSION 2.8)
 
-project(any)
-add_executable(${PROJECT_NAME} "main.cpp")
+project(any LANGUAGES CXX)
+
+set (CMAKE_CXX_STANDARD 11)
+
+set(SRC
+    main.cpp)
+
+add_executable(${PROJECT_NAME} ${SRC})
