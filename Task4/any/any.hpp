@@ -25,7 +25,7 @@ const std::type_info& any::type() const
     }
 }
 
-template<typename T> T& any::any_cast() const
+template<typename T> T any::any_cast() const
 {
     if (typeid (T) == type() && pvalue)
     {
@@ -35,7 +35,7 @@ template<typename T> T& any::any_cast() const
     }
 }
 
-template<typename T> T& any_cast(const any &a)
+template<typename T> T any_cast(const any &a)
 {
     return a.any_cast<T>();
 }

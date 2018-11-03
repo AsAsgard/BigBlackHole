@@ -12,7 +12,7 @@ namespace NewAny {
         ~any() {}
         template<typename T> any(const T &newObject);
         template<typename T> any& operator=(const T &newObject);
-        template<typename T> T& any_cast() const;
+        template<typename T> T any_cast() const;
         const std::type_info& type() const;
     private:
         class base
