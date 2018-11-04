@@ -1,4 +1,4 @@
 cmake_minimum_required(VERSION 2.8)
 
-project(Task5)
+project(print_tuple)
 add_executable(${PROJECT_NAME} "main.cpp")
