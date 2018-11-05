@@ -20,9 +20,8 @@ static TPrinterPrivate pr;
 template<std::size_t N, typename... Types>
 class TPrinter {
 public:
-    static /*std::stringstream& */ void print_tuple(/*std::stringstream& ss, */const std::tuple<Types...> &t)
+    static void print_tuple(const std::tuple<Types...> &t)
     {
-//        ss << TPrinter<N-1, Types...>::print_tuple(ss,t).str() << ", " << std::get<N-1>(t);
         TPrinter<N-1, Types...>::print_tuple(t);
         pr.ss << ", " <<std::get<N-1>(t);
     }
@@ -32,10 +31,9 @@ template<typename... Types>
 class TPrinter<1, Types...>
 {
 public:
-    static /*std::stringstream&*/void print_tuple(/*std::stringstream& ss, */const std::tuple<Types...> &t)
+    static void print_tuple(const std::tuple<Types...> &t)
     {
         pr.ss << std::get<0>(t);
-//        return ss;
     }
 };
 
@@ -43,10 +41,7 @@ template<typename... Types>
 class TPrinter<0, Types...>
 {
 public:
-    static /*std::stringstream&*/void print_tuple(/*std::stringstream& ss, */const std::tuple<Types...> &t)
-    {
-//        return ss;
-    }
+    static void print_tuple(const std::tuple<Types...> &t) {}
 };
 
 template<typename... Types>
