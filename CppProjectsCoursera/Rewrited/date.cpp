@@ -34,10 +34,10 @@ ostream& operator<<(ostream& out, const Date& date)
     return out;
 }
 
-void EnsureNextSymbol(stringstream& in)
+void EnsureNextSymbol(stringstream& in, const string& input)
 {
     if (in.peek() != '-') {
-        throw std::invalid_argument("No '-' in date declaration");
+        throw invalid_argument("Wrong date format: "+input);
     }
     in.ignore(1);
 }
@@ -48,9 +48,9 @@ istream& operator>>(istream& in, Date& date)
     in >> input;
     stringstream InputStream(input);
     InputStream >> date.year;
-    EnsureNextSymbol(InputStream);
+    EnsureNextSymbol(InputStream, input);
     InputStream >> date.month;
-    EnsureNextSymbol(InputStream);
+    EnsureNextSymbol(InputStream, input);
     if(!(InputStream >> date.day)) throw invalid_argument("Wrong date format: "+input);
     if(!InputStream.eof()) throw invalid_argument("Wrong date format: "+input);
     if (date.month < 1 || date.month > 12) throw invalid_argument("Month value is invalid: "+to_string(date.month));
