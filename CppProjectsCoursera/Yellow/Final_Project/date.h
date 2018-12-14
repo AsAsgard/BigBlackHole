@@ -4,16 +4,6 @@
 #include <iostream>
 #include <sstream>
 
-class invalid_month : public std::invalid_argument {
-public:
-    invalid_month(const char * pchar) : invalid_argument(pchar) {}
-};
-
-class invalid_day : public std::invalid_argument {
-public:
-    invalid_day(const char * pchar) : invalid_argument(pchar) {}
-};
-
 class Date {
 public:
   Date(int year = 0, int month = 0, int day = 0) : year(year), month(month), day(day) {}

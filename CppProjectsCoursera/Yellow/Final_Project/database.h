@@ -11,9 +11,6 @@ class Database {
 public:
   void Add(const Date& date, const std::string& event);
 
-  bool DeleteEvent(const Date& date, const std::string& event);
-  int  DeleteDate(const Date& date);
-
   template<typename PredFunc> int RemoveIf(PredFunc predicate)
   {
       int DeletedCount = 0;
@@ -41,8 +38,6 @@ public:
       return DeletedCount;
   }
 
-  std::set<std::string> Find(const Date& date) const;
-
   template<typename PredFunc> std::vector<std::pair<Date, std::string>> FindIf(PredFunc predicate) const
   {
       std::vector<std::pair<Date, std::string>> Result;
@@ -62,9 +57,8 @@ public:
       return Result;
   }
 
-
   void Print(std::ostream& out) const;
-
+ 
   std::pair<Date, std::string> Last(const Date& date) const;
 
 private:

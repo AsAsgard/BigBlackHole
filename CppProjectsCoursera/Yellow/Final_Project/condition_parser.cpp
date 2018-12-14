@@ -57,7 +57,7 @@ template <class It> shared_ptr<Node> ParseComparison(It& current, It end) {
   }
 }
 
-template <class It>
+template<class It>
 shared_ptr<Node> ParseExpression(It& current, It end, unsigned precedence) {
   if (current == end) {
     return shared_ptr<Node>();

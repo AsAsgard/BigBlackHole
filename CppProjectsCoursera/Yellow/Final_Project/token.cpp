@@ -6,7 +6,7 @@ using namespace std;
 
 vector<Token> Tokenize(istream& cl) {
   vector<Token> tokens;
-
+  
   char c;
   while (cl >> c) {
     if (isdigit(c)) {
