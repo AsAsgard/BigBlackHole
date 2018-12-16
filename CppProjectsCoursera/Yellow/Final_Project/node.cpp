@@ -17,7 +17,7 @@ bool DateComparisonNode::Evaluate(const Date& date, const std::string& event) co
     else if (operation == Comparison::Greater) { return date > desiredDate;}
     else if (operation == Comparison::GreaterOrEqual) { return date >= desiredDate;}
     else return false;
-} 
+}
 
 bool EventComparisonNode::Evaluate(const Date& date, const std::string& event) const
 {

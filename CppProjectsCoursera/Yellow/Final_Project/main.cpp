@@ -9,19 +9,11 @@
 
 using namespace std;
 
-template<typename T, typename U>
-std::ostream& operator<<(std::ostream& out, std::pair<T, U> p)
-{
-    out << p.first << " " << p.second;
-    return out;
-}
-
 string ParseEvent(istream& is)
 {
     while(is.peek() == ' ') is.get();
     string event("");
     getline(is, event, '\n');
-    if (is.fail() || is.eof()) is.clear();
     return event;
 }
 
@@ -95,8 +87,27 @@ void TestParseEvent() {
   }
 }
 
+#include "tests.h"
+
 void TestAll() {
   TestRunner tr;
   tr.RunTest(TestParseEvent, "TestParseEvent");
   tr.RunTest(TestParseCondition, "TestParseCondition");
+  tr.RunTest(TestDbAdd_U, "TestAdd");
+  tr.RunTest(TestDbFind_U, "TestFind");
+  tr.RunTest(TestDate, "TestDate");
+  tr.RunTest(TestParseDate, "TestParseDate");
+  tr.RunTest(TestDateComparison, "TestDateComparison");
+  tr.RunTest(TestDbAdd, "TestDbAdd");
+  tr.RunTest(TestDbFind, "TestDbFind");
+  tr.RunTest(TestDbLast, "TestDbLast");
+  tr.RunTest(TestDbRemoveIf, "TestDbRemoveIf");
+  tr.RunTest(TestDateComparisonNode, "TestDateComparisonNode");
+  tr.RunTest(TestEventComparisonNode, "TestEventComparisonNode");
+  tr.RunTest(TestLogicalOperationNode, "TestLogicalOperationNode");
+  tr.RunTest(TestEmptyNode, "TestEmptyNode");
+  tr.RunTest(TestDatabasePrint, "TestDatabasePrint");
+  tr.RunTest(TestDatabaseDel, "TestDatabaseDel");
+  tr.RunTest(TestDatabaseLast, "TestDatabaseLast");
+  tr.RunTest(TestDatabaseFind, "TestDatabaseFind");
 }

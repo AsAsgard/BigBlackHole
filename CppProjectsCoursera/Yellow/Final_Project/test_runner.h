@@ -19,7 +19,7 @@ std::ostream& operator<<(std::ostream& os, const std::vector<T>& s)
         first = false;
         os << x;
     }
-    return os << "}";
+    return  os << "}";
 }
 
 template<class T>
@@ -34,7 +34,7 @@ std::ostream& operator<<(std::ostream& os, const std::set<T>& s)
         first = false;
         os << x;
     }
-    return os << "}";
+    return  os << "}";
 }
 
 template<class K, class V>
@@ -49,7 +49,7 @@ std::ostream& operator<<(std::ostream& os, const std::map<K, V>& m)
         first = false;
         os << kv.first << ": " << kv.second;
     }
-    return os << "}";
+    return  os << "}";
 }
 
 template<class T, class U>

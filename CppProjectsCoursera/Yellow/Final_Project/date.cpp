@@ -7,7 +7,7 @@ using namespace std;
 
 bool operator==(const Date& lhs, const Date& rhs)
 {
-    if ( tie(lhs.year, lhs.month, lhs.day) == tie(rhs.year, rhs.month, rhs.day) )
+    if ( tie(lhs.year,lhs.month,lhs.day) == tie(rhs.year,rhs.month,rhs.day) )
         return true;
     else
         return false;
@@ -15,7 +15,7 @@ bool operator==(const Date& lhs, const Date& rhs)
 
 bool operator<(const Date& lhs, const Date& rhs)
 {
-    if ( tie(lhs.year, lhs.month, lhs.day) < tie(rhs.year, rhs.month, rhs.day) )
+    if ( tie(lhs.year,lhs.month,lhs.day) < tie(rhs.year,rhs.month,rhs.day) )
         return true;
     else
         return false;
@@ -51,8 +51,8 @@ istream& operator>>(istream& in, Date& date)
     EnsureNextSymbol(InputStream, input);
     InputStream >> date.month;
     EnsureNextSymbol(InputStream, input);
-    if(!(InputStream >> date.day)) throw invalid_argument("Wrong date format: "+input);
-    if(!InputStream.eof()) throw invalid_argument("Wrong date format: "+input);
+    if(!(InputStream >> date.day))throw invalid_argument("Wrong date format: "+input);
+    if (!InputStream.eof()) throw invalid_argument("Wrong date format: "+input);
     if (date.month < 1 || date.month > 12) throw invalid_argument("Month value is invalid: "+to_string(date.month));
     if (date.day < 1 || date.day > 31) throw invalid_argument("Day value is invalid: "+to_string(date.day));
     return in;

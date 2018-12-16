@@ -11,7 +11,8 @@ SOURCES += \
     node.cpp \
     date.cpp \
     main.cpp \
-    test_runner.cpp
+    test_runner.cpp \
+    tests.cpp
 
 HEADERS += \
     condition_parser.h \
@@ -19,4 +20,5 @@ HEADERS += \
     database.h \
     node.h \
     date.h \
-    test_runner.h
+    test_runner.h \
+    tests.h

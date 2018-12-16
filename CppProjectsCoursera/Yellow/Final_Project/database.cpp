@@ -6,15 +6,15 @@ using namespace std;
 
 void Database::Add(const Date& date, const string& event)
 {
-    auto insertion = EventsMap[date].second.insert(event);
-    if (insertion.second) EventsMap[date].first.emplace_back(insertion.first);
+     auto insertion = EventsMap[date].second.insert(event);
+     if (insertion.second) EventsMap[date].first.emplace_back(insertion.first);
 }
 
 void Database::Print(std::ostream& out) const
 {
-    for(auto mit = EventsMap.begin(); mit != EventsMap.end(); ++mit)
+    for(auto mit = EventsMap.begin(); mit != EventsMap.end(); mit++)
     {
-        for(auto vit = mit->second.first.begin(); vit != mit->second.first.end(); ++vit)
+        for(auto vit = mit->second.first.begin(); vit != mit->second.first.end(); vit++)
         {
             out << mit->first << ' ' << **vit << endl;
         }
