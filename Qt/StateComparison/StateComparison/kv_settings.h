@@ -58,14 +58,14 @@ private slots:
 	void on_AllAuto_toggled(bool checked);
 
 private:
-	// ѕќЋя
+	// ПОЛЯ
 	Ui::KV_Settings ui;
 	// параметры настройки гистограммы
 	QPen newState1Pen;
 	QPen newState2Pen;
 	AutoAxis::AutoAxisEnum newAutoAxisSetting;
 
-	// ћ≈“ќƒџ
+	// МЕТОДЫ
 	// применить настройки
 	void applySettings();
 	// установить нужные параметры на виджетах

@@ -7,7 +7,7 @@
 #include "cdatastate.h"
 #include "ui_filebrowser.h"
 
-// класс формы - выбор файлов с состо¤ни¤ми дл¤ сравнени¤
+// класс формы - выбор файлов с состояниями для сравнения
 class FileBrowser : public QMainWindow
 {
 	Q_OBJECT
@@ -18,9 +18,9 @@ public:
 	~FileBrowser();
 
 signals:
-	// запрос активности пол¤ картограммы
+	// запрос активности поля картограммы
 	bool isComparisonFieldActive();
-	// изменить текущие состо¤ни¤
+	// изменить текущие состояния
 	void ChangeStatesFB(const cDataState& State1, const cDataState& State2);
 	// закрытие окна
 	void closing();
@@ -43,26 +43,26 @@ private slots:
 	void on_File2lineEdit_textEdited(QString);
 
 private:
-	//ѕќЋя
+	// ПОЛЯ
 	Ui::FileBrowserClass ui;
 	// дополнительный Label дл¤ статус-бара
 	QScopedPointer<QLabel> statusLabel;
-	//ћ≈“ќƒџ
-	// проверить правильность входных данных (дл¤ статус-бара)
+	// МЕТОДЫ
+	// проверить правильность входных данных (для статус-бара)
 	void CheckingFileNames(void); 
 };
 
-// получить/установить папку по умолчанию дл¤ открыти¤ FileDialog
+// получить/установить папку по умолчанию для открытия FileDialog
 QString defaultPath();
 void setDefaultPath(const QString &NewDefaultPath);
 void setDefaultPath(QString &&NewDefaultPath);
 
-// получить/установить им¤ файла с первым состо¤нием
+// получить/установить имя файла с первым состо¤нием
 QString State1FileName();
 void setState1FileName(const QString &NewState1FileName);
 void setState1FileName(QString &&NewState1FileName);
 
-// получить/установить им¤ файла со вторым состо¤нием
+// получить/установить имя файла со вторым состоянием
 QString State2FileName();
 void setState2FileName(const QString &NewState2FileName);
 void setState2FileName(QString &&NewState2FileName);

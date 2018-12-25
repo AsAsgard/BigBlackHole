@@ -22,7 +22,7 @@ signals:
 	void RecolorComparisonField();
 	// изменить просматриваемый параметр
 	void changeActiveMode(const Parameters::ParametersEnum &);
-	// перерисовать демонстрационные “¬—
+	// перерисовать демонстрационные поля
 	void sendDemoStates(const QPair<double,double>& demoStates);
 
 protected:
@@ -42,12 +42,12 @@ private slots:
 	void on_KvButton_clicked();
 
 private:
-	// ѕќЋя
+	// ПОЛЯ
 	Ui::CF_ColorChanger ui;
 	// активный параметр
 	Parameters::ParametersEnum activeMode;
 
-	// вспомогательна¤ структура
+	// вспомогательная структура
 	struct LimColors {
 		QColor maxColor;
 		QColor minColor;
@@ -56,7 +56,7 @@ private:
 	// новые цвета
 	std::map<Parameters::ParametersEnum, LimColors> newLimitColors;
 
-	// ћ≈“ќƒџ
+	// МЕТОДЫ
 	// применить цвета к картограмме
 	void applyColors();
 	// применить цвета к демонстрационному полю

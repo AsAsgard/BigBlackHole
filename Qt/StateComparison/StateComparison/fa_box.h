@@ -26,7 +26,7 @@ namespace View {
 class cFA_Box{
 private : 
 	// ПОЛЯ
-	// 
+	// граница ТВС
 	QPainterPath painterPath;
 	// надпись с номером ТВС
 	QLabel FA_Number;
