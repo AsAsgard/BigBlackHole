@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ComparisonFieldClass</class>
+ <widget class="QMainWindow" name="ComparisonFieldClass">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>719</width>
+    <height>652</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>650</width>
+    <height>650</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Картограмма сравнения состояний</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <widget class="QGroupBox" name="groupBox">
+    <property name="geometry">
+     <rect>
+      <x>652</x>
+      <y>508</y>
+      <width>65</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"> QGroupBox {
+     border: 2px groove #828282;
+     border-radius: 3px;
+	 margin-top: 2ex; /* оставляем пространство вверху для заголовка */
+ }
+
+ QGroupBox::title {
+     subcontrol-origin: margin;
+     subcontrol-position: top center; /* помещаем вверху по центру */
+     padding: 0 1px;
+     background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                       stop: 0 #FFOECE, stop: 1 #FFFFFF);
+ }</string>
+    </property>
+    <property name="title">
+     <string>Слой</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+    <widget class="QSpinBox" name="spinBox">
+     <property name="geometry">
+      <rect>
+       <x>3</x>
+       <y>17</y>
+       <width>60</width>
+       <height>50</height>
+      </rect>
+     </property>
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="frame">
+      <bool>true</bool>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="buttonSymbols">
+      <enum>QAbstractSpinBox::UpDownArrows</enum>
+     </property>
+     <property name="keyboardTracking">
+      <bool>true</bool>
+     </property>
+     <property name="showGroupSeparator" stdset="0">
+      <bool>false</bool>
+     </property>
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="value">
+      <number>1</number>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QLabel" name="LayerLabel">
+    <property name="geometry">
+     <rect>
+      <x>550</x>
+      <y>550</y>
+      <width>91</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Слой </string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>719</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="contextMenuPolicy">
+    <enum>Qt::PreventContextMenu</enum>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
+   <widget class="QMenu" name="menu">
+    <property name="contextMenuPolicy">
+     <enum>Qt::PreventContextMenu</enum>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="title">
+     <string>Файл</string>
+    </property>
+    <addaction name="otherStates"/>
+    <addaction name="separator"/>
+    <addaction name="Exit"/>
+   </widget>
+   <addaction name="menu"/>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <property name="contextMenuPolicy">
+    <enum>Qt::PreventContextMenu</enum>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
+   <property name="movable">
+    <bool>false</bool>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::AllToolBarAreas</set>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>30</width>
+     <height>23</height>
+    </size>
+   </property>
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonIconOnly</enum>
+   </property>
+   <property name="floatable">
+    <bool>false</bool>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="ColorFont"/>
+   <addaction name="separator"/>
+   <addaction name="ChangeViewMode"/>
+   <addaction name="separator"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar">
+   <property name="styleSheet">
+    <string notr="true">QStatusBar { 
+					border-top-style: outset; 
+					border-top-width: 1px; 
+					border-top-color: #828282; 
+					}</string>
+   </property>
+   <property name="sizeGripEnabled">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QToolBar" name="toolBar_1">
+   <property name="contextMenuPolicy">
+    <enum>Qt::PreventContextMenu</enum>
+   </property>
+   <property name="windowTitle">
+    <string>toolBar_2</string>
+   </property>
+   <property name="movable">
+    <bool>false</bool>
+   </property>
+   <property name="floatable">
+    <bool>true</bool>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="separator"/>
+   <addaction name="activateKq"/>
+   <addaction name="separator"/>
+   <addaction name="activateBurn"/>
+   <addaction name="separator"/>
+   <addaction name="activateKv"/>
+   <addaction name="separator"/>
+  </widget>
+  <widget class="QToolBar" name="toolBar_2">
+   <property name="contextMenuPolicy">
+    <enum>Qt::PreventContextMenu</enum>
+   </property>
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="movable">
+    <bool>false</bool>
+   </property>
+   <property name="floatable">
+    <bool>true</bool>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="separator"/>
+   <addaction name="Kv_diagramActivator"/>
+   <addaction name="separator"/>
+   <addaction name="MaxShow"/>
+   <addaction name="separator"/>
+   <addaction name="ChangeColors"/>
+   <addaction name="separator"/>
+   <addaction name="Screenshot"/>
+  </widget>
+  <action name="otherStates">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Сравнить другие состояния</string>
+   </property>
+  </action>
+  <action name="Exit">
+   <property name="text">
+    <string>Выход</string>
+   </property>
+  </action>
+  <action name="ColorFont">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="filebrowser.qrc">
+     <normaloff>:/icons/icons/a_Palette.xpm</normaloff>:/icons/icons/a_Palette.xpm</iconset>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="toolTip">
+    <string>Показать картограмму в цвете</string>
+   </property>
+   <property name="priority">
+    <enum>QAction::NormalPriority</enum>
+   </property>
+  </action>
+  <action name="Kv_diagramActivator">
+   <property name="icon">
+    <iconset resource="filebrowser.qrc">
+     <normaloff>:/icons/icons/a_Altitude.xpm</normaloff>:/icons/icons/a_Altitude.xpm</iconset>
+   </property>
+   <property name="text">
+    <string>Kv_activator</string>
+   </property>
+   <property name="toolTip">
+    <string>Показать высотное распределение</string>
+   </property>
+  </action>
+  <action name="activateKq">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Kq</string>
+   </property>
+   <property name="toolTip">
+    <string>Показать распределение Kq</string>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+  </action>
+  <action name="activateBurn">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Burn</string>
+   </property>
+   <property name="toolTip">
+    <string>Показать распределение выгорания</string>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+  </action>
+  <action name="activateKv">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Kv</string>
+   </property>
+   <property name="toolTip">
+    <string>Показать распределение Kv</string>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+  </action>
+  <action name="MaxShow">
+   <property name="text">
+    <string>Max</string>
+   </property>
+   <property name="toolTip">
+    <string>Максимальное значение отклонения</string>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+  </action>
+  <action name="Screenshot">
+   <property name="icon">
+    <iconset resource="filebrowser.qrc">
+     <normaloff>:/icons/icons/a_Camera.xpm</normaloff>:/icons/icons/a_Camera.xpm</iconset>
+   </property>
+   <property name="text">
+    <string>Скрин</string>
+   </property>
+   <property name="toolTip">
+    <string>Сделать скриншот картограммы (Ctrl+O)</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="ChangeColors">
+   <property name="icon">
+    <iconset resource="filebrowser.qrc">
+     <normaloff>:/icons/icons/a_ChangeLine.xpm</normaloff>:/icons/icons/a_ChangeLine.xpm</iconset>
+   </property>
+   <property name="text">
+    <string>ChangeColors</string>
+   </property>
+   <property name="toolTip">
+    <string>Настройка цвета ячеек</string>
+   </property>
+  </action>
+  <action name="ChangeViewMode">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="filebrowser.qrc">
+     <normaloff>:/icons/icons/a_ChangeRegim.xpm</normaloff>:/icons/icons/a_ChangeRegim.xpm</iconset>
+   </property>
+   <property name="text">
+    <string>ChangeViewMode</string>
+   </property>
+   <property name="toolTip">
+    <string>Показать разность (Ctrl+M)</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+M</string>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="filebrowser.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>Exit</sender>
+   <signal>triggered()</signal>
+   <receiver>ComparisonFieldClass</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>437</x>
+     <y>365</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
