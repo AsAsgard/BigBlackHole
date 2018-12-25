@@ -1,4 +1,4 @@
-#ifndef DEMOAREACF_H
+п»ї#ifndef DEMOAREACF_H
 #define DEMOAREACF_H
 
 #include <QFrame>
@@ -7,33 +7,33 @@
 #include <QPair>
 #include "fa_box.h"
 
-// демонстрационное поле для настройки картограммы ТВС
+// РґРµРјРѕРЅСЃС‚СЂР°С†РёРѕРЅРЅРѕРµ РїРѕР»Рµ РґР»СЏ РЅР°СЃС‚СЂРѕР№РєРё РєР°СЂС‚РѕРіСЂР°РјРјС‹ РўР’РЎ
 class demoAreaCF : public QFrame
 {
 	Q_OBJECT
 
 	
 public:
-	// конструкторы
+	// РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂС‹
 	demoAreaCF(QWidget *parent);
 	~demoAreaCF();
 
 signals:
-	// получить цвет, в который покрасить ТВС
+	// РїРѕР»СѓС‡РёС‚СЊ С†РІРµС‚, РІ РєРѕС‚РѕСЂС‹Р№ РїРѕРєСЂР°СЃРёС‚СЊ РўР’РЎ
 	QColor getColor();
 
 protected:
-	// перерисовать поле
+	// РїРµСЂРµСЂРёСЃРѕРІР°С‚СЊ РїРѕР»Рµ
 	void paintEvent(QPaintEvent *) override;
 
 private slots:
-	// получить значения
+	// РїРѕР»СѓС‡РёС‚СЊ Р·РЅР°С‡РµРЅРёСЏ
 	void getStates(const QPair<double, double>& States);
 
 private:
-	// текущий цвет
+	// С‚РµРєСѓС‰РёР№ С†РІРµС‚
 	QColor color;
-	// демонстрационная ТВС
+	// РґРµРјРѕРЅСЃС‚СЂР°С†РёРѕРЅРЅР°СЏ РўР’РЎ
 	cFA_Box demoFA;
 };
 

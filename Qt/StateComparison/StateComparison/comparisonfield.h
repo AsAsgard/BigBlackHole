@@ -1,4 +1,4 @@
-#ifndef COMPARISONFIELD_H
+п»ї#ifndef COMPARISONFIELD_H
 #define COMPARISONFIELD_H
 
 #include <QLabel>
@@ -10,90 +10,90 @@
 #include "filebrowser.h"
 #include "cf_colorchanger.h"
 
-// класс формы - основное окно с картограммой
+// РєР»Р°СЃСЃ С„РѕСЂРјС‹ - РѕСЃРЅРѕРІРЅРѕРµ РѕРєРЅРѕ СЃ РєР°СЂС‚РѕРіСЂР°РјРјРѕР№
 class ComparisonField : public QMainWindow
 {
 	Q_OBJECT
 
 public:
-	// конструктор и деструктор
+	// РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ Рё РґРµСЃС‚СЂСѓРєС‚РѕСЂ
 	explicit ComparisonField(QWidget *parent, const cDataState &rState1, const cDataState &rState2,const QRect &ScreenParameters);
 	~ComparisonField();
 
 signals:
-	// изменить режим просмотра
+	// РёР·РјРµРЅРёС‚СЊ СЂРµР¶РёРј РїСЂРѕСЃРјРѕС‚СЂР°
 	void ViewModeChange(bool);
-	// изменить состояния
+	// РёР·РјРµРЅРёС‚СЊ СЃРѕСЃС‚РѕСЏРЅРёСЏ
 	void ChangeStatesCF(const cDataState& State1, const cDataState& State2);
-	// выбор новой ТВС для гистограммы Kv
+	// РІС‹Р±РѕСЂ РЅРѕРІРѕР№ РўР’РЎ РґР»СЏ РіРёСЃС‚РѕРіСЂР°РјРјС‹ Kv
 	void select_FA(int);
-	// необходимо перезадать параметры оси X гистограммы Kv
+	// РЅРµРѕР±С…РѕРґРёРјРѕ РїРµСЂРµР·Р°РґР°С‚СЊ РїР°СЂР°РјРµС‚СЂС‹ РѕСЃРё X РіРёСЃС‚РѕРіСЂР°РјРјС‹ Kv
 	void resetAxisNeeded();
-	// необходимо спрятать линию слоя на гистограмме Kv
+	// РЅРµРѕР±С…РѕРґРёРјРѕ СЃРїСЂСЏС‚Р°С‚СЊ Р»РёРЅРёСЋ СЃР»РѕСЏ РЅР° РіРёСЃС‚РѕРіСЂР°РјРјРµ Kv
 	void hideLayerLine();
-	// отправить указатель на поле рисования
+	// РѕС‚РїСЂР°РІРёС‚СЊ СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РїРѕР»Рµ СЂРёСЃРѕРІР°РЅРёСЏ
 	void sendRenderAreaPointer(RenderArea *);
 
 protected:
 	void resizeEvent(QResizeEvent * res) override;
 
 private slots:
-	// выбрать другие состояния
+	// РІС‹Р±СЂР°С‚СЊ РґСЂСѓРіРёРµ СЃРѕСЃС‚РѕСЏРЅРёСЏ
 	void on_otherStates_triggered();
-	// активировать гистограмму Kv
+	// Р°РєС‚РёРІРёСЂРѕРІР°С‚СЊ РіРёСЃС‚РѕРіСЂР°РјРјСѓ Kv
 	void on_Kv_diagramActivator_triggered();
-	// сделать скрин картограммы
+	// СЃРґРµР»Р°С‚СЊ СЃРєСЂРёРЅ РєР°СЂС‚РѕРіСЂР°РјРјС‹
 	void on_Screenshot_triggered();
-	// выбор показа активного параметра
+	// РІС‹Р±РѕСЂ РїРѕРєР°Р·Р° Р°РєС‚РёРІРЅРѕРіРѕ РїР°СЂР°РјРµС‚СЂР°
 	void on_activateKq_triggered();
 	void on_activateBurn_triggered();
 	void on_activateKv_triggered();
-	// показать максимальное отклонение
+	// РїРѕРєР°Р·Р°С‚СЊ РјР°РєСЃРёРјР°Р»СЊРЅРѕРµ РѕС‚РєР»РѕРЅРµРЅРёРµ
 	void on_MaxShow_triggered();
-	// открыть окно настройки картограммы
+	// РѕС‚РєСЂС‹С‚СЊ РѕРєРЅРѕ РЅР°СЃС‚СЂРѕР№РєРё РєР°СЂС‚РѕРіСЂР°РјРјС‹
 	void on_ChangeColors_triggered();
-	// изменить режим просмотра
+	// РёР·РјРµРЅРёС‚СЊ СЂРµР¶РёРј РїСЂРѕСЃРјРѕС‚СЂР°
 	void on_ChangeViewMode_toggled(bool checked);
-	// включить/выключить цвета
+	// РІРєР»СЋС‡РёС‚СЊ/РІС‹РєР»СЋС‡РёС‚СЊ С†РІРµС‚Р°
 	void on_ColorFont_toggled(bool checked);
-	// изменение значения слоя Kv
+	// РёР·РјРµРЅРµРЅРёРµ Р·РЅР°С‡РµРЅРёСЏ СЃР»РѕСЏ Kv
 	void on_spinBox_valueChanged(int newValue);
-	// ответ на запрос активности гистограммы Kv
+	// РѕС‚РІРµС‚ РЅР° Р·Р°РїСЂРѕСЃ Р°РєС‚РёРІРЅРѕСЃС‚Рё РіРёСЃС‚РѕРіСЂР°РјРјС‹ Kv
 	bool KvDiagramAvaliability() const;
-	// Гистограмма Kv была закрыта
+	// Р“РёСЃС‚РѕРіСЂР°РјРјР° Kv Р±С‹Р»Р° Р·Р°РєСЂС‹С‚Р°
 	void KvDiagramClosed(const QPen& Kv1PenToSave, const QPen& Kv2PenToSave, const AutoAxis::AutoAxisEnum& KvAutoAxisToSave);
-	// окно настройки картограммы было закрыто
+	// РѕРєРЅРѕ РЅР°СЃС‚СЂРѕР№РєРё РєР°СЂС‚РѕРіСЂР°РјРјС‹ Р±С‹Р»Рѕ Р·Р°РєСЂС‹С‚Рѕ
 	void ColorChangerClosed();
-	// окно выбора файлов состояний было закрыто
+	// РѕРєРЅРѕ РІС‹Р±РѕСЂР° С„Р°Р№Р»РѕРІ СЃРѕСЃС‚РѕСЏРЅРёР№ Р±С‹Р»Рѕ Р·Р°РєСЂС‹С‚Рѕ
 	void FileBrowserClosed();
-	// ответ на запрос активности окна с картограммой
+	// РѕС‚РІРµС‚ РЅР° Р·Р°РїСЂРѕСЃ Р°РєС‚РёРІРЅРѕСЃС‚Рё РѕРєРЅР° СЃ РєР°СЂС‚РѕРіСЂР°РјРјРѕР№
 	bool ComparisonFieldAvaliability() const;
-	// пришел сигнал с изменением состояний
+	// РїСЂРёС€РµР» СЃРёРіРЅР°Р» СЃ РёР·РјРµРЅРµРЅРёРµРј СЃРѕСЃС‚РѕСЏРЅРёР№
 	void StatesChanged(const cDataState &rState1, const cDataState &rState2);
-	// перекрасить поле рисования
+	// РїРµСЂРµРєСЂР°СЃРёС‚СЊ РїРѕР»Рµ СЂРёСЃРѕРІР°РЅРёСЏ
 	void RecolorAll();
 
 private:
-	// ПОЛЯ
+	// РџРћР›РЇ
 	Ui::ComparisonFieldClass ui;
-	// форма гистограммы Kv
+	// С„РѕСЂРјР° РіРёСЃС‚РѕРіСЂР°РјРјС‹ Kv
 	QScopedPointer<Kv_Distribution> KvDistrib;
-	// область рисования
+	// РѕР±Р»Р°СЃС‚СЊ СЂРёСЃРѕРІР°РЅРёСЏ
 	QScopedPointer<RenderArea> renderArea;
-	// дополнитльный Label в статус-бар
+	// РґРѕРїРѕР»РЅРёС‚Р»СЊРЅС‹Р№ Label РІ СЃС‚Р°С‚СѓСЃ-Р±Р°СЂ
 	QScopedPointer<QLabel> statusLabel;
-	// форма настройки параметров картограммы
+	// С„РѕСЂРјР° РЅР°СЃС‚СЂРѕР№РєРё РїР°СЂР°РјРµС‚СЂРѕРІ РєР°СЂС‚РѕРіСЂР°РјРјС‹
 	QScopedPointer<CF_ColorChanger> ColorChanger;
-	// форма выбора состояний
+	// С„РѕСЂРјР° РІС‹Р±РѕСЂР° СЃРѕСЃС‚РѕСЏРЅРёР№
 	QScopedPointer<FileBrowser> fileBrowser;
 
-	// сохраненные параметры рисования для гистограммы Kv
+	// СЃРѕС…СЂР°РЅРµРЅРЅС‹Рµ РїР°СЂР°РјРµС‚СЂС‹ СЂРёСЃРѕРІР°РЅРёСЏ РґР»СЏ РіРёСЃС‚РѕРіСЂР°РјРјС‹ Kv
 	QPen Kv1SavedPen;
 	QPen Kv2SavedPen;
 	AutoAxis::AutoAxisEnum KvSavedAutoAxis;
 
-	// МЕТОДЫ
-	// обновить статус-бар
+	// РњР•РўРћР”Р«
+	// РѕР±РЅРѕРІРёС‚СЊ СЃС‚Р°С‚СѓСЃ-Р±Р°СЂ
 	void StatusBarUpdate(void);
 };
 

@@ -1,4 +1,4 @@
-#ifndef CSTATE_H
+п»ї#ifndef CSTATE_H
 #define CSTATE_H
 
 #include <vector>
@@ -6,33 +6,33 @@
 #include <limits>
 #include <tuple>
 
-// данные для конкретной ТВС
+// РґР°РЅРЅС‹Рµ РґР»СЏ РєРѕРЅРєСЂРµС‚РЅРѕР№ РўР’РЎ
 class cState
 {
-    // друзья
+    // РґСЂСѓР·СЊСЏ
     friend class cDataState;
 	friend std::tuple<cDataState, double> CompareStates(const cDataState &State1, const cDataState &State2);
 private:
-    // ПОЛЯ
-	// данные
+    // РџРћР›РЇ
+	// РґР°РЅРЅС‹Рµ
     double Kq;
     double Burn;
     std::vector<double> Kv;
 	// NaN
 	double quiet_NaN;
-    // количество слоев в ТВС
+    // РєРѕР»РёС‡РµСЃС‚РІРѕ СЃР»РѕРµРІ РІ РўР’РЎ
     static int NumLayers;
-	// число слоев в ТВС, которое запомнили
+	// С‡РёСЃР»Рѕ СЃР»РѕРµРІ РІ РўР’РЎ, РєРѕС‚РѕСЂРѕРµ Р·Р°РїРѕРјРЅРёР»Рё
 	static int prevNumLayers;
 
-    // МЕТОДЫ
-	// изменение данных
+    // РњР•РўРћР”Р«
+	// РёР·РјРµРЅРµРЅРёРµ РґР°РЅРЅС‹С…
     void SetKq(const double &newKq) {Kq = newKq;}
     void SetBurn(const double &newBurn) {Burn = newBurn;}
     void SetKv(const std::vector<double> &newKv) {Kv = newKv;}
     void SetKv(int LayerNumber, const double &newKv);
 public:
-    // конструкторы
+    // РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂС‹
     cState() 
 	: Kq(std::numeric_limits<double>::quiet_NaN())
 	, Burn(std::numeric_limits<double>::quiet_NaN())
@@ -57,7 +57,7 @@ public:
 	, Burn(newState.Burn)
 	, Kv(newState.Kv)
 	, quiet_NaN(std::numeric_limits<double>::quiet_NaN()) {}
-    // получение значений
+    // РїРѕР»СѓС‡РµРЅРёРµ Р·РЅР°С‡РµРЅРёР№
     const double& GetKq() const { return Kq;}
     const double& GetBurn() const { return Burn;}
     const std::vector<double>& GetKv() const { return Kv;}

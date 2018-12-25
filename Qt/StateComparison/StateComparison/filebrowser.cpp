@@ -1,4 +1,4 @@
-#include <QDesktopWidget>
+п»ї#include <QDesktopWidget>
 #include <QFileDialog>
 #include <QString>
 #include <QFont>
@@ -7,13 +7,13 @@
 
 using namespace std;
 
-// реализация стандартного пути - его получение и задание
+// СЂРµР°Р»РёР·Р°С†РёСЏ СЃС‚Р°РЅРґР°СЂС‚РЅРѕРіРѕ РїСѓС‚Рё - РµРіРѕ РїРѕР»СѓС‡РµРЅРёРµ Рё Р·Р°РґР°РЅРёРµ
 static QString _defaultPath = "./";
 QString defaultPath() {return _defaultPath;}
 void setDefaultPath(const QString &NewDefaultPath) { _defaultPath = NewDefaultPath;}
 void setDefaultPath(QString &&NewDefaultPath) { if (&_defaultPath != &NewDefaultPath) _defaultPath = NewDefaultPath;}
 
-// реализация имен файлов - их получение и задание
+// СЂРµР°Р»РёР·Р°С†РёСЏ РёРјРµРЅ С„Р°Р№Р»РѕРІ - РёС… РїРѕР»СѓС‡РµРЅРёРµ Рё Р·Р°РґР°РЅРёРµ
 static QString _State1FileName = "", _State2FileName = "";
 QString State1FileName() { return _State1FileName;}
 void setState1FileName(const QString &NewState1FileName) { _State1FileName = NewState1FileName;}
@@ -28,18 +28,18 @@ FileBrowser::FileBrowser(QWidget *parent)
 {
 	ui.setupUi(this);
 
-	// делаем окно модальным и фиксированного размера
+	// РґРµР»Р°РµРј РѕРєРЅРѕ РјРѕРґР°Р»СЊРЅС‹Рј Рё С„РёРєСЃРёСЂРѕРІР°РЅРЅРѕРіРѕ СЂР°Р·РјРµСЂР°
 	FileBrowser::setFixedSize(FileBrowser::size());
 	FileBrowser::setWindowModality(Qt::ApplicationModal);
 
-	// изменяем размеры статус-бара, создаем на нем Label, задаем его геометрию и выравнивание и вписываем текст
+	// РёР·РјРµРЅСЏРµРј СЂР°Р·РјРµСЂС‹ СЃС‚Р°С‚СѓСЃ-Р±Р°СЂР°, СЃРѕР·РґР°РµРј РЅР° РЅРµРј Label, Р·Р°РґР°РµРј РµРіРѕ РіРµРѕРјРµС‚СЂРёСЋ Рё РІС‹СЂР°РІРЅРёРІР°РЅРёРµ Рё РІРїРёСЃС‹РІР°РµРј С‚РµРєСЃС‚
 	ui.statusBar->resize(this->width(), 20);
 	statusLabel.reset(new QLabel(ui.statusBar));
 	statusLabel->setGeometry(4, 0, this->width(), ui.statusBar->height());
 	statusLabel->setAlignment(Qt::AlignVCenter);
-	statusLabel->setText(QString::fromStdWString(L"Введите названия файлов с состояниями, которые необходимо сравнить."));
+	statusLabel->setText(QString::fromStdWString(L"Р’РІРµРґРёС‚Рµ РЅР°Р·РІР°РЅРёСЏ С„Р°Р№Р»РѕРІ СЃ СЃРѕСЃС‚РѕСЏРЅРёСЏРјРё, РєРѕС‚РѕСЂС‹Рµ РЅРµРѕР±С…РѕРґРёРјРѕ СЃСЂР°РІРЅРёС‚СЊ."));
 	
-	// параметры шрифтов для совместимости с high dpi
+	// РїР°СЂР°РјРµС‚СЂС‹ С€СЂРёС„С‚РѕРІ РґР»СЏ СЃРѕРІРјРµСЃС‚РёРјРѕСЃС‚Рё СЃ high dpi
 	QFont font(ui.File1Label->font());
 	font.setPixelSize(15);
 	ui.File1Label->setFont(font);
@@ -53,209 +53,209 @@ FileBrowser::FileBrowser(QWidget *parent)
 	ui.File2lineEdit->setFont(font);
 }
 
-// деструктор
+// РґРµСЃС‚СЂСѓРєС‚РѕСЂ
 FileBrowser::~FileBrowser() 
 {
-	// перестраховка - освобождение памяти (из-за того, что были проблемы с памятью при завершении приложения)
+	// РїРµСЂРµСЃС‚СЂР°С…РѕРІРєР° - РѕСЃРІРѕР±РѕР¶РґРµРЅРёРµ РїР°РјСЏС‚Рё (РёР·-Р·Р° С‚РѕРіРѕ, С‡С‚Рѕ Р±С‹Р»Рё РїСЂРѕР±Р»РµРјС‹ СЃ РїР°РјСЏС‚СЊСЋ РїСЂРё Р·Р°РІРµСЂС€РµРЅРёРё РїСЂРёР»РѕР¶РµРЅРёСЏ)
 	statusLabel.reset(nullptr);
 }
 
-// обозреватель первого состояния
+// РѕР±РѕР·СЂРµРІР°С‚РµР»СЊ РїРµСЂРІРѕРіРѕ СЃРѕСЃС‚РѕСЏРЅРёСЏ
 void FileBrowser::on_File1Button_clicked() 
 {
-	// обновляем статус-бар
-	statusLabel->setText(QString::fromStdWString(L"Выберете файл с первым состоянием."));
-	// вызываем диалог открытия файла
+	// РѕР±РЅРѕРІР»СЏРµРј СЃС‚Р°С‚СѓСЃ-Р±Р°СЂ
+	statusLabel->setText(QString::fromStdWString(L"Р’С‹Р±РµСЂРµС‚Рµ С„Р°Р№Р» СЃ РїРµСЂРІС‹Рј СЃРѕСЃС‚РѕСЏРЅРёРµРј."));
+	// РІС‹Р·С‹РІР°РµРј РґРёР°Р»РѕРі РѕС‚РєСЂС‹С‚РёСЏ С„Р°Р№Р»Р°
 	QString FileName = QFileDialog::getOpenFileName(
 		this,
-		QString::fromStdWString(L"Выберете файл со первым состоянием."),
+		QString::fromStdWString(L"Р’С‹Р±РµСЂРµС‚Рµ С„Р°Р№Р» СЃРѕ РїРµСЂРІС‹Рј СЃРѕСЃС‚РѕСЏРЅРёРµРј."),
 		defaultPath(),
 		"All files (*.*);;Dat file (*.dat);;Text file (*.txt);;Exp files (*.exp)"
 		);
-	// если файл выбран
+	// РµСЃР»Рё С„Р°Р№Р» РІС‹Р±СЂР°РЅ
 	if (!FileName.isEmpty()) 
 	{
-		// задаем новый стандартный путь
+		// Р·Р°РґР°РµРј РЅРѕРІС‹Р№ СЃС‚Р°РЅРґР°СЂС‚РЅС‹Р№ РїСѓС‚СЊ
 		setDefaultPath(FileName.left(FileName.lastIndexOf('/')+1));
-		// заносим имя файла в LineEdit
+		// Р·Р°РЅРѕСЃРёРј РёРјСЏ С„Р°Р№Р»Р° РІ LineEdit
 		ui.File1lineEdit->setText(FileName);
-		// делаем запись в TextBrowser-е
-		ui.textBrowser->append(QString::fromStdWString(L"В графу \"Первое состояние\" помещен файл "+ FileName.toStdWString() + L"."));
+		// РґРµР»Р°РµРј Р·Р°РїРёСЃСЊ РІ TextBrowser-Рµ
+		ui.textBrowser->append(QString::fromStdWString(L"Р’ РіСЂР°С„Сѓ \"РџРµСЂРІРѕРµ СЃРѕСЃС‚РѕСЏРЅРёРµ\" РїРѕРјРµС‰РµРЅ С„Р°Р№Р» "+ FileName.toStdWString() + L"."));
 	}
-	// обновляем статус-бар
+	// РѕР±РЅРѕРІР»СЏРµРј СЃС‚Р°С‚СѓСЃ-Р±Р°СЂ
 	CheckingFileNames();
 }
 
-// обозреватель второго состояния
+// РѕР±РѕР·СЂРµРІР°С‚РµР»СЊ РІС‚РѕСЂРѕРіРѕ СЃРѕСЃС‚РѕСЏРЅРёСЏ
 void FileBrowser::on_File2Button_clicked() 
 {
-	// обновляем статус-бар
-	statusLabel->setText(QString::fromStdWString(L"Выберете файл со вторым состоянием."));
-	// вызываем диалог открытия файла
+	// РѕР±РЅРѕРІР»СЏРµРј СЃС‚Р°С‚СѓСЃ-Р±Р°СЂ
+	statusLabel->setText(QString::fromStdWString(L"Р’С‹Р±РµСЂРµС‚Рµ С„Р°Р№Р» СЃРѕ РІС‚РѕСЂС‹Рј СЃРѕСЃС‚РѕСЏРЅРёРµРј."));
+	// РІС‹Р·С‹РІР°РµРј РґРёР°Р»РѕРі РѕС‚РєСЂС‹С‚РёСЏ С„Р°Р№Р»Р°
 	QString FileName = QFileDialog::getOpenFileName(
 		this,
-		QString::fromStdWString(L"Выберете файл со вторым состоянием."),
+		QString::fromStdWString(L"Р’С‹Р±РµСЂРµС‚Рµ С„Р°Р№Р» СЃРѕ РІС‚РѕСЂС‹Рј СЃРѕСЃС‚РѕСЏРЅРёРµРј."),
 		defaultPath(),
 		"All files (*.*);;Dat file (*.dat);;Text file (*.txt);;Exp files (*.exp)"
 		);
-	// если файл выбран
+	// РµСЃР»Рё С„Р°Р№Р» РІС‹Р±СЂР°РЅ
 	if (!FileName.isEmpty()) 
 	{
-		// задаем новый стандартный путь
+		// Р·Р°РґР°РµРј РЅРѕРІС‹Р№ СЃС‚Р°РЅРґР°СЂС‚РЅС‹Р№ РїСѓС‚СЊ
 		setDefaultPath(FileName.left(FileName.lastIndexOf('/')+1));
-		// заносим имя файла в LineEdit
+		// Р·Р°РЅРѕСЃРёРј РёРјСЏ С„Р°Р№Р»Р° РІ LineEdit
 		ui.File2lineEdit->setText(FileName);
-		// делаем запись в TextBrowser-е
-		ui.textBrowser->append(QString::fromStdWString(L"В графу \"Второе состояние\" помещен файл "+ FileName.toStdWString() + L"."));
+		// РґРµР»Р°РµРј Р·Р°РїРёСЃСЊ РІ TextBrowser-Рµ
+		ui.textBrowser->append(QString::fromStdWString(L"Р’ РіСЂР°С„Сѓ \"Р’С‚РѕСЂРѕРµ СЃРѕСЃС‚РѕСЏРЅРёРµ\" РїРѕРјРµС‰РµРЅ С„Р°Р№Р» "+ FileName.toStdWString() + L"."));
 	}
-	// обновляем статус-бар
+	// РѕР±РЅРѕРІР»СЏРµРј СЃС‚Р°С‚СѓСЃ-Р±Р°СЂ
 	CheckingFileNames();
 }
 
-// окончание модифицирования текста в первом LineEdit - фиксирование нового имени файла
+// РѕРєРѕРЅС‡Р°РЅРёРµ РјРѕРґРёС„РёС†РёСЂРѕРІР°РЅРёСЏ С‚РµРєСЃС‚Р° РІ РїРµСЂРІРѕРј LineEdit - С„РёРєСЃРёСЂРѕРІР°РЅРёРµ РЅРѕРІРѕРіРѕ РёРјРµРЅРё С„Р°Р№Р»Р°
 void FileBrowser::on_File1lineEdit_editingFinished()
 {
-	// если имя файла было модифицировано
+	// РµСЃР»Рё РёРјСЏ С„Р°Р№Р»Р° Р±С‹Р»Рѕ РјРѕРґРёС„РёС†РёСЂРѕРІР°РЅРѕ
 	if (ui.File1lineEdit->isModified())
 	{
-		// фиксируем имя файла
+		// С„РёРєСЃРёСЂСѓРµРј РёРјСЏ С„Р°Р№Р»Р°
 		ui.File1lineEdit->setModified(false);
 		QString FileName = ui.File1lineEdit->text();
-		// если имя файла не пустое
+		// РµСЃР»Рё РёРјСЏ С„Р°Р№Р»Р° РЅРµ РїСѓСЃС‚РѕРµ
 		if (!FileName.isEmpty()) 
 		{
-			// задаем новый стандартный путь
+			// Р·Р°РґР°РµРј РЅРѕРІС‹Р№ СЃС‚Р°РЅРґР°СЂС‚РЅС‹Р№ РїСѓС‚СЊ
 			setDefaultPath(FileName.left(FileName.lastIndexOf('/')+1));
-			// делаем запись в TextBrowser-е
-			ui.textBrowser->append(QString::fromStdWString(L"В графу \"Первое состояние\" помещен файл "+ FileName.toStdWString() + L"."));
+			// РґРµР»Р°РµРј Р·Р°РїРёСЃСЊ РІ TextBrowser-Рµ
+			ui.textBrowser->append(QString::fromStdWString(L"Р’ РіСЂР°С„Сѓ \"РџРµСЂРІРѕРµ СЃРѕСЃС‚РѕСЏРЅРёРµ\" РїРѕРјРµС‰РµРЅ С„Р°Р№Р» "+ FileName.toStdWString() + L"."));
 		}
-		// обновляем статус-бар
+		// РѕР±РЅРѕРІР»СЏРµРј СЃС‚Р°С‚СѓСЃ-Р±Р°СЂ
 		CheckingFileNames();
 	}
 }
 
-// при редактировании имен файлов - происходит автоматическое обновление статус-бара
+// РїСЂРё СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёРё РёРјРµРЅ С„Р°Р№Р»РѕРІ - РїСЂРѕРёСЃС…РѕРґРёС‚ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРѕРµ РѕР±РЅРѕРІР»РµРЅРёРµ СЃС‚Р°С‚СѓСЃ-Р±Р°СЂР°
 void FileBrowser::on_File1lineEdit_textEdited(QString) { CheckingFileNames();}
 
-// окончание модифицирования текста во втором LineEdit - фиксирование нового имени файла
+// РѕРєРѕРЅС‡Р°РЅРёРµ РјРѕРґРёС„РёС†РёСЂРѕРІР°РЅРёСЏ С‚РµРєСЃС‚Р° РІРѕ РІС‚РѕСЂРѕРј LineEdit - С„РёРєСЃРёСЂРѕРІР°РЅРёРµ РЅРѕРІРѕРіРѕ РёРјРµРЅРё С„Р°Р№Р»Р°
 void FileBrowser::on_File2lineEdit_editingFinished()
 {
-	// если имя файла было модифицировано
+	// РµСЃР»Рё РёРјСЏ С„Р°Р№Р»Р° Р±С‹Р»Рѕ РјРѕРґРёС„РёС†РёСЂРѕРІР°РЅРѕ
 	if (ui.File2lineEdit->isModified()) 
 	{
-		// фиксируем имя файла
+		// С„РёРєСЃРёСЂСѓРµРј РёРјСЏ С„Р°Р№Р»Р°
 		ui.File2lineEdit->setModified(false);
 		QString FileName = ui.File2lineEdit->text();
-		// если имя файла не пустое
+		// РµСЃР»Рё РёРјСЏ С„Р°Р№Р»Р° РЅРµ РїСѓСЃС‚РѕРµ
 		if (!FileName.isEmpty()) 
 		{
-			// задаем новый стандартный путь
+			// Р·Р°РґР°РµРј РЅРѕРІС‹Р№ СЃС‚Р°РЅРґР°СЂС‚РЅС‹Р№ РїСѓС‚СЊ
 			setDefaultPath(FileName.left(FileName.lastIndexOf('/')+1));
-			// делаем запись в TextBrowser-е
-			ui.textBrowser->append(QString::fromStdWString(L"В графу \"Второе состояние\" помещен файл "+ FileName.toStdWString() + L"."));
+			// РґРµР»Р°РµРј Р·Р°РїРёСЃСЊ РІ TextBrowser-Рµ
+			ui.textBrowser->append(QString::fromStdWString(L"Р’ РіСЂР°С„Сѓ \"Р’С‚РѕСЂРѕРµ СЃРѕСЃС‚РѕСЏРЅРёРµ\" РїРѕРјРµС‰РµРЅ С„Р°Р№Р» "+ FileName.toStdWString() + L"."));
 		}
-		// обновляем статус-бар
+		// РѕР±РЅРѕРІР»СЏРµРј СЃС‚Р°С‚СѓСЃ-Р±Р°СЂ
 		CheckingFileNames();
 	}
 }
 
-// при редактировании имен файлов - происходит автоматическое обновление статус-бара
+// РїСЂРё СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёРё РёРјРµРЅ С„Р°Р№Р»РѕРІ - РїСЂРѕРёСЃС…РѕРґРёС‚ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРѕРµ РѕР±РЅРѕРІР»РµРЅРёРµ СЃС‚Р°С‚СѓСЃ-Р±Р°СЂР°
 void FileBrowser::on_File2lineEdit_textEdited(QString) { CheckingFileNames();}
 
 
-// нажата кнопка "Сравнить"
+// РЅР°Р¶Р°С‚Р° РєРЅРѕРїРєР° "РЎСЂР°РІРЅРёС‚СЊ"
 void FileBrowser::on_Compare_clicked()
 {
-	// начальная проверка - как при обновлении статус-бара, только с занесением данных также и в TextBrowser
+	// РЅР°С‡Р°Р»СЊРЅР°СЏ РїСЂРѕРІРµСЂРєР° - РєР°Рє РїСЂРё РѕР±РЅРѕРІР»РµРЅРёРё СЃС‚Р°С‚СѓСЃ-Р±Р°СЂР°, С‚РѕР»СЊРєРѕ СЃ Р·Р°РЅРµСЃРµРЅРёРµРј РґР°РЅРЅС‹С… С‚Р°РєР¶Рµ Рё РІ TextBrowser
 	if (ui.File1lineEdit->text().isEmpty() && ui.File2lineEdit->text().isEmpty())
 	{
-		ui.textBrowser->append(QString::fromStdWString(L"Введите названия файлов с состояниями в графы \"Первое состояние\" и \"Второе состояние\"."));
-		statusLabel->setText(QString::fromStdWString(L"Введите названия файлов с состояниями, которые необходимо сравнить."));
+		ui.textBrowser->append(QString::fromStdWString(L"Р’РІРµРґРёС‚Рµ РЅР°Р·РІР°РЅРёСЏ С„Р°Р№Р»РѕРІ СЃ СЃРѕСЃС‚РѕСЏРЅРёСЏРјРё РІ РіСЂР°С„С‹ \"РџРµСЂРІРѕРµ СЃРѕСЃС‚РѕСЏРЅРёРµ\" Рё \"Р’С‚РѕСЂРѕРµ СЃРѕСЃС‚РѕСЏРЅРёРµ\"."));
+		statusLabel->setText(QString::fromStdWString(L"Р’РІРµРґРёС‚Рµ РЅР°Р·РІР°РЅРёСЏ С„Р°Р№Р»РѕРІ СЃ СЃРѕСЃС‚РѕСЏРЅРёСЏРјРё, РєРѕС‚РѕСЂС‹Рµ РЅРµРѕР±С…РѕРґРёРјРѕ СЃСЂР°РІРЅРёС‚СЊ."));
 		return;
 	}
 	if (ui.File1lineEdit->text().isEmpty())
 	{
-		ui.textBrowser->append(QString::fromStdWString(L"Введите название файла с первым состоянием в графу \"Первое состояние\"."));
-		statusLabel->setText(QString::fromStdWString(L"Введите название файла с первым состоянием в графу \"Первое состояние\"."));
+		ui.textBrowser->append(QString::fromStdWString(L"Р’РІРµРґРёС‚Рµ РЅР°Р·РІР°РЅРёРµ С„Р°Р№Р»Р° СЃ РїРµСЂРІС‹Рј СЃРѕСЃС‚РѕСЏРЅРёРµРј РІ РіСЂР°С„Сѓ \"РџРµСЂРІРѕРµ СЃРѕСЃС‚РѕСЏРЅРёРµ\"."));
+		statusLabel->setText(QString::fromStdWString(L"Р’РІРµРґРёС‚Рµ РЅР°Р·РІР°РЅРёРµ С„Р°Р№Р»Р° СЃ РїРµСЂРІС‹Рј СЃРѕСЃС‚РѕСЏРЅРёРµРј РІ РіСЂР°С„Сѓ \"РџРµСЂРІРѕРµ СЃРѕСЃС‚РѕСЏРЅРёРµ\"."));
 		return;
 	}
 	if (ui.File2lineEdit->text().isEmpty())
 	{
-		ui.textBrowser->append(QString::fromStdWString(L"Введите название файла со вторым состоянием в графу \"Второе состояние\"."));
-		statusLabel->setText(QString::fromStdWString(L"Введите название файла со вторым состоянием в графу \"Второе состояние\"."));
+		ui.textBrowser->append(QString::fromStdWString(L"Р’РІРµРґРёС‚Рµ РЅР°Р·РІР°РЅРёРµ С„Р°Р№Р»Р° СЃРѕ РІС‚РѕСЂС‹Рј СЃРѕСЃС‚РѕСЏРЅРёРµРј РІ РіСЂР°С„Сѓ \"Р’С‚РѕСЂРѕРµ СЃРѕСЃС‚РѕСЏРЅРёРµ\"."));
+		statusLabel->setText(QString::fromStdWString(L"Р’РІРµРґРёС‚Рµ РЅР°Р·РІР°РЅРёРµ С„Р°Р№Р»Р° СЃРѕ РІС‚РѕСЂС‹Рј СЃРѕСЃС‚РѕСЏРЅРёРµРј РІ РіСЂР°С„Сѓ \"Р’С‚РѕСЂРѕРµ СЃРѕСЃС‚РѕСЏРЅРёРµ\"."));
 		return;
 	}
 	if (ui.File1lineEdit->text() == ui.File2lineEdit->text())
 	{
-		ui.textBrowser->append(QString::fromStdWString(L"Выберете для сравнения различные файлы."));
-		statusLabel->setText(QString::fromStdWString(L"Необходимо выбрать различные файлы для сравнения."));
+		ui.textBrowser->append(QString::fromStdWString(L"Р’С‹Р±РµСЂРµС‚Рµ РґР»СЏ СЃСЂР°РІРЅРµРЅРёСЏ СЂР°Р·Р»РёС‡РЅС‹Рµ С„Р°Р№Р»С‹."));
+		statusLabel->setText(QString::fromStdWString(L"РќРµРѕР±С…РѕРґРёРјРѕ РІС‹Р±СЂР°С‚СЊ СЂР°Р·Р»РёС‡РЅС‹Рµ С„Р°Р№Р»С‹ РґР»СЏ СЃСЂР°РІРЅРµРЅРёСЏ."));
 		return;
 	}
-	// создаем состояния, в которые будем считывать, а также переменные с именами файлов
+	// СЃРѕР·РґР°РµРј СЃРѕСЃС‚РѕСЏРЅРёСЏ, РІ РєРѕС‚РѕСЂС‹Рµ Р±СѓРґРµРј СЃС‡РёС‚С‹РІР°С‚СЊ, Р° С‚Р°РєР¶Рµ РїРµСЂРµРјРµРЅРЅС‹Рµ СЃ РёРјРµРЅР°РјРё С„Р°Р№Р»РѕРІ
 	cDataState State1, State2;
 	QString FileName = "", FileName1 = "", FileName2 = "";
 	try {
-		// запоминаем текущее число высотных слоев
+		// Р·Р°РїРѕРјРёРЅР°РµРј С‚РµРєСѓС‰РµРµ С‡РёСЃР»Рѕ РІС‹СЃРѕС‚РЅС‹С… СЃР»РѕРµРІ
 		cDataState::rememberNumLayers();
-		// ставим число слоев = 1
+		// СЃС‚Р°РІРёРј С‡РёСЃР»Рѕ СЃР»РѕРµРІ = 1
 		cDataState::reduceNumLayers();
-		// считываем первое имя файла
+		// СЃС‡РёС‚С‹РІР°РµРј РїРµСЂРІРѕРµ РёРјСЏ С„Р°Р№Р»Р°
 		FileName = FileName1 = ui.File1lineEdit->text();
-		// пытаемся считать первое состояние
+		// РїС‹С‚Р°РµРјСЃСЏ СЃС‡РёС‚Р°С‚СЊ РїРµСЂРІРѕРµ СЃРѕСЃС‚РѕСЏРЅРёРµ
 		State1.ReadDataFromFile(FileName.toStdWString());
-		// считываем второе имя файла
+		// СЃС‡РёС‚С‹РІР°РµРј РІС‚РѕСЂРѕРµ РёРјСЏ С„Р°Р№Р»Р°
 		FileName = FileName2 = ui.File2lineEdit->text();
-		// пытаемся считать второе состояние
+		// РїС‹С‚Р°РµРјСЃСЏ СЃС‡РёС‚Р°С‚СЊ РІС‚РѕСЂРѕРµ СЃРѕСЃС‚РѕСЏРЅРёРµ
 		State2.ReadDataFromFile(FileName.toStdWString());
 	} catch(const ios_base::failure &ex) {
-		// выводим сообщение об ошибке
+		// РІС‹РІРѕРґРёРј СЃРѕРѕР±С‰РµРЅРёРµ РѕР± РѕС€РёР±РєРµ
 		ui.textBrowser->append("");
-		ui.textBrowser->append(QString::fromWCharArray(L"ОШИБКА!"));
+		ui.textBrowser->append(QString::fromWCharArray(L"РћРЁРР‘РљРђ!"));
 		ui.textBrowser->append(QString(ex.what()));
-		ui.textBrowser->append(QString::fromWCharArray(L"Проблема с файлом ")+FileName+QString::fromWCharArray(L". Проверьте правильность указанного пути."));
-		statusLabel->setText(QString::fromWCharArray(L"Проверьте правильность пути файла с проблемой."));
-		// возвращаем предыдущее число слоев и выходим из функции
+		ui.textBrowser->append(QString::fromWCharArray(L"РџСЂРѕР±Р»РµРјР° СЃ С„Р°Р№Р»РѕРј ")+FileName+QString::fromWCharArray(L". РџСЂРѕРІРµСЂСЊС‚Рµ РїСЂР°РІРёР»СЊРЅРѕСЃС‚СЊ СѓРєР°Р·Р°РЅРЅРѕРіРѕ РїСѓС‚Рё."));
+		statusLabel->setText(QString::fromWCharArray(L"РџСЂРѕРІРµСЂСЊС‚Рµ РїСЂР°РІРёР»СЊРЅРѕСЃС‚СЊ РїСѓС‚Рё С„Р°Р№Р»Р° СЃ РїСЂРѕР±Р»РµРјРѕР№."));
+		// РІРѕР·РІСЂР°С‰Р°РµРј РїСЂРµРґС‹РґСѓС‰РµРµ С‡РёСЃР»Рѕ СЃР»РѕРµРІ Рё РІС‹С…РѕРґРёРј РёР· С„СѓРЅРєС†РёРё
 		cDataState::setRememberedNumLayers();
 		return;
 	} catch(const invalid_argument &ex) {
-		// выводим сообщение об ошибке
+		// РІС‹РІРѕРґРёРј СЃРѕРѕР±С‰РµРЅРёРµ РѕР± РѕС€РёР±РєРµ
 		ui.textBrowser->append("");
-		ui.textBrowser->append(QString::fromWCharArray(L"ОШИБКА!"));
+		ui.textBrowser->append(QString::fromWCharArray(L"РћРЁРР‘РљРђ!"));
 		ui.textBrowser->append(QString(ex.what()));
-		ui.textBrowser->append(QString::fromWCharArray(L"Проблема с файлом ")+FileName+QString::fromWCharArray(L". Проверьте правильность формата файла."));
-		statusLabel->setText(QString::fromWCharArray(L"Проверьте правильность формата файла с проблемой."));
-		// возвращаем предыдущее число слоев и выходим из функции
+		ui.textBrowser->append(QString::fromWCharArray(L"РџСЂРѕР±Р»РµРјР° СЃ С„Р°Р№Р»РѕРј ")+FileName+QString::fromWCharArray(L". РџСЂРѕРІРµСЂСЊС‚Рµ РїСЂР°РІРёР»СЊРЅРѕСЃС‚СЊ С„РѕСЂРјР°С‚Р° С„Р°Р№Р»Р°."));
+		statusLabel->setText(QString::fromWCharArray(L"РџСЂРѕРІРµСЂСЊС‚Рµ РїСЂР°РІРёР»СЊРЅРѕСЃС‚СЊ С„РѕСЂРјР°С‚Р° С„Р°Р№Р»Р° СЃ РїСЂРѕР±Р»РµРјРѕР№."));
+		// РІРѕР·РІСЂР°С‰Р°РµРј РїСЂРµРґС‹РґСѓС‰РµРµ С‡РёСЃР»Рѕ СЃР»РѕРµРІ Рё РІС‹С…РѕРґРёРј РёР· С„СѓРЅРєС†РёРё
 		cDataState::setRememberedNumLayers();
 		return;
 	} catch(const exception &ex) {
-		// выводим сообщение об ошибке
+		// РІС‹РІРѕРґРёРј СЃРѕРѕР±С‰РµРЅРёРµ РѕР± РѕС€РёР±РєРµ
 		ui.textBrowser->append("");
-		ui.textBrowser->append(QString::fromWCharArray(L"НЕПРЕДВИДЕННАЯ ОШИБКА!"));
+		ui.textBrowser->append(QString::fromWCharArray(L"РќР•РџР Р•Р”Р’РР”Р•РќРќРђРЇ РћРЁРР‘РљРђ!"));
 		ui.textBrowser->append(QString(ex.what()));
-		ui.textBrowser->append(QString::fromWCharArray(L"Проблема с файлом ")+FileName);
-		ui.textBrowser->append(QString::fromWCharArray(L"Попробуйте изменить файл и перезапустить программу. Если проблема останется, свяжитесь с разработчиком."));
-		statusLabel->setText(QString::fromWCharArray(L"Попробуйте изменить файл с проблемой и перезапустить программу."));
-		// возвращаем предыдущее число слоев и выходим из функции
+		ui.textBrowser->append(QString::fromWCharArray(L"РџСЂРѕР±Р»РµРјР° СЃ С„Р°Р№Р»РѕРј ")+FileName);
+		ui.textBrowser->append(QString::fromWCharArray(L"РџРѕРїСЂРѕР±СѓР№С‚Рµ РёР·РјРµРЅРёС‚СЊ С„Р°Р№Р» Рё РїРµСЂРµР·Р°РїСѓСЃС‚РёС‚СЊ РїСЂРѕРіСЂР°РјРјСѓ. Р•СЃР»Рё РїСЂРѕР±Р»РµРјР° РѕСЃС‚Р°РЅРµС‚СЃСЏ, СЃРІСЏР¶РёС‚РµСЃСЊ СЃ СЂР°Р·СЂР°Р±РѕС‚С‡РёРєРѕРј."));
+		statusLabel->setText(QString::fromWCharArray(L"РџРѕРїСЂРѕР±СѓР№С‚Рµ РёР·РјРµРЅРёС‚СЊ С„Р°Р№Р» СЃ РїСЂРѕР±Р»РµРјРѕР№ Рё РїРµСЂРµР·Р°РїСѓСЃС‚РёС‚СЊ РїСЂРѕРіСЂР°РјРјСѓ."));
+		// РІРѕР·РІСЂР°С‰Р°РµРј РїСЂРµРґС‹РґСѓС‰РµРµ С‡РёСЃР»Рѕ СЃР»РѕРµРІ Рё РІС‹С…РѕРґРёРј РёР· С„СѓРЅРєС†РёРё
 		cDataState::setRememberedNumLayers();
 		return;
 	} catch(...) {
-		// выводим сообщение об ошибке
+		// РІС‹РІРѕРґРёРј СЃРѕРѕР±С‰РµРЅРёРµ РѕР± РѕС€РёР±РєРµ
 		ui.textBrowser->append("");
-		ui.textBrowser->append(QString::fromWCharArray(L"НЕПРЕДВИДЕННАЯ ОШИБКА!"));
-		ui.textBrowser->append(QString::fromWCharArray(L"Проблема с файлом ")+FileName);
-		ui.textBrowser->append(QString::fromWCharArray(L"Попробуйте изменить файл и перезапустить программу. Если проблема останется, свяжитесь с разработчиком."));
-		statusLabel->setText(QString::fromWCharArray(L"Попробуйте изменить файл с проблемой и перезапустить программу."));
-		// возвращаем предыдущее число слоев и выходим из функции
+		ui.textBrowser->append(QString::fromWCharArray(L"РќР•РџР Р•Р”Р’РР”Р•РќРќРђРЇ РћРЁРР‘РљРђ!"));
+		ui.textBrowser->append(QString::fromWCharArray(L"РџСЂРѕР±Р»РµРјР° СЃ С„Р°Р№Р»РѕРј ")+FileName);
+		ui.textBrowser->append(QString::fromWCharArray(L"РџРѕРїСЂРѕР±СѓР№С‚Рµ РёР·РјРµРЅРёС‚СЊ С„Р°Р№Р» Рё РїРµСЂРµР·Р°РїСѓСЃС‚РёС‚СЊ РїСЂРѕРіСЂР°РјРјСѓ. Р•СЃР»Рё РїСЂРѕР±Р»РµРјР° РѕСЃС‚Р°РЅРµС‚СЃСЏ, СЃРІСЏР¶РёС‚РµСЃСЊ СЃ СЂР°Р·СЂР°Р±РѕС‚С‡РёРєРѕРј."));
+		statusLabel->setText(QString::fromWCharArray(L"РџРѕРїСЂРѕР±СѓР№С‚Рµ РёР·РјРµРЅРёС‚СЊ С„Р°Р№Р» СЃ РїСЂРѕР±Р»РµРјРѕР№ Рё РїРµСЂРµР·Р°РїСѓСЃС‚РёС‚СЊ РїСЂРѕРіСЂР°РјРјСѓ."));
+		// РІРѕР·РІСЂР°С‰Р°РµРј РїСЂРµРґС‹РґСѓС‰РµРµ С‡РёСЃР»Рѕ СЃР»РѕРµРІ Рё РІС‹С…РѕРґРёРј РёР· С„СѓРЅРєС†РёРё
 		cDataState::setRememberedNumLayers();
 		return;
 	}
-	// если все хорошо - запоминаем имена файлов со считанными состояниями
+	// РµСЃР»Рё РІСЃРµ С…РѕСЂРѕС€Рѕ - Р·Р°РїРѕРјРёРЅР°РµРј РёРјРµРЅР° С„Р°Р№Р»РѕРІ СЃРѕ СЃС‡РёС‚Р°РЅРЅС‹РјРё СЃРѕСЃС‚РѕСЏРЅРёСЏРјРё
 	setState1FileName(FileName1.mid(FileName.lastIndexOf('/')+1));
 	setState2FileName(FileName2.mid(FileName.lastIndexOf('/')+1));
 	/*
-		если картограмма активна - меняем состояния
-		если картограмма не активна - создаем ее, ставим аттрибут - удалить при закрытии - и выводим на экран
-		при создании картограммы, передаем её в конструктор параметры экрана
+		РµСЃР»Рё РєР°СЂС‚РѕРіСЂР°РјРјР° Р°РєС‚РёРІРЅР° - РјРµРЅСЏРµРј СЃРѕСЃС‚РѕСЏРЅРёСЏ
+		РµСЃР»Рё РєР°СЂС‚РѕРіСЂР°РјРјР° РЅРµ Р°РєС‚РёРІРЅР° - СЃРѕР·РґР°РµРј РµРµ, СЃС‚Р°РІРёРј Р°С‚С‚СЂРёР±СѓС‚ - СѓРґР°Р»РёС‚СЊ РїСЂРё Р·Р°РєСЂС‹С‚РёРё - Рё РІС‹РІРѕРґРёРј РЅР° СЌРєСЂР°РЅ
+		РїСЂРё СЃРѕР·РґР°РЅРёРё РєР°СЂС‚РѕРіСЂР°РјРјС‹, РїРµСЂРµРґР°РµРј РµС‘ РІ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РїР°СЂР°РјРµС‚СЂС‹ СЌРєСЂР°РЅР°
 	*/
 	if (emit isComparisonFieldActive())
 	{
@@ -266,42 +266,42 @@ void FileBrowser::on_Compare_clicked()
 		w->setAttribute(Qt::WA_DeleteOnClose);	
 		w->show();
 	}
-	// закрываем обозреватель
+	// Р·Р°РєСЂС‹РІР°РµРј РѕР±РѕР·СЂРµРІР°С‚РµР»СЊ
 	FileBrowser::close();
 }
 
-// обновление статус-бара
+// РѕР±РЅРѕРІР»РµРЅРёРµ СЃС‚Р°С‚СѓСЃ-Р±Р°СЂР°
 void FileBrowser::CheckingFileNames(void) 
 {
-	// если оба LineEdit-а пусты
+	// РµСЃР»Рё РѕР±Р° LineEdit-Р° РїСѓСЃС‚С‹
 	if (ui.File1lineEdit->text().isEmpty() && ui.File2lineEdit->text().isEmpty())
 	{
-		statusLabel->setText(QString::fromStdWString(L"Введите названия файлов с состояниями, которые необходимо сравнить."));
+		statusLabel->setText(QString::fromStdWString(L"Р’РІРµРґРёС‚Рµ РЅР°Р·РІР°РЅРёСЏ С„Р°Р№Р»РѕРІ СЃ СЃРѕСЃС‚РѕСЏРЅРёСЏРјРё, РєРѕС‚РѕСЂС‹Рµ РЅРµРѕР±С…РѕРґРёРјРѕ СЃСЂР°РІРЅРёС‚СЊ."));
 		return;
 	}
-	// если пуст только первый LineEdit
+	// РµСЃР»Рё РїСѓСЃС‚ С‚РѕР»СЊРєРѕ РїРµСЂРІС‹Р№ LineEdit
 	if (ui.File1lineEdit->text().isEmpty())
 	{
-		statusLabel->setText(QString::fromStdWString(L"Введите название файла с первым состоянием в графу \"Первое состояние\"."));
+		statusLabel->setText(QString::fromStdWString(L"Р’РІРµРґРёС‚Рµ РЅР°Р·РІР°РЅРёРµ С„Р°Р№Р»Р° СЃ РїРµСЂРІС‹Рј СЃРѕСЃС‚РѕСЏРЅРёРµРј РІ РіСЂР°С„Сѓ \"РџРµСЂРІРѕРµ СЃРѕСЃС‚РѕСЏРЅРёРµ\"."));
 		return;
 	}
-	// если пуст только второй LineEdit
+	// РµСЃР»Рё РїСѓСЃС‚ С‚РѕР»СЊРєРѕ РІС‚РѕСЂРѕР№ LineEdit
 	if (ui.File2lineEdit->text().isEmpty())
 	{
-		statusLabel->setText(QString::fromStdWString(L"Введите название файла со вторым состоянием в графу \"Второе состояние\"."));
+		statusLabel->setText(QString::fromStdWString(L"Р’РІРµРґРёС‚Рµ РЅР°Р·РІР°РЅРёРµ С„Р°Р№Р»Р° СЃРѕ РІС‚РѕСЂС‹Рј СЃРѕСЃС‚РѕСЏРЅРёРµРј РІ РіСЂР°С„Сѓ \"Р’С‚РѕСЂРѕРµ СЃРѕСЃС‚РѕСЏРЅРёРµ\"."));
 		return;
 	}
-	// если в LineEdit-ах одинаковые названия файлов
+	// РµСЃР»Рё РІ LineEdit-Р°С… РѕРґРёРЅР°РєРѕРІС‹Рµ РЅР°Р·РІР°РЅРёСЏ С„Р°Р№Р»РѕРІ
 	if (ui.File1lineEdit->text() == ui.File2lineEdit->text())
 	{
-		statusLabel->setText(QString::fromStdWString(L"Необходимо выбрать различные файлы для сравнения."));
+		statusLabel->setText(QString::fromStdWString(L"РќРµРѕР±С…РѕРґРёРјРѕ РІС‹Р±СЂР°С‚СЊ СЂР°Р·Р»РёС‡РЅС‹Рµ С„Р°Р№Р»С‹ РґР»СЏ СЃСЂР°РІРЅРµРЅРёСЏ."));
 		return;
 	}
-	// ничего из вышеперечисленного
-	statusLabel->setText(QString::fromStdWString(L"Нажмите кнопку \"Сравнить\" для сравнения состояний."));
+	// РЅРёС‡РµРіРѕ РёР· РІС‹С€РµРїРµСЂРµС‡РёСЃР»РµРЅРЅРѕРіРѕ
+	statusLabel->setText(QString::fromStdWString(L"РќР°Р¶РјРёС‚Рµ РєРЅРѕРїРєСѓ \"РЎСЂР°РІРЅРёС‚СЊ\" РґР»СЏ СЃСЂР°РІРЅРµРЅРёСЏ СЃРѕСЃС‚РѕСЏРЅРёР№."));
 }
 
-// оповещение картограммы о закрытии обозревателя файлов
+// РѕРїРѕРІРµС‰РµРЅРёРµ РєР°СЂС‚РѕРіСЂР°РјРјС‹ Рѕ Р·Р°РєСЂС‹С‚РёРё РѕР±РѕР·СЂРµРІР°С‚РµР»СЏ С„Р°Р№Р»РѕРІ
 void FileBrowser::closeEvent(QCloseEvent *)
 {
 	emit closing();

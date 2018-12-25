@@ -1,24 +1,24 @@
-#include <QColorDialog>
+п»ї#include <QColorDialog>
 #include "extfunctions.h"
 #include "cf_colorchanger.h"
 #include "fa_box.h"
 #include "filebrowser.h"
 
-// конструктор
+// РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 CF_ColorChanger::CF_ColorChanger(QWidget *parent)
 	: QWidget(parent)
 {
 	ui.setupUi(this);
-	// делаем окно модальным и фиксированного размера
+	// РґРµР»Р°РµРј РѕРєРЅРѕ РјРѕРґР°Р»СЊРЅС‹Рј Рё С„РёРєСЃРёСЂРѕРІР°РЅРЅРѕРіРѕ СЂР°Р·РјРµСЂР°
 	CF_ColorChanger::setFixedSize(CF_ColorChanger::size());
 	CF_ColorChanger::setWindowModality(Qt::ApplicationModal);
 
-	// вставляем имена файлов в соответствующие поля
-	ui.textBrowser_Max->setText(QString::fromWCharArray(L"Значение величины в ") + State1FileName() +
-								QString::fromWCharArray(L" больше, чем в ") + State2FileName());
-	ui.textBrowser_Min->setText(QString::fromWCharArray(L"Значение величины в ") + State1FileName() +
-								QString::fromWCharArray(L" меньше, чем в ") + State2FileName());
-	// копируем настройки цветов из текущих значений картограммы
+	// РІСЃС‚Р°РІР»СЏРµРј РёРјРµРЅР° С„Р°Р№Р»РѕРІ РІ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РёРµ РїРѕР»СЏ
+	ui.textBrowser_Max->setText(QString::fromWCharArray(L"Р—РЅР°С‡РµРЅРёРµ РІРµР»РёС‡РёРЅС‹ РІ ") + State1FileName() +
+								QString::fromWCharArray(L" Р±РѕР»СЊС€Рµ, С‡РµРј РІ ") + State2FileName());
+	ui.textBrowser_Min->setText(QString::fromWCharArray(L"Р—РЅР°С‡РµРЅРёРµ РІРµР»РёС‡РёРЅС‹ РІ ") + State1FileName() +
+								QString::fromWCharArray(L" РјРµРЅСЊС€Рµ, С‡РµРј РІ ") + State2FileName());
+	// РєРѕРїРёСЂСѓРµРј РЅР°СЃС‚СЂРѕР№РєРё С†РІРµС‚РѕРІ РёР· С‚РµРєСѓС‰РёС… Р·РЅР°С‡РµРЅРёР№ РєР°СЂС‚РѕРіСЂР°РјРјС‹
 	newLimitColors[Parameters::Kq].maxColor = cFA_Box::GetMaxColor(Parameters::Kq);
 	newLimitColors[Parameters::Kq].minColor = cFA_Box::GetMinColor(Parameters::Kq);
 	newLimitColors[Parameters::Burn].maxColor = cFA_Box::GetMaxColor(Parameters::Burn);
@@ -26,33 +26,33 @@ CF_ColorChanger::CF_ColorChanger(QWidget *parent)
 	newLimitColors[Parameters::Kv].maxColor = cFA_Box::GetMaxColor(Parameters::Kv);
 	newLimitColors[Parameters::Kv].minColor = cFA_Box::GetMinColor(Parameters::Kv);
 
-	// задаем демонстрационные значения (какие в голову придут)
+	// Р·Р°РґР°РµРј РґРµРјРѕРЅСЃС‚СЂР°С†РёРѕРЅРЅС‹Рµ Р·РЅР°С‡РµРЅРёСЏ (РєР°РєРёРµ РІ РіРѕР»РѕРІСѓ РїСЂРёРґСѓС‚)
 	double demoValue1 = 1.433;
 	double demoValue2 = 1.254;
 
-	// задаем параметры первого демонстрационного поля - цвет, автозаполнение и присоединяем сигнал передачи параметров отрисовки
+	// Р·Р°РґР°РµРј РїР°СЂР°РјРµС‚СЂС‹ РїРµСЂРІРѕРіРѕ РґРµРјРѕРЅСЃС‚СЂР°С†РёРѕРЅРЅРѕРіРѕ РїРѕР»СЏ - С†РІРµС‚, Р°РІС‚РѕР·Р°РїРѕР»РЅРµРЅРёРµ Рё РїСЂРёСЃРѕРµРґРёРЅСЏРµРј СЃРёРіРЅР°Р» РїРµСЂРµРґР°С‡Рё РїР°СЂР°РјРµС‚СЂРѕРІ РѕС‚СЂРёСЃРѕРІРєРё
 	ui.ColorField_Max->setBackgroundRole(QPalette::Base);
 	ui.ColorField_Max->setAutoFillBackground(true);
 	connect(ui.ColorField_Max, &demoAreaCF::getColor, [this] () { return newLimitColors.at(cFA_Box::ActiveMode()).maxColor;});
-	// подключаем сигнал передачи демонстрационных значениий
+	// РїРѕРґРєР»СЋС‡Р°РµРј СЃРёРіРЅР°Р» РїРµСЂРµРґР°С‡Рё РґРµРјРѕРЅСЃС‚СЂР°С†РёРѕРЅРЅС‹С… Р·РЅР°С‡РµРЅРёРёР№
 	connect(this, SIGNAL(sendDemoStates(const QPair<double, double>&)), ui.ColorField_Max, SLOT(getStates(const QPair<double, double>&)));
-	// передаем демонстрационные значения 
+	// РїРµСЂРµРґР°РµРј РґРµРјРѕРЅСЃС‚СЂР°С†РёРѕРЅРЅС‹Рµ Р·РЅР°С‡РµРЅРёСЏ 
 	emit sendDemoStates(qMakePair( demoValue1, demoValue2));
-	// отключаем сигнал передачи демонстрационных значениий
+	// РѕС‚РєР»СЋС‡Р°РµРј СЃРёРіРЅР°Р» РїРµСЂРµРґР°С‡Рё РґРµРјРѕРЅСЃС‚СЂР°С†РёРѕРЅРЅС‹С… Р·РЅР°С‡РµРЅРёРёР№
 	disconnect(this, SIGNAL(sendDemoStates(const QPair<double, double>&)), ui.ColorField_Max, SLOT(getStates(const QPair<double, double>&)));
 
-	// задаем параметры второго демонстрационного поля - цвет, автозаполнение и присоединяем сигнал передачи параметров отрисовки
+	// Р·Р°РґР°РµРј РїР°СЂР°РјРµС‚СЂС‹ РІС‚РѕСЂРѕРіРѕ РґРµРјРѕРЅСЃС‚СЂР°С†РёРѕРЅРЅРѕРіРѕ РїРѕР»СЏ - С†РІРµС‚, Р°РІС‚РѕР·Р°РїРѕР»РЅРµРЅРёРµ Рё РїСЂРёСЃРѕРµРґРёРЅСЏРµРј СЃРёРіРЅР°Р» РїРµСЂРµРґР°С‡Рё РїР°СЂР°РјРµС‚СЂРѕРІ РѕС‚СЂРёСЃРѕРІРєРё
 	ui.ColorField_Min->setBackgroundRole(QPalette::Base);
 	ui.ColorField_Min->setAutoFillBackground(true);
 	connect(ui.ColorField_Min, &demoAreaCF::getColor, [this] () { return newLimitColors.at(cFA_Box::ActiveMode()).minColor;});
-	// подключаем сигнал передачи демонстрационных значениий
+	// РїРѕРґРєР»СЋС‡Р°РµРј СЃРёРіРЅР°Р» РїРµСЂРµРґР°С‡Рё РґРµРјРѕРЅСЃС‚СЂР°С†РёРѕРЅРЅС‹С… Р·РЅР°С‡РµРЅРёРёР№
 	connect(this, SIGNAL(sendDemoStates(const QPair<double, double>&)), ui.ColorField_Min, SLOT(getStates(const QPair<double, double>&)));
-	// передаем демонстрационные значения 
+	// РїРµСЂРµРґР°РµРј РґРµРјРѕРЅСЃС‚СЂР°С†РёРѕРЅРЅС‹Рµ Р·РЅР°С‡РµРЅРёСЏ 
 	emit sendDemoStates(qMakePair( demoValue2, demoValue1));
-	// отключаем сигнал передачи демонстрационных значениий
+	// РѕС‚РєР»СЋС‡Р°РµРј СЃРёРіРЅР°Р» РїРµСЂРµРґР°С‡Рё РґРµРјРѕРЅСЃС‚СЂР°С†РёРѕРЅРЅС‹С… Р·РЅР°С‡РµРЅРёРёР№
 	disconnect(this, SIGNAL(sendDemoStates(const QPair<double, double>&)), ui.ColorField_Min, SLOT(getStates(const QPair<double, double>&)));
 
-	// в зависимости от текущего выбранного параметра нажимаем нужную кнопку и перерисовываем демонтрационные поля
+	// РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ С‚РµРєСѓС‰РµРіРѕ РІС‹Р±СЂР°РЅРЅРѕРіРѕ РїР°СЂР°РјРµС‚СЂР° РЅР°Р¶РёРјР°РµРј РЅСѓР¶РЅСѓСЋ РєРЅРѕРїРєСѓ Рё РїРµСЂРµСЂРёСЃРѕРІС‹РІР°РµРј РґРµРјРѕРЅС‚СЂР°С†РёРѕРЅРЅС‹Рµ РїРѕР»СЏ
 	switch (cFA_Box::ActiveMode()) {
 		case (Parameters::Kq) : 
 			ui.KqButton->click();
@@ -65,104 +65,104 @@ CF_ColorChanger::CF_ColorChanger(QWidget *parent)
 			break;
 	}
 
-	// параметры шрифтов для совместимости с high dpi
+	// РїР°СЂР°РјРµС‚СЂС‹ С€СЂРёС„С‚РѕРІ РґР»СЏ СЃРѕРІРјРµСЃС‚РёРјРѕСЃС‚Рё СЃ high dpi
 	QFont font(ui.groupBox->font());
 	font.setPixelSize(13);
 	ui.groupBox->setFont(font);
 }
 
-// деструктор
+// РґРµСЃС‚СЂСѓРєС‚РѕСЂ
 CF_ColorChanger::~CF_ColorChanger() {}
 
 
-// выбран режим Kq
+// РІС‹Р±СЂР°РЅ СЂРµР¶РёРј Kq
 void CF_ColorChanger::on_KqButton_clicked()
 {
-	// кнопка Kq является нажатой - остальные нет
+	// РєРЅРѕРїРєР° Kq СЏРІР»СЏРµС‚СЃСЏ РЅР°Р¶Р°С‚РѕР№ - РѕСЃС‚Р°Р»СЊРЅС‹Рµ РЅРµС‚
 	ui.KqButton->setChecked(true);
 	ui.BurnButton->setChecked(false);
 	ui.KvButton->setChecked(false);
-	// активный режим - Kq
+	// Р°РєС‚РёРІРЅС‹Р№ СЂРµР¶РёРј - Kq
 	activeMode = Parameters::Kq;
-	// изменение активного режима картограммы
+	// РёР·РјРµРЅРµРЅРёРµ Р°РєС‚РёРІРЅРѕРіРѕ СЂРµР¶РёРјР° РєР°СЂС‚РѕРіСЂР°РјРјС‹
 	emit changeActiveMode(activeMode);
-	// изменение цветов демонстрационных полей
+	// РёР·РјРµРЅРµРЅРёРµ С†РІРµС‚РѕРІ РґРµРјРѕРЅСЃС‚СЂР°С†РёРѕРЅРЅС‹С… РїРѕР»РµР№
 	changeColorField();
 }
 
-// выбран режим Burn
+// РІС‹Р±СЂР°РЅ СЂРµР¶РёРј Burn
 void CF_ColorChanger::on_BurnButton_clicked()
 {
-	// кнопка Burn является нажатой - остальные нет
+	// РєРЅРѕРїРєР° Burn СЏРІР»СЏРµС‚СЃСЏ РЅР°Р¶Р°С‚РѕР№ - РѕСЃС‚Р°Р»СЊРЅС‹Рµ РЅРµС‚
 	ui.KqButton->setChecked(false);
 	ui.BurnButton->setChecked(true);
 	ui.KvButton->setChecked(false);
-	// активный режим - Burn
+	// Р°РєС‚РёРІРЅС‹Р№ СЂРµР¶РёРј - Burn
 	activeMode = Parameters::Burn;
-	// изменение активного режима картограммы
+	// РёР·РјРµРЅРµРЅРёРµ Р°РєС‚РёРІРЅРѕРіРѕ СЂРµР¶РёРјР° РєР°СЂС‚РѕРіСЂР°РјРјС‹
 	emit changeActiveMode(activeMode);
-	// изменение цветов демонстрационных полей
+	// РёР·РјРµРЅРµРЅРёРµ С†РІРµС‚РѕРІ РґРµРјРѕРЅСЃС‚СЂР°С†РёРѕРЅРЅС‹С… РїРѕР»РµР№
 	changeColorField();
 }
 
-// выбран режим Kv
+// РІС‹Р±СЂР°РЅ СЂРµР¶РёРј Kv
 void CF_ColorChanger::on_KvButton_clicked()
 {
-	// кнопка Kv является нажатой - остальные нет
+	// РєРЅРѕРїРєР° Kv СЏРІР»СЏРµС‚СЃСЏ РЅР°Р¶Р°С‚РѕР№ - РѕСЃС‚Р°Р»СЊРЅС‹Рµ РЅРµС‚
 	ui.KqButton->setChecked(false);
 	ui.BurnButton->setChecked(false);
 	ui.KvButton->setChecked(true);
-	// активный режим - Kv
+	// Р°РєС‚РёРІРЅС‹Р№ СЂРµР¶РёРј - Kv
 	activeMode = Parameters::Kv;
-	// изменение активного режима картограммы
+	// РёР·РјРµРЅРµРЅРёРµ Р°РєС‚РёРІРЅРѕРіРѕ СЂРµР¶РёРјР° РєР°СЂС‚РѕРіСЂР°РјРјС‹
 	emit changeActiveMode(activeMode);
-	// изменение цветов демонстрационных полей
+	// РёР·РјРµРЅРµРЅРёРµ С†РІРµС‚РѕРІ РґРµРјРѕРЅСЃС‚СЂР°С†РёРѕРЅРЅС‹С… РїРѕР»РµР№
 	changeColorField();
 }
 
-// перерисовка демонстрационных полей
+// РїРµСЂРµСЂРёСЃРѕРІРєР° РґРµРјРѕРЅСЃС‚СЂР°С†РёРѕРЅРЅС‹С… РїРѕР»РµР№
 void CF_ColorChanger::changeColorField()
 {
 	ui.ColorField_Max->repaint();
 	ui.ColorField_Min->repaint();
 }
 
-// изменение значения цвета первой ТВС
+// РёР·РјРµРЅРµРЅРёРµ Р·РЅР°С‡РµРЅРёСЏ С†РІРµС‚Р° РїРµСЂРІРѕР№ РўР’РЎ
 void CF_ColorChanger::on_ChangeMaxColor_clicked()
 {
-	// вызываем ColorDialog
+	// РІС‹Р·С‹РІР°РµРј ColorDialog
 	QColor newMaxColor = QColorDialog::getColor( newLimitColors.at(activeMode).maxColor,
 												 this,
-											 	 QString::fromWCharArray(L"Выберете цвет"));
-	// если цвет выбран
+											 	 QString::fromWCharArray(L"Р’С‹Р±РµСЂРµС‚Рµ С†РІРµС‚"));
+	// РµСЃР»Рё С†РІРµС‚ РІС‹Р±СЂР°РЅ
 	if (newMaxColor.isValid())
 	{
-		// задаем новый цвет отрисовки
+		// Р·Р°РґР°РµРј РЅРѕРІС‹Р№ С†РІРµС‚ РѕС‚СЂРёСЃРѕРІРєРё
 		newLimitColors[activeMode].maxColor = newMaxColor;
-		// перерисовываем демонстрационные области
+		// РїРµСЂРµСЂРёСЃРѕРІС‹РІР°РµРј РґРµРјРѕРЅСЃС‚СЂР°С†РёРѕРЅРЅС‹Рµ РѕР±Р»Р°СЃС‚Рё
 		changeColorField();
 	}
 }
 
-// изменение значения цвета второй ТВС
+// РёР·РјРµРЅРµРЅРёРµ Р·РЅР°С‡РµРЅРёСЏ С†РІРµС‚Р° РІС‚РѕСЂРѕР№ РўР’РЎ
 void CF_ColorChanger::on_ChangeMinColor_clicked()
 {
-	// вызываем ColorDialog
+	// РІС‹Р·С‹РІР°РµРј ColorDialog
 	QColor newMinColor = QColorDialog::getColor( newLimitColors.at(activeMode).minColor,
 												 this,
-												 QString::fromWCharArray(L"Выберете цвет"));
-	// если цвет выбран
+												 QString::fromWCharArray(L"Р’С‹Р±РµСЂРµС‚Рµ С†РІРµС‚"));
+	// РµСЃР»Рё С†РІРµС‚ РІС‹Р±СЂР°РЅ
 	if (newMinColor.isValid())
 	{
-		// задаем новый цвет отрисовки
+		// Р·Р°РґР°РµРј РЅРѕРІС‹Р№ С†РІРµС‚ РѕС‚СЂРёСЃРѕРІРєРё
 		newLimitColors[activeMode].minColor = newMinColor;
-		// перерисовываем демонстрационные области
+		// РїРµСЂРµСЂРёСЃРѕРІС‹РІР°РµРј РґРµРјРѕРЅСЃС‚СЂР°С†РёРѕРЅРЅС‹Рµ РѕР±Р»Р°СЃС‚Рё
 		changeColorField();
 	}
 }
 
 
-// оповещение картограммы о закрытии окна настройки
+// РѕРїРѕРІРµС‰РµРЅРёРµ РєР°СЂС‚РѕРіСЂР°РјРјС‹ Рѕ Р·Р°РєСЂС‹С‚РёРё РѕРєРЅР° РЅР°СЃС‚СЂРѕР№РєРё
 void CF_ColorChanger::closeEvent(QCloseEvent *)
 {
 	emit closing();
@@ -173,27 +173,27 @@ void CF_ColorChanger::on_buttonBox_clicked(QAbstractButton * button)
 {
 	// OK
 	if (button == ui.buttonBox->button(QDialogButtonBox::Ok)) {
-		// применяем настройки и закрываем окно
+		// РїСЂРёРјРµРЅСЏРµРј РЅР°СЃС‚СЂРѕР№РєРё Рё Р·Р°РєСЂС‹РІР°РµРј РѕРєРЅРѕ
 		applyColors();
 		CF_ColorChanger::close();
 	// CANCEL
 	} else if (button == ui.buttonBox->button(QDialogButtonBox::Cancel)) {
-		// закрываем окно
+		// Р·Р°РєСЂС‹РІР°РµРј РѕРєРЅРѕ
 		CF_ColorChanger::close();
 	// APPLY
 	} else if (button == ui.buttonBox->button(QDialogButtonBox::Apply)) {
-		// применяем настройки
+		// РїСЂРёРјРµРЅСЏРµРј РЅР°СЃС‚СЂРѕР№РєРё
 		applyColors();
 	// DISCARD
 	} else if (button == ui.buttonBox->button(QDialogButtonBox::Discard)) {
-		// копируем настройки цветов из текущих значений картограммы
+		// РєРѕРїРёСЂСѓРµРј РЅР°СЃС‚СЂРѕР№РєРё С†РІРµС‚РѕРІ РёР· С‚РµРєСѓС‰РёС… Р·РЅР°С‡РµРЅРёР№ РєР°СЂС‚РѕРіСЂР°РјРјС‹
 		newLimitColors[Parameters::Kq].maxColor = cFA_Box::GetMaxColor(Parameters::Kq);
 		newLimitColors[Parameters::Kq].minColor = cFA_Box::GetMinColor(Parameters::Kq);
 		newLimitColors[Parameters::Burn].maxColor = cFA_Box::GetMaxColor(Parameters::Burn);
 		newLimitColors[Parameters::Burn].minColor = cFA_Box::GetMinColor(Parameters::Burn);
 		newLimitColors[Parameters::Kv].maxColor = cFA_Box::GetMaxColor(Parameters::Kv);
 		newLimitColors[Parameters::Kv].minColor = cFA_Box::GetMinColor(Parameters::Kv);
-		// перерисовываем поля
+		// РїРµСЂРµСЂРёСЃРѕРІС‹РІР°РµРј РїРѕР»СЏ
 		if (ui.KqButton->isChecked()) {
 			ui.KqButton->click();
 		} else if (ui.BurnButton->isChecked()) {
@@ -205,14 +205,14 @@ void CF_ColorChanger::on_buttonBox_clicked(QAbstractButton * button)
 		}
 	// RESTORE DEFAULTS
 	} else if (button == ui.buttonBox->button(QDialogButtonBox::RestoreDefaults)) {
-		// копируем настройки цветов из стандартных значений картограммы
+		// РєРѕРїРёСЂСѓРµРј РЅР°СЃС‚СЂРѕР№РєРё С†РІРµС‚РѕРІ РёР· СЃС‚Р°РЅРґР°СЂС‚РЅС‹С… Р·РЅР°С‡РµРЅРёР№ РєР°СЂС‚РѕРіСЂР°РјРјС‹
 		newLimitColors[Parameters::Kq].maxColor = cFA_Box::GetDefaultMaxColor(Parameters::Kq);
 		newLimitColors[Parameters::Kq].minColor = cFA_Box::GetDefaultMinColor(Parameters::Kq);
 		newLimitColors[Parameters::Burn].maxColor = cFA_Box::GetDefaultMaxColor(Parameters::Burn);
 		newLimitColors[Parameters::Burn].minColor = cFA_Box::GetDefaultMinColor(Parameters::Burn);
 		newLimitColors[Parameters::Kv].maxColor = cFA_Box::GetDefaultMaxColor(Parameters::Kv);
 		newLimitColors[Parameters::Kv].minColor = cFA_Box::GetDefaultMinColor(Parameters::Kv);
-		// перерисовываем поля
+		// РїРµСЂРµСЂРёСЃРѕРІС‹РІР°РµРј РїРѕР»СЏ
 		if (ui.KqButton->isChecked()) {
 			ui.KqButton->click();
 		} else if (ui.BurnButton->isChecked()) {
@@ -225,16 +225,16 @@ void CF_ColorChanger::on_buttonBox_clicked(QAbstractButton * button)
 	}
 }
 
-// применить цвета
+// РїСЂРёРјРµРЅРёС‚СЊ С†РІРµС‚Р°
 void CF_ColorChanger::applyColors()
 {
-	// задание предельных цветов картограммы
+	// Р·Р°РґР°РЅРёРµ РїСЂРµРґРµР»СЊРЅС‹С… С†РІРµС‚РѕРІ РєР°СЂС‚РѕРіСЂР°РјРјС‹
 	cFA_Box::SetMaxColor(Parameters::Kq, newLimitColors.at(Parameters::Kq).maxColor);
 	cFA_Box::SetMinColor(Parameters::Kq, newLimitColors.at(Parameters::Kq).minColor);
 	cFA_Box::SetMaxColor(Parameters::Burn, newLimitColors.at(Parameters::Burn).maxColor);
 	cFA_Box::SetMinColor(Parameters::Burn, newLimitColors.at(Parameters::Burn).minColor);
 	cFA_Box::SetMaxColor(Parameters::Kv, newLimitColors.at(Parameters::Kv).maxColor);
 	cFA_Box::SetMinColor(Parameters::Kv, newLimitColors.at(Parameters::Kv).minColor);
-	// перекрасить картограмму
+	// РїРµСЂРµРєСЂР°СЃРёС‚СЊ РєР°СЂС‚РѕРіСЂР°РјРјСѓ
 	emit RecolorComparisonField();
 }
