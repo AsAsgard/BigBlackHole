@@ -5,7 +5,7 @@
 #include <sstream>
 #include <string>
 
-// шаблонные функции перевода в строки (отсутствуют в компиляторе msvc-2010)
+// С€Р°Р±Р»РѕРЅРЅС‹Рµ С„СѓРЅРєС†РёРё РїРµСЂРµРІРѕРґР° РІ СЃС‚СЂРѕРєРё (РѕС‚СЃСѓС‚СЃС‚РІСѓСЋС‚ РІ РєРѕРјРїРёР»СЏС‚РѕСЂРµ msvc-2010)
 namespace ExtFunctions {
 	template<typename T> std::string to_string(const T &inparam)
 	{

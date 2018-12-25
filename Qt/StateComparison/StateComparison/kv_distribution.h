@@ -12,24 +12,24 @@
 #include "kv_settings.h"
 #include "renderarea.h"
 
-//класс формы - гистограмма распределения Kv
+//РєР»Р°СЃСЃ С„РѕСЂРјС‹ - РіРёСЃС‚РѕРіСЂР°РјРјР° СЂР°СЃРїСЂРµРґРµР»РµРЅРёСЏ Kv
 class Kv_Distribution : public QMainWindow
 {
 	Q_OBJECT
 
 
 public:
-	// конструктор и деструктор
+	// РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ Рё РґРµСЃС‚СЂСѓРєС‚РѕСЂ
 	Kv_Distribution(const QPen& oldState1Pen, const QPen& oldState2Pen, const AutoAxis::AutoAxisEnum& oldAutoAxisSetting, QWidget *parent = 0);
 	~Kv_Distribution();
 
-	// отправка текущего номера ТВС, открытого на гистограмме
+	// РѕС‚РїСЂР°РІРєР° С‚РµРєСѓС‰РµРіРѕ РЅРѕРјРµСЂР° РўР’РЎ, РѕС‚РєСЂС‹С‚РѕРіРѕ РЅР° РіРёСЃС‚РѕРіСЂР°РјРјРµ
 	int currentFA() const { return CurrentFA;}
 
 signals:
-	// закрытие гистограммы с отправкой текущих параметров отрисовки
+	// Р·Р°РєСЂС‹С‚РёРµ РіРёСЃС‚РѕРіСЂР°РјРјС‹ СЃ РѕС‚РїСЂР°РІРєРѕР№ С‚РµРєСѓС‰РёС… РїР°СЂР°РјРµС‚СЂРѕРІ РѕС‚СЂРёСЃРѕРІРєРё
 	void closing(const QPen& State1Pen, const QPen& State2Pen, const AutoAxis::AutoAxisEnum& AutoAxisSetting);\
-	// получить значение текущего высотного слоя
+	// РїРѕР»СѓС‡РёС‚СЊ Р·РЅР°С‡РµРЅРёРµ С‚РµРєСѓС‰РµРіРѕ РІС‹СЃРѕС‚РЅРѕРіРѕ СЃР»РѕСЏ
 	int getSpinBoxValue();
 
 protected:
@@ -37,58 +37,58 @@ protected:
 	void resizeEvent(QResizeEvent * res) override;
 
 private slots:
-	//определение положения мыши на графике - отрисовка доп линий
+	//РѕРїСЂРµРґРµР»РµРЅРёРµ РїРѕР»РѕР¶РµРЅРёСЏ РјС‹С€Рё РЅР° РіСЂР°С„РёРєРµ - РѕС‚СЂРёСЃРѕРІРєР° РґРѕРї Р»РёРЅРёР№
 	void MouseOnPlot(QMouseEvent * mouse);
-	// сделать скриншот гистограмы
+	// СЃРґРµР»Р°С‚СЊ СЃРєСЂРёРЅС€РѕС‚ РіРёСЃС‚РѕРіСЂР°РјС‹
 	void on_Screenshot_triggered();
-	// окно настроек гистограммы
+	// РѕРєРЅРѕ РЅР°СЃС‚СЂРѕРµРє РіРёСЃС‚РѕРіСЂР°РјРјС‹
 	void on_Settings_triggered();
-	// окно настроек гистограммы было закрыто 
+	// РѕРєРЅРѕ РЅР°СЃС‚СЂРѕРµРє РіРёСЃС‚РѕРіСЂР°РјРјС‹ Р±С‹Р»Рѕ Р·Р°РєСЂС‹С‚Рѕ 
 	void SetterClosed();
-	// отправить текущие настройки отрисовки
+	// РѕС‚РїСЂР°РІРёС‚СЊ С‚РµРєСѓС‰РёРµ РЅР°СЃС‚СЂРѕР№РєРё РѕС‚СЂРёСЃРѕРІРєРё
 	QPair<QPen, QPen> sendCurrentPens();
-	// отправить настройки отрисовки по умолчанию
+	// РѕС‚РїСЂР°РІРёС‚СЊ РЅР°СЃС‚СЂРѕР№РєРё РѕС‚СЂРёСЃРѕРІРєРё РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
 	QPair<QPen, QPen> sendDefaultPens();
-	// отправить текущюю автонастройку оси
+	// РѕС‚РїСЂР°РІРёС‚СЊ С‚РµРєСѓС‰СЋСЋ Р°РІС‚РѕРЅР°СЃС‚СЂРѕР№РєСѓ РѕСЃРё
 	AutoAxis::AutoAxisEnum sendCurrentAutoAxisSetting();
-	// получение новых параметров отрисовки и автонастройки
+	// РїРѕР»СѓС‡РµРЅРёРµ РЅРѕРІС‹С… РїР°СЂР°РјРµС‚СЂРѕРІ РѕС‚СЂРёСЃРѕРІРєРё Рё Р°РІС‚РѕРЅР°СЃС‚СЂРѕР№РєРё
 	void getNewSettings(const QPen& newState1Pen, const QPen& newState2Pen, AutoAxis::AutoAxisEnum newAutoAxisSetting);
-	// новая ТВС выбрана в поле картограммы
+	// РЅРѕРІР°СЏ РўР’РЎ РІС‹Р±СЂР°РЅР° РІ РїРѕР»Рµ РєР°СЂС‚РѕРіСЂР°РјРјС‹
 	void FA_selected(int FA_Number);
-	// необходимо скрыть линию слоя
+	// РЅРµРѕР±С…РѕРґРёРјРѕ СЃРєСЂС‹С‚СЊ Р»РёРЅРёСЋ СЃР»РѕСЏ
 	void LayerLineHiding() {ui.plotArea->graph(2)->data()->clear(); ui.plotArea->replot();}
-	// необходимо пересчитать параметры оси
+	// РЅРµРѕР±С…РѕРґРёРјРѕ РїРµСЂРµСЃС‡РёС‚Р°С‚СЊ РїР°СЂР°РјРµС‚СЂС‹ РѕСЃРё
 	void ResetAxisNeededTrue() { AxisSettingNeeded = true;}
-	// получить указатель на поле рисования
+	// РїРѕР»СѓС‡РёС‚СЊ СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РїРѕР»Рµ СЂРёСЃРѕРІР°РЅРёСЏ
 	void getRenderAreaPointer(RenderArea *);
 
 private:
-	// ПОЛЯ
+	// РџРћР›РЇ
 	Ui::Kv_DistributionClass ui;
-	// текущая ТВС
+	// С‚РµРєСѓС‰Р°СЏ РўР’РЎ
 	int CurrentFA;
-	// Layout легенды на графике
+	// Layout Р»РµРіРµРЅРґС‹ РЅР° РіСЂР°С„РёРєРµ
 	QScopedPointer<QCPLayoutGrid> LegendLayout;
-	// Текстовый элемент на графике
+	// РўРµРєСЃС‚РѕРІС‹Р№ СЌР»РµРјРµРЅС‚ РЅР° РіСЂР°С„РёРєРµ
 	QScopedPointer<QCPTextElement> FA_Num;
-	// окно параметров отрисовки гистограммы
+	// РѕРєРЅРѕ РїР°СЂР°РјРµС‚СЂРѕРІ РѕС‚СЂРёСЃРѕРІРєРё РіРёСЃС‚РѕРіСЂР°РјРјС‹
 	QScopedPointer<KV_Settings> Setter;
-	// указатель на поле рисования
+	// СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РїРѕР»Рµ СЂРёСЃРѕРІР°РЅРёСЏ
 	RenderArea * renderArea;
-	// параметры отрисовки по умолчанию
+	// РїР°СЂР°РјРµС‚СЂС‹ РѕС‚СЂРёСЃРѕРІРєРё РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
 	QPen defaultState1Pen;
 	QPen defaultState2Pen;
-	// текущие параметры отрисовки
+	// С‚РµРєСѓС‰РёРµ РїР°СЂР°РјРµС‚СЂС‹ РѕС‚СЂРёСЃРѕРІРєРё
 	QPen State1Pen;
 	QPen State2Pen;
-	// текущее значение автонастройки осей
+	// С‚РµРєСѓС‰РµРµ Р·РЅР°С‡РµРЅРёРµ Р°РІС‚РѕРЅР°СЃС‚СЂРѕР№РєРё РѕСЃРµР№
 	AutoAxis::AutoAxisEnum AutoAxisSetting;
-	// необходимость перерисовки
+	// РЅРµРѕР±С…РѕРґРёРјРѕСЃС‚СЊ РїРµСЂРµСЂРёСЃРѕРІРєРё
 	bool AxisSettingNeeded;
-	// МЕТОДЫ
-	// установить новое значение номера ТВС
-	void SetFAnum(const int& newFA_num) { CurrentFA = newFA_num; FA_Num->setText(QString::fromStdWString(L"ТВС " + ExtFunctions::to_wstring(newFA_num)));}
-	// задание параметров оси X
+	// РњР•РўРћР”Р«
+	// СѓСЃС‚Р°РЅРѕРІРёС‚СЊ РЅРѕРІРѕРµ Р·РЅР°С‡РµРЅРёРµ РЅРѕРјРµСЂР° РўР’РЎ
+	void SetFAnum(const int& newFA_num) { CurrentFA = newFA_num; FA_Num->setText(QString::fromStdWString(L"РўР’РЎ " + ExtFunctions::to_wstring(newFA_num)));}
+	// Р·Р°РґР°РЅРёРµ РїР°СЂР°РјРµС‚СЂРѕРІ РѕСЃРё X
 	void XAxisSetting(void);
 };
 

@@ -5,61 +5,61 @@
 #include "fa_box.h"
 #include "ui_cf_colorchanger.h"
 
-// класс формы - меню настройки окна картограммы
+// РєР»Р°СЃСЃ С„РѕСЂРјС‹ - РјРµРЅСЋ РЅР°СЃС‚СЂРѕР№РєРё РѕРєРЅР° РєР°СЂС‚РѕРіСЂР°РјРјС‹
 class CF_ColorChanger : public QWidget
 {
 	Q_OBJECT
 
 public:
-	// конструктор и деструктор
+	// РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ Рё РґРµСЃС‚СЂСѓРєС‚РѕСЂ
 	CF_ColorChanger(QWidget *parent = 0);
 	~CF_ColorChanger();
 
 signals:
-	// закрытие окна
+	// Р·Р°РєСЂС‹С‚РёРµ РѕРєРЅР°
 	void closing();
-	// изменить цвета окна картограммы
+	// РёР·РјРµРЅРёС‚СЊ С†РІРµС‚Р° РѕРєРЅР° РєР°СЂС‚РѕРіСЂР°РјРјС‹
 	void RecolorComparisonField();
-	// изменить просматриваемый параметр
+	// РёР·РјРµРЅРёС‚СЊ РїСЂРѕСЃРјР°С‚СЂРёРІР°РµРјС‹Р№ РїР°СЂР°РјРµС‚СЂ
 	void changeActiveMode(const Parameters::ParametersEnum &);
-	// перерисовать демонстрационные ТВС
+	// РїРµСЂРµСЂРёСЃРѕРІР°С‚СЊ РґРµРјРѕРЅСЃС‚СЂР°С†РёРѕРЅРЅС‹Рµ вЂњВ¬вЂ”
 	void sendDemoStates(const QPair<double,double>& demoStates);
 
 protected:
 	void closeEvent(QCloseEvent *) override;
 
 private slots:
-	// вызов ColorDialog-ов и считывание с них цветов
+	// РІС‹Р·РѕРІ ColorDialog-РѕРІ Рё СЃС‡РёС‚С‹РІР°РЅРёРµ СЃ РЅРёС… С†РІРµС‚РѕРІ
 	void on_ChangeMaxColor_clicked();
 	void on_ChangeMinColor_clicked();
 
-	// нажатие на кнопки снизу
+	// РЅР°Р¶Р°С‚РёРµ РЅР° РєРЅРѕРїРєРё СЃРЅРёР·Сѓ
 	void on_buttonBox_clicked(QAbstractButton * button);
 	
-	// выбор режима
+	// РІС‹Р±РѕСЂ СЂРµР¶РёРјР°
 	void on_KqButton_clicked();
 	void on_BurnButton_clicked();
 	void on_KvButton_clicked();
 
 private:
-	// ПОЛЯ
+	// С•СњР‹СЏ
 	Ui::CF_ColorChanger ui;
-	// активный параметр
+	// Р°РєС‚РёРІРЅС‹Р№ РїР°СЂР°РјРµС‚СЂ
 	Parameters::ParametersEnum activeMode;
 
-	// вспомогательная структура
+	// РІСЃРїРѕРјРѕРіР°С‚РµР»СЊРЅР°В¤ СЃС‚СЂСѓРєС‚СѓСЂР°
 	struct LimColors {
 		QColor maxColor;
 		QColor minColor;
 	};
 
-	// новые цвета
+	// РЅРѕРІС‹Рµ С†РІРµС‚Р°
 	std::map<Parameters::ParametersEnum, LimColors> newLimitColors;
 
-	// МЕТОДЫ
-	// применить цвета к картограмме
+	// С›в‰€вЂњСњЖ’Сџ
+	// РїСЂРёРјРµРЅРёС‚СЊ С†РІРµС‚Р° Рє РєР°СЂС‚РѕРіСЂР°РјРјРµ
 	void applyColors();
-	// применить цвета к демонстрационному полю
+	// РїСЂРёРјРµРЅРёС‚СЊ С†РІРµС‚Р° Рє РґРµРјРѕРЅСЃС‚СЂР°С†РёРѕРЅРЅРѕРјСѓ РїРѕР»СЋ
 	void changeColorField();
 };
 
