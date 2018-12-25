@@ -75,3 +75,7 @@ Thumbs.db
 #---------
 /**/build*/
 *.txt.user*
+/**/Win32/
+/**/ipch/
+/**/Debug/
+/**/Release/
