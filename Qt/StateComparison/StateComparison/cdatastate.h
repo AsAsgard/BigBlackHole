@@ -5,51 +5,51 @@
 
 #include "cstate.h"
 
-// РґР°РЅРЅС‹Рµ РєРѕРЅРєСЂРµС‚РЅРѕРіРѕ СЃРѕСЃС‚РѕСЏРЅРёСЏ РІ Р°РєС‚РёРІРЅРѕР№ Р·РѕРЅРµ
+// данные конкретного состояния в активной зоне
 class cDataState
 {
-	// РґСЂСѓР·СЊСЏ
+	// друзья
 	friend std::tuple<cDataState, double> CompareStates(const cDataState &State1, const cDataState &State2);
 private:
-	// РџРћР›РЇ
-	// РґР°РЅРЅС‹Рµ РґР»СЏ РєРѕРЅРєСЂРµС‚РЅРѕР№ РўР’РЎ
+	// ПОЛЯ
+	// данные для конкретной ТВС
     std::map<int, cState> Data;
-	// РїСѓСЃС‚РѕРµ СЃРѕСЃС‚РѕСЏРЅРёРµ
+	// пустое состояние
 	cState EmptyState; 
-	// РєРѕР»РёС‡РµСЃС‚РІРѕ РўР’РЎ
+	// количество ТВС
     static int NumberFAs;
 
-	// РњР•РўРћР”Р«
-	// РґРѕР±Р°РІР»РµРЅРёРµ СЌР»РµРјРµРЅС‚Р° РІ РїРѕР»Рµ Data
+	// МЕТОДЫ
+	// добавление элемента в поле Data
 	cState& add(int FA_Number);
-    // СѓСЃС‚Р°РЅРѕРІРєР° РЅРѕРІРѕРіРѕ Р·РЅР°С‡РµРЅРёСЏ С‡РёСЃР»Р° РІС‹СЃРѕС‚РЅС‹С… СЃР»РѕРµРІ РІ РђР—
+    // установка нового значения числа высотных слоев в АЗ
 	static void SetNumLayers(int newNumLayers) { cState::NumLayers = newNumLayers;}
 public:
-	// РњР•РўРћР”Р«
-    // РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂС‹
+	// МЕТОДЫ
+    // конструкторы
     cDataState() {}
 	cDataState(const cDataState &rState) : Data(rState.Data) {}
 	cDataState(cDataState &&rrState) {if (this != &rrState) Data = rrState.Data;}
-	// РѕРїРµСЂР°С‚РѕСЂС‹ =
+	// операторы =
 	cDataState& operator=(const cDataState &rState) {Data = rState.Data; return (*this);}
 	cDataState& operator=(cDataState &&rrState) {if (this != &rrState) Data = rrState.Data; return (*this);}
-    // СЃС‡РёС‚С‹РІР°РЅРёРµ РґР°РЅРЅС‹С… РёР· С„Р°Р№Р»Р°
+    // считывание данных из файла
     void ReadDataFromFile(const std::wstring &FileName);
-    // РѕРїРµСЂР°С‚РѕСЂ []
+    // оператор []
     const cState& operator[](int FA_Number) const;
-    // РїРѕР»СѓС‡РµРЅРёРµ С‡РёСЃР»Р° РўР’РЎ
+    // получение числа ТВС
     static int GetNumberFAs() {return NumberFAs;}
-    // РїРѕР»СѓС‡РµРЅРёРµ С‡РёСЃР»Р° РІС‹СЃРѕС‚РЅС‹С… СЃР»РѕРµРІ
+    // получение числа высотных слоев
     static int GetNumLayers() {return cState::NumLayers;}
-	// СѓРґР°Р»РёС‚СЊ С‡РёСЃР»Рѕ СЃР»РѕРµРІ
+	// удалить число слоев
 	static void reduceNumLayers() { SetNumLayers(1);}
-	// Р·Р°РїРѕРјРЅРёС‚СЊ С‚РµРєСѓС‰РµРµ С‡РёСЃР»Рѕ СЃР»РѕРµРІ
+	// запомнить текущее число слоев
 	static void rememberNumLayers() { cState::prevNumLayers = cState::NumLayers;}
-	// СѓСЃС‚Р°РЅРѕРІРёС‚СЊ С‡РёСЃР»Рѕ СЃР»РѕРµРІ, РєРѕС‚РѕСЂРѕРµ СЂР°РЅРµРµ Р·Р°РїРѕРјРёРЅР°Р»Рё
+	// установить число слоев, которое ранее запоминали
 	static void setRememberedNumLayers() { SetNumLayers(cState::prevNumLayers);}
 };
 
-// СЃСЂР°РІРЅРёС‚СЊ СЃРѕСЃС‚РѕСЏРЅРёСЏ
+// сравнить состояния
 std::tuple<cDataState, double> CompareStates(const cDataState &State1, const cDataState &State2);
 
 #endif // CDATASTATE_H

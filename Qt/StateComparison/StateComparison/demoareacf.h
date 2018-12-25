@@ -7,33 +7,33 @@
 #include <QPair>
 #include "fa_box.h"
 
-// РґРµРјРѕРЅСЃС‚СЂР°С†РёРѕРЅРЅРѕРµ РїРѕР»Рµ РґР»СЏ РЅР°СЃС‚СЂРѕР№РєРё РєР°СЂС‚РѕРіСЂР°РјРјС‹ РўР’РЎ
+// демонстрационное поле для настройки картограммы ТВС
 class demoAreaCF : public QFrame
 {
 	Q_OBJECT
 
 	
 public:
-	// РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂС‹
+	// конструкторы
 	demoAreaCF(QWidget *parent);
 	~demoAreaCF();
 
 signals:
-	// РїРѕР»СѓС‡РёС‚СЊ С†РІРµС‚, РІ РєРѕС‚РѕСЂС‹Р№ РїРѕРєСЂР°СЃРёС‚СЊ РўР’РЎ
+	// получить цвет, в который покрасить ТВС
 	QColor getColor();
 
 protected:
-	// РїРµСЂРµСЂРёСЃРѕРІР°С‚СЊ РїРѕР»Рµ
+	// перерисовать поле
 	void paintEvent(QPaintEvent *) override;
 
 private slots:
-	// РїРѕР»СѓС‡РёС‚СЊ Р·РЅР°С‡РµРЅРёСЏ
+	// получить значения
 	void getStates(const QPair<double, double>& States);
 
 private:
-	// С‚РµРєСѓС‰РёР№ С†РІРµС‚
+	// текущий цвет
 	QColor color;
-	// РґРµРјРѕРЅСЃС‚СЂР°С†РёРѕРЅРЅР°СЏ РўР’РЎ
+	// демонстрационная ТВС
 	cFA_Box demoFA;
 };
 

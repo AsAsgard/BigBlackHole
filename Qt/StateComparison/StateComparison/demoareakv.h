@@ -5,26 +5,26 @@
 #include <QPaintEvent>
 #include <QPainter>
 
-// РґРµРјРѕРЅСЃС‚СЂР°С†РёРѕРЅРЅРѕРµ РїРѕР»Рµ РґР»СЏ РЅР°СЃС‚СЂРѕР№РєРё РіРёСЃС‚РѕРіСЂР°РјРјС‹ Kv
+// демонстрационное поле для настройки гистограммы Kv
 class demoAreaKv : public QFrame
 {
 	Q_OBJECT
 
 public:
-	// РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂС‹
+	// конструкторы
 	demoAreaKv(QWidget *parent);
 	~demoAreaKv();
 
 signals:
-	// РїРѕР»СѓС‡РёС‚СЊ РїР°СЂР°РјРµС‚СЂС‹ СЂРёСЃРѕРІР°РЅРёСЏ
+	// получить параметры рисования
 	QPen getPen();
 
 protected:
-	// РїРµСЂРµСЂРёСЃРѕРІР°С‚СЊ РїРѕР»Рµ
+	// перерисовать поле
 	void paintEvent(QPaintEvent *) override;
 
 private:
-	// РїР°СЂР°РјРµС‚СЂС‹ СЂРёСЃРѕРІР°РЅРёСЏ
+	// параметры рисования
 	QPen pen;
 };
 

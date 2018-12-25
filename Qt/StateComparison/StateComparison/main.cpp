@@ -1,4 +1,4 @@
-// РїР»Р°РіРёРЅ Windows
+// плагин Windows
 #ifdef WIN32
 #include <QtPlugin>
 Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin)
@@ -11,18 +11,18 @@ Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin)
 
 int main(int argc, char *argv[])
 {
-	// СЃРѕР·РґР°РµРј РїСЂРёР»РѕР¶РµРЅРёРµ
+	// создаем приложение
 	QApplication a(argc, argv);
-	// РїРѕРґРєР»СЋС‡Р°РµРј С„Р°Р№Р»С‹ СЃ РїРµСЂРµРІРѕРґР°РјРё Рё Р·Р°РіСЂСѓР¶Р°РµРј РёС… РІ РїСЂРѕРіСЂР°РјРјСѓ
+	// подключаем файлы с переводами и загружаем их в программу
 	QTranslator qtTranslator;
     qtTranslator.load("qt_ru",":/translations/translations");
     a.installTranslator(&qtTranslator);
-	// СЃРѕР·РґР°РЅРёРµ РЅРѕРІРѕРіРѕ РѕРєРЅР° 
+	// создание нового окна 
 	FileBrowser *w = new FileBrowser;
-	// Р°С‚С‚СЂРёР±СѓС‚ РґР»СЏ СѓРґР°Р»РµРЅРёСЏ РїР°РјСЏС‚Рё РїРѕСЃР»Рµ Р·Р°РєСЂС‹С‚РёСЏ РѕРєРЅР°
+	// аттрибут для удаления памяти после закрытия окна
 	w->setAttribute(Qt::WA_DeleteOnClose);
-	// РїРѕРєР°Р·С‹РІР°РµРј РѕРєРЅРѕ
+	// показываем окно
 	w->show();
-	// Р·Р°РїСѓСЃРє QApplication
+	// запуск QApplication
 	return a.exec();
 }

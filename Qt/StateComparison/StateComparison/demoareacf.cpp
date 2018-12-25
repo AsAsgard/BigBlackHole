@@ -1,6 +1,6 @@
 #include "demoareacf.h"
 
-// РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ - С†РІРµС‚ РЅРµ Р·Р°РґР°РµРј, Р·Р°РґР°РµРј РѕСЃРЅРѕРІРЅС‹Рµ РїР°СЂР°РјРµС‚СЂС‹ РґРµРјРѕРЅСЃС‚СЂР°С†РёРѕРЅРЅРѕР№ РўР’РЎ
+// конструктор - цвет не задаем, задаем основные параметры демонстрационной ТВС
 demoAreaCF::demoAreaCF(QWidget *parent)
 	: QFrame(parent), color(), demoFA() 
 {
@@ -9,33 +9,33 @@ demoAreaCF::demoAreaCF(QWidget *parent)
 	demoFA.SetFA_Number(135);
 }
 
-// РґРµСЃС‚СЂСѓРєС‚РѕСЂ
+// деструктор
 demoAreaCF::~demoAreaCF() {}
 
-// РїРѕР»СѓС‡Р°РµРј РЅРѕРІС‹Рµ Р·РЅР°С‡РµРЅРёСЏ
+// получаем новые значения
 void demoAreaCF::getStates(const QPair<double, double>& States)
 {
-	// Р·Р°РґР°РµРј Р·РЅР°С‡РµРЅРёРµ 1
+	// задаем значение 1
 	demoFA.SetState1(States.first);
-	// Р·Р°РґР°РµРј Р·РЅР°С‡РµРЅРёРµ 2
+	// задаем значение 2
 	demoFA.SetState2(States.second);
-	// Р·Р°РґР°РµРј СЂР°Р·РЅРёС†Сѓ Р·РЅР°С‡РµРЅРёР№
+	// задаем разницу значений
 	demoFA.SetDelta(States.first - States.second);
 }
 
-// РїРµСЂРµСЂРёСЃРѕРІС‹РІР°РµРј РѕР±Р»Р°СЃС‚СЊ
+// перерисовываем область
 void demoAreaCF::paintEvent(QPaintEvent *)
 {
-	// Р·Р°РґР°РµРј РіРµРѕРјРµС‚СЂРёСЋ РўР’РЎ
+	// задаем геометрию ТВС
 	demoFA.SetGeometry(this->width() / 2, this->height() / 2, 9 * this->height() / 10, 9 * this->height() / 10);
-	// РїРѕР»СѓС‡Р°РµРј С†РІРµС‚ РѕС‚СЂРёСЃРѕРІРєРё
+	// получаем цвет отрисовки
 	color = emit getColor();
-	// СЃРѕР·РґР°Р°РµРј РѕР±СЉРµРєС‚ СЂРёСЃРѕРІР°РЅРёСЏ
+	// создааем объект рисования
 	QPainter painter(this);
-	// Р·Р°РґР°РµРј СЃС‚Р°РЅРґР°СЂС‚РЅС‹Рµ РµРіРѕ РїР°СЂР°РјРµС‚СЂС‹
+	// задаем стандартные его параметры
 	painter.setPen(QPen(Qt::black, 1));
-	// РїРѕРґРєР»СЋС‡Р°РµРј РїРѕР»СѓС‡РµРЅРЅС‹Р№ С†РІРµС‚
+	// подключаем полученный цвет
 	painter.setBrush(color);
-	// СЂРёСЃСѓРµРј РўР’РЎ
+	// рисуем ТВС
 	painter.drawPath(demoFA.GetPainterPath());
 }

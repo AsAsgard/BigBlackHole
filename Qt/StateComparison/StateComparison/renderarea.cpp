@@ -5,24 +5,24 @@
 
 using namespace std;
 
-// РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
+// конструктор
 RenderArea::RenderArea(QWidget *parent, const cDataState &rState1, const cDataState &rState2, const QSize &rSize) 
 	: QWidget(parent), FA(cDataState::GetNumberFAs()), FA_geometry(cDataState::GetNumberFAs()),
 	  titleFA(cFA_Box(true))
 {
-	// Р±РµР»С‹Р№ С„РѕРЅ
+	// белый фон
 	setBackgroundRole(QPalette::Base);
-    // Р°РІС‚РѕР·Р°РїРѕР»РЅРµРЅРёРµ
+    // автозаполнение
 	setAutoFillBackground(true);
-	// СЃР»РµР¶РµРЅРёРµ Р·Р° РјС‹С€СЊСЋ
+	// слежение за мышью
 	setMouseTracking(true);
-	// Р·Р°РґР°РµРј СЃРѕСЃС‚РѕСЏРЅРёСЏ Рё С†РІРµС‚Р°
+	// задаем состояния и цвета
 	StatesBinding(rState1, rState2);
-	// Р·Р°РґР°РµРј РіРµРѕРјРµС‚СЂРёСЋ РўР’РЎ
+	// задаем геометрию ТВС
 	RecalculateGeometry();
-	// Р·Р°РґР°РµРј Р±С‹Р·РѕРІС‹Р№ С‚РµРєСЃС‚ - Kv, РїРµСЂРІС‹Р№ СЃР»РѕР№
+	// задаем бызовый текст - Kv, первый слой
 	ChangeText(Parameters::Kv, 1);
-	// РґР»СЏ РєР°Р¶РґРѕР№ РўР’РЎ Р·Р°РґР°РµРј РѕСЃРЅРѕРІРЅС‹Рµ РїР°СЂР°РјРµС‚СЂС‹
+	// для каждой ТВС задаем основные параметры
 	for (int i = 0; i < cDataState::GetNumberFAs(); ++i)
 	{
 		FA[i].SetParent(this);
@@ -30,45 +30,45 @@ RenderArea::RenderArea(QWidget *parent, const cDataState &rState1, const cDataSt
 		FA[i].SetFA_Number(i+1);
 		FA[i].SetGeometry(FA_geometry[i].x_center, FA_geometry[i].y_center, FA_geometry[i].width, FA_geometry[i].height);
 	}
-	// Р·Р°РґР°РµРј РїР°СЂР°РјРµС‚СЂС‹ РўР’РЎ-Р»РµРіРµРЅРґС‹
+	// задаем параметры ТВС-легенды
 	titleFA.SetParent(this);
 	titleFA.SetVisible(true);
 }
  
-// РґРµСЃС‚СЂСѓРєС‚РѕСЂ
+// деструктор
 RenderArea::~RenderArea() {}
 
-// РёР·РјРµРЅРµРЅРёРµ СЂР°Р·РјРµСЂР° РїРѕР»СЏ РґР»СЏ СЂРёСЃРѕРІР°РЅРёСЏ
+// изменение размера поля для рисования
 void RenderArea::resizeEvent(QResizeEvent * res)
 {
-	// РїРµСЂРµСЃС‡РёС‚С‹РІР°РµРј РіРµРѕРјРµС‚СЂРёСЋ РўР’РЎ
+	// пересчитываем геометрию ТВС
 	RecalculateGeometry();
-	// Р·Р°РґР°РµРј РЅРѕРІСѓСЋ РіРµРѕРјРµС‚СЂРёСЋ РґР»СЏ РІСЃРµС… РўР’РЎ
+	// задаем новую геометрию для всех ТВС
 	for (int i = 0; i < cDataState::GetNumberFAs(); ++i)
 	{
 		FA[i].SetGeometry(FA_geometry[i].x_center, FA_geometry[i].y_center, FA_geometry[i].width, FA_geometry[i].height);
 	}
 }
 
-// РїРµСЂРµСЂРёСЃРѕРІРєР° РїРѕР»СЏ
+// перерисовка поля
 void RenderArea::paintEvent(QPaintEvent *)
 {
-	// СЃРѕР·РґР°РµРј РѕР±СЉРµРєС‚ СЂРёСЃРѕРІР°РЅРёСЏ
+	// создаем объект рисования
 	QPainter painter(this);
-	// Р·Р°РґР°РµРј СЃС‚Р°РЅРґР°СЂС‚РЅС‹Рµ РїР°СЂР°РјРµС‚СЂС‹ СЂРёСЃРѕРІР°РЅРёСЏ РўР’РЎ
+	// задаем стандартные параметры рисования ТВС
 	painter.setPen(QPen(Qt::black, 1));
-	// СЂРёСЃСѓРµРј РєР°Р¶РґСѓСЋ РўР’РЎ
+	// рисуем каждую ТВС
 	for (int i = 0; i < cDataState::GetNumberFAs(); ++i)
 	{
-		// РµСЃР»Рё РѕРЅР° РІРёРґРЅР°
+		// если она видна
 		if (FA[i].isVisible()) 
 		{
-			// Р·Р°РґР°РµРј С†РІРµС‚ РўР’РЎ Рё СЂРёСЃСѓРµРј РµРµ
+			// задаем цвет ТВС и рисуем ее
 			painter.setBrush(FA[i].GetColor());
 			painter.drawPath(FA[i].GetPainterPath());
 		}
 	}
-	// РµСЃР»Рё РІРёРґРЅР° РўР’РЎ-Р»РµРіРµРЅРґР° - СЂРёСЃСѓРµРј РµРµ
+	// если видна ТВС-легенда - рисуем ее
 	if (titleFA.isVisible())
 	{
 		painter.setBrush(titleFA.GetColor());
@@ -76,12 +76,12 @@ void RenderArea::paintEvent(QPaintEvent *)
 	}
 }
 
-// РёР·РјРµРЅРёР»СЃСЏ СЂРµР¶РёРј РїРѕРєР°Р·Р°
+// изменился режим показа
 void RenderArea::ViewModeChanged(bool DeltaChecked)
 {
 	/* 
-		РµСЃР»Рё РЅР°Р¶Р°С‚Р° РєРЅРѕРїРєР° РїРѕРєР°Р·Р° СЂР°Р·РЅРѕСЃС‚Рё - РїРѕРєР°Р·С‹РІР°РµРј РµРµ,
-		РёРЅР°С‡Рµ РїРѕРєР°Р·С‹РІР°Рј РґРІР° СЃРѕСЃС‚РѕСЏРЅРёСЏ
+		если нажата кнопка показа разности - показываем ее,
+		иначе показывам два состояния
 	*/
 	if (DeltaChecked) 
 	{
@@ -89,28 +89,28 @@ void RenderArea::ViewModeChanged(bool DeltaChecked)
 	} else {
 		cFA_Box::SetViewMode(View::TwoStatesView);
 	}
-	// РїСЂРёРјРµРЅСЏРµРј РёР·РјРµРЅРµРЅРёРµ РІРёРґР° Рє РєР°Р¶РґРѕР№ РўР’РЎ
+	// применяем изменение вида к каждой ТВС
 	for_each(FA.begin(), FA.end(), [] (cFA_Box& obj)
 	{
 		obj.ChangeView();
 	});
-	// Рё Рє РўР’РЎ-Р»РµРіРµРЅРґРµ
+	// и к ТВС-легенде
 	titleFA.ChangeView();
 }
 
-// РјР°РєСЂРѕСЃ РІС‹С‡РёСЃР»РµРЅРёСЏ Р»РёРЅРёРё РјРµР¶РґСѓ РґРІСѓРјСЏ С‚РѕС‡РєР°РјРё
+// макрос вычисления линии между двумя точками
 #define LINE_TWO_POINTS(x, x1, y1, x2, y2) (y1) + ((y2)-(y1))*((x)-(x1))/((x2)-(x1)) 
 
-// РЅР°Р¶Р°С‚РёРµ РјС‹С€Рё РЅР° РїРѕР»Рµ 
+// нажатие мыши на поле 
 void RenderArea::mousePressEvent(QMouseEvent * mouse)
 {
-	// РµСЃР»Рё РµСЃС‚СЊ РіРёСЃС‚РѕРіСЂР°РјРјР° Kv
+	// если есть гистограмма Kv
 	if (emit isKvDiagramActive()) 
 	{
-		// СЃС‡РёС‚С‹РІР°РµРј РєРѕРѕСЂРґРёРЅР°С‚С‹ РјС‹С€Рё
+		// считываем координаты мыши
 		int x = mouse->x();
 		int y = mouse->y();
-		// РёС‰РµРј РўР’РЎ РІ РєРѕС‚РѕСЂСѓСЋ РїРѕРїР°Р»Р° РјС‹С€СЊ
+		// ищем ТВС в которую попала мышь
 		std::vector<cFA_Box>::iterator it = std::find_if(FA.begin(),FA.end(), [&] (const cFA_Box& fa)
 		{
 			return ( (x > (fa.x_center() - fa.width() / 2.0)) && 
@@ -120,16 +120,16 @@ void RenderArea::mousePressEvent(QMouseEvent * mouse)
 					 (y < LINE_TWO_POINTS(x, fa.x_center() + fa.width() / 2.0, fa.y_center() + fa.height() / 4.0, fa.x_center(), fa.y_center() + fa.height() / 2.0)) &&
 					 (y < LINE_TWO_POINTS(x, fa.x_center(), fa.y_center() + fa.height() / 2.0, fa.x_center() - fa.width() / 2.0, fa.y_center() + fa.height() / 4.0)) );
 		});
-		// РµСЃР»Рё РјС‹С€СЊ РїРѕРїР°Р»Р° РІ РєР°РєСѓСЋ-С‚Рѕ РўР’РЎ - РјРµРЅСЏРµРј Р·РЅР°С‡РµРЅРёРµ РўР’РЎ Сѓ РіРёСЃС‚РѕРіСЂР°РјРјС‹
+		// если мышь попала в какую-то ТВС - меняем значение ТВС у гистограммы
 		if (it != FA.end()) emit select_FA(it->GetFA_Number());
 	}
 }
 
 /*
-	РјР°РєСЂРѕСЃ Р·Р°РґР°РЅРёСЏ РіРµРѕРјРµС‚СЂРёРё РўР’РЎРѕРє
-	Р’С‹СЃРѕС‚Р°, С€РёСЂРёРЅР° Р·Р°РґР°РЅС‹
-	РџРѕР»РѕР¶РµРЅРёРµ РїРѕ РІС‹СЃРѕС‚Рµ РЅРёР¶Рµ РїСЂРµРґС‹РґСѓС‰РµРіРѕ СЂСЏРґР° РЅР° РєРѕРЅСЃС‚Р°РЅС‚Сѓ
-	РќР°С…РѕРґРёС‚СЃСЏ РїРѕР»РѕР¶РµРЅРёРµ РєРѕРЅРєСЂРµС‚РЅРѕР№ РўР’РЎ РІ СЂСЏРґСѓ Рё Р·Р°РґР°РµС‚СЃСЏ РіРµРѕРјРµС‚СЂРёСЏ РўР’РЎ
+	макрос задания геометрии ТВСок
+	Высота, ширина заданы
+	Положение по высоте ниже предыдущего ряда на константу
+	Находится положение конкретной ТВС в ряду и задается геометрия ТВС
 */
 #define LINE_GEOMETRY(FAsInRow, FirstFAinRow) {								\
 	FAy_center = FAy_center - 3 * FAheight / 4;								\
@@ -143,17 +143,17 @@ void RenderArea::mousePressEvent(QMouseEvent * mouse)
 	}																		\
 } 
 
-// РїРµСЂРµСЃС‡РµС‚ РіРµРѕРјРµС‚СЂРёРё РўР’РЎ
+// пересчет геометрии ТВС
 void RenderArea::RecalculateGeometry()
 {
-	// С€РёСЂРёРЅР° Рё РІС‹СЃРѕС‚Р° - СЌРєСЃРїРµСЂРёРјРµРЅС‚Р°Р»СЊРЅРѕ
+	// ширина и высота - экспериментально
 	int FAwidth = (this->width() - 2*this->width()/50.0) / 14.0;
 	int FAheight = (this->height() - 2*this->height()/30.0) / (8.0 + 7*0.5);
 
-	// РїРѕР»РѕР¶РµРЅРёРµ РїРѕ РІС‹СЃРѕС‚Рµ - СЌРєСЃРїРµСЂРёРјРµРЅС‚Р°Р»СЊРЅРѕ + РЅР°С‡Р°Р»СЊРЅРѕРµ РѕС‚РєР»РѕРЅРµРЅРёРµ РґР»СЏ РїСЂР°РІРёР»СЊРЅРѕСЃС‚Рё СЂР°Р±РѕС‚С‹ РјР°РєСЂРѕСЃР°
+	// положение по высоте - экспериментально + начальное отклонение для правильности работы макроса
 	int FAy_center = this->height() - (this->height()/30.0 + FAheight / 2.0) + 3 * FAheight / 4;
 
-	// РіРµРѕРјРµС‚СЂРёСЏ СЂСЏРґРѕРІ
+	// геометрия рядов
 	LINE_GEOMETRY( 6, 1);
 	LINE_GEOMETRY( 9, 7);
 	LINE_GEOMETRY( 10, 16);
@@ -170,17 +170,17 @@ void RenderArea::RecalculateGeometry()
 	LINE_GEOMETRY( 9, 149);
 	LINE_GEOMETRY( 6, 158);
 
-	// РіРµРѕРјРµС‚СЂРёСЏ РўР’РЎ-Р»РµРіРµРЅРґС‹
+	// геометрия ТВС-легенды
 	titleFA.SetGeometry(0.03 * this->width() + 0.9 * FAwidth, this->height() - 0.03 * this->height() - 0.9 * FAheight, 1.8 * FAwidth, 1.8 * FAheight);
 }
 
-// РёР·РјРµРЅРµРЅРёРµ С‚РµРєСЃС‚Р°
+// изменение текста
 void RenderArea::ChangeText(Parameters::ParametersEnum newActiveMode, int LayerValue)
 {
-	// Р·Р°РґР°РЅРёРµ РЅРѕРІРѕРіРѕ Р°РєС‚РёРІРЅРѕРіРѕ РїР°СЂР°РјРµС‚СЂ
+	// задание нового активного параметр
 	cFA_Box::SetActiveMode(newActiveMode);
-	// РІ Р·Р°РІРёСЃРёРјРѕС‚Рё РѕС‚ РїР°СЂР°РјРµС‚СЂР° РІС‹РІРѕРґРёС‚СЃСЏ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РёР№ С‚РµРєСЃС‚
-	// РµСЃР»Рё Р·РЅР°С‡РµРЅРёРµ NaN - РІС‹РІРѕРґРёС‚СЃСЏ С‚РµРєСЃС‚ NaN
+	// в зависимоти от параметра выводится соответствующий текст
+	// если значение NaN - выводится текст NaN
 	switch(newActiveMode) 
 	{
 		case(Parameters::Kq) :
@@ -219,18 +219,18 @@ void RenderArea::ChangeText(Parameters::ParametersEnum newActiveMode, int LayerV
 	}
 }
 
-// Р·Р°РґР°РЅРёРµ СЃРѕСЃС‚РѕСЏРЅРёР№
+// задание состояний
 void RenderArea::StatesBinding(const cDataState& rState1, const cDataState& rState2)
 {
-	// РєРѕРїРёСЂСѓРµРј СЃРѕСЃС‚РѕСЏРЅРёСЏ РІ РјРµСЃС‚РЅС‹Рµ РїРµСЂРµРјРµРЅРЅС‹Рµ
+	// копируем состояния в местные переменные
 	State1 = rState1;
 	State2 = rState2;
-	// СЃСЂР°РІРЅРёРІР°РµРј СЃРѕСЃС‚РѕСЏРЅРёСЏ
+	// сравниваем состояния
 	std::tie(DeltaState,MaxKv) = CompareStates(State1, State2);
 	double maxKq = 0;
 	double maxBurn = 0;
 	double maxKv = 0;
-	// РёС‰РµРј РјР°РєСЃРёРјР°Р»СЊРЅРѕРµ РїРѕ РјРѕРґСѓР»СЋ РѕС‚РєР»РѕРЅРµРЅРёРµ Р·РЅР°С‡РµРЅРёР№ СЃРѕСЃС‚РѕСЏРЅРёР№ - РѕС‚ СЌС‚РѕРіРѕ Р·Р°РІРёСЃРёС‚ РѕРєСЂР°СЃРєР° РўР’РЎ
+	// ищем максимальное по модулю отклонение значений состояний - от этого зависит окраска ТВС
 	for (int i = 1; i <= cDataState::GetNumberFAs(); ++i)
 	{
 		if (!qIsNaN(DeltaState[i].GetKq()) && abs(DeltaState[i].GetKq()) > maxKq)
@@ -251,7 +251,7 @@ void RenderArea::StatesBinding(const cDataState& rState1, const cDataState& rSta
 			}
 		}
 	}
-	// Р·Р°РґР°РµРј РЅРѕРІС‹Рµ РјР°РєСЃРёРјСѓРјС‹, РµСЃР»Рё РѕРЅРё РЅРµ 0
+	// задаем новые максимумы, если они не 0
 	if(maxKq!=0)	cFA_Box::SetLimiters(Parameters::Kq, maxKq);
 	if(maxBurn!=0)	cFA_Box::SetLimiters(Parameters::Burn, maxBurn);
 	if(maxKv!=0)	cFA_Box::SetLimiters(Parameters::Kv, maxKv);

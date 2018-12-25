@@ -6,18 +6,18 @@
 #include "kv_distribution.h"
 #include "extfunctions.h"
 
-// РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
+// конструктор
 ComparisonField::ComparisonField(QWidget *parent, const cDataState &rState1, const cDataState &rState2, const QRect &ScreenParameters)
 	: QMainWindow(parent), Kv1SavedPen(Qt::white), Kv2SavedPen(Qt::white), KvSavedAutoAxis(AutoAxis::NoAuto)
 {
 	ui.setupUi(this);
-	// РёРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј СѓРєР°Р·Р°С‚РµР»Рё РЅР° Р·Р°РІРёСЃРёРјС‹Рµ С„РѕСЂРјС‹ РЅСѓР»РµРІС‹РјРё СѓРєР°Р·Р°С‚РµР»СЏРјРё
+	// инициализируем указатели на зависимые формы нулевыми указателями
 	KvDistrib.reset(nullptr);
 	ColorChanger.reset(nullptr);
 	fileBrowser.reset(nullptr);
-	// Р·Р°РґР°РµРј РјР°РєСЃРёРјСѓРј РґР»СЏ SpinBox-Р° СЃ РІС‹СЃРѕС‚РЅС‹РјРё СЃР»РѕСЏРјРё
+	// задаем максимум для SpinBox-а с высотными слоями
 	ui.spinBox->setMaximum(cDataState::GetNumLayers());
-	// РІС‹Р±РёСЂР°РµРј С€РёСЂРёРЅСѓ Рё РІС‹СЃРѕС‚Сѓ РѕРєРЅР° (РІ С‚.С‡. РјРёРЅРёРјР°Р»СЊРЅС‹Рµ) РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ СЂР°Р·РјРµСЂРѕРІ СЌРєСЂР°РЅР°
+	// выбираем ширину и высоту окна (в т.ч. минимальные) в зависимости от размеров экрана
 	if (ScreenParameters.width() >= ScreenParameters.height())
 	{
 		this->setMinimumSize(0.6 * ScreenParameters.height(), 0.6 * ScreenParameters.height());
@@ -26,41 +26,41 @@ ComparisonField::ComparisonField(QWidget *parent, const cDataState &rState1, con
 		this->setMinimumSize(0.6 * ScreenParameters.width(), 0.6 * ScreenParameters.width());
 		this->resize(ScreenParameters.width()-150, ScreenParameters.width()-150);
 	}
-	// РґРІРёРіР°РµРј РѕРєРЅРѕ РІ С†РµРЅС‚СЂ СЌРєСЂР°РЅР°
+	// двигаем окно в центр экрана
 	this->move(ScreenParameters.center().x() - this->width()/2,50);
 
-	// РёР·РјРµРЅСЏРµРј СЂР°Р·РјРµСЂС‹ СЃС‚Р°С‚СѓСЃ-Р±Р°СЂР°, СЃРѕР·РґР°РµРј РЅР° РЅРµРј Label, Р·Р°РґР°РµРј РµРіРѕ РіРµРѕРјРµС‚СЂРёСЋ Рё РІС‹СЂР°РІРЅРёРІР°РЅРёРµ Рё РѕР±РЅРѕРІР»СЏРµРј С‚РµРєСЃС‚
+	// изменяем размеры статус-бара, создаем на нем Label, задаем его геометрию и выравнивание и обновляем текст
 	ui.statusBar->resize(this->width(), 20);
 	statusLabel.reset(new QLabel(ui.statusBar));
 	statusLabel->setGeometry(4, 0, this->width(), ui.statusBar->height());
 	statusLabel->setAlignment(Qt::AlignVCenter);
 	StatusBarUpdate();
 
-	// РґРІРёРіР°РµРј РІ СѓРіРѕР» SpinBox Рё Label СЃ РЅРѕРјРµСЂРѕРј СЃР»РѕСЏ Рё РґРµР»Р°РµРј Label РЅРµРІРёРґРёРјС‹Рј
+	// двигаем в угол SpinBox и Label с номером слоя и делаем Label невидимым
 	ui.groupBox->move( this->width() - (ui.groupBox->width() + 2) , this->height() - (ui.groupBox->height() + ui.statusBar->height() + ui.mainToolBar->height()+ ui.menuBar->height() - 15));
 	ui.LayerLabel->setVisible(false);
 	ui.LayerLabel->move( this->width() - (ui.LayerLabel->width() + 2) , this->height() - (ui.LayerLabel->height() + ui.statusBar->height() + ui.mainToolBar->height()+ ui.menuBar->height() - 5));
-	// С„РёРєСЃРёСЂСѓРµРј РІС‹СЃРѕС‚Сѓ РѕРєРЅР° - Р±СѓРґРµС‚ СЂР°Р±РѕС‚Р°С‚СЊ РїСЂРѕРїРѕСЂС†РёРѕРЅР°Р»СЊРЅРѕРµ СЂР°СЃС€РёСЂРµРЅРёРµ РѕРєРЅР° РїСЂРё РёР·РјРµРЅРµРЅРёРµ С€РёСЂРёРЅС‹
+	// фиксируем высоту окна - будет работать пропорциональное расширение окна при изменение ширины
 	ComparisonField::setFixedHeight(ComparisonField::height());
 
-	// СЃРѕР·РґР°РµРј РїРѕР»Рµ РґР»СЏ СЂРёСЃРѕРІР°РЅРёСЏ
+	// создаем поле для рисования
 	renderArea.reset(new RenderArea(ui.centralWidget, 
 									rState1,
 									rState2,
 									QSize(this->width(),this->height() - (ui.statusBar->height() + ui.mainToolBar->height()+ ui.menuBar->height() - 7))	
 									));
-	// РїСЂРёСЃРѕРµРґРёРЅСЏРµРј СЃРёРіРЅР°Р»С‹ Рё СЃР»РѕС‚С‹ РґР»СЏ РїРѕР»СЏ СЂРёСЃРѕРІР°РЅРёСЏ Рё РѕСЃРЅРѕРІРЅРѕРіРѕ РѕРєРЅР° РєР°СЂС‚РѕРіСЂР°РјРјС‹
-	// РїСЂРѕРІРµСЂРєР° Р°РєС‚РёРІРЅРѕСЃС‚Рё РіРёСЃС‚РѕРіСЂР°РјРјС‹ Kv
+	// присоединяем сигналы и слоты для поля рисования и основного окна картограммы
+	// проверка активности гистограммы Kv
 	connect(renderArea.data(), SIGNAL(isKvDiagramActive()), this, SLOT(KvDiagramAvaliability()));
-	// СЃРёРіРЅР°Р» РґР»СЏ РїРѕР»СЏ СЂРёСЃРѕРІР°РЅРёСЏ, С‡С‚Рѕ СЂРµР¶РёРј РїСЂРѕСЃРјРѕС‚СЂР° Р±С‹Р» РёР·РјРµРЅРµРЅ
+	// сигнал для поля рисования, что режим просмотра был изменен
 	connect(this, SIGNAL(ViewModeChange(bool)), renderArea.data(), SLOT(ViewModeChanged(bool)));
-	// СЃРёРіРЅР°Р» РґР»СЏ РїРѕР»СЏ СЂРёСЃРѕРІР°РЅРёСЏ, С‡С‚Рѕ СЃРѕСЃС‚РѕСЏРЅРёСЏ Р±С‹Р»Рё РёР·РјРµРЅРµРЅС‹
+	// сигнал для поля рисования, что состояния были изменены
 	connect(this, SIGNAL(ChangeStatesCF(const cDataState&, const cDataState&)), renderArea.data(), SLOT(StatesBinding(const cDataState&, const cDataState&)));
-	// РїРѕРґРЅРёРјР°РµРј РЅР° РїРµСЂРІС‹Р№ РїР»Р°РЅ SpinBox Рё Label СЃ РЅРѕРјРµСЂРѕРј СЃР»РѕСЏ (РґР»СЏ СЃРєСЂРёРЅС€РѕС‚Р°)
+	// поднимаем на первый план SpinBox и Label с номером слоя (для скриншота)
 	ui.LayerLabel->raise();
 	ui.groupBox->raise();
 	
-	// РїР°СЂР°РјРµС‚СЂС‹ С€СЂРёС„С‚РѕРІ РґР»СЏ СЃРѕРІРјРµСЃС‚РёРјРѕСЃС‚Рё СЃ high dpi
+	// параметры шрифтов для совместимости с high dpi
 	QFont font(ui.groupBox->font());
 	font.setPixelSize(13);
 	ui.groupBox->setFont(font);
@@ -72,10 +72,10 @@ ComparisonField::ComparisonField(QWidget *parent, const cDataState &rState1, con
 	ui.spinBox->setFont(font);
 }
 
-// РґРµСЃС‚СЂСѓРєС‚РѕСЂ
+// деструктор
 ComparisonField::~ComparisonField() 
 {
-	// РїРµСЂРµСЃС‚СЂР°С…РѕРІРєР° - РѕСЃРІРѕР±РѕР¶РґРµРЅРёРµ РїР°РјСЏС‚Рё (РёР·-Р·Р° С‚РѕРіРѕ, С‡С‚Рѕ Р±С‹Р»Рё РїСЂРѕР±Р»РµРјС‹ СЃ РїР°РјСЏС‚СЊСЋ РїСЂРё Р·Р°РІРµСЂС€РµРЅРёРё РїСЂРёР»РѕР¶РµРЅРёСЏ)
+	// перестраховка - освобождение памяти (из-за того, что были проблемы с памятью при завершении приложения)
 	KvDistrib.reset(nullptr);
 	renderArea.reset(nullptr);
 	statusLabel.reset(nullptr);
@@ -83,61 +83,61 @@ ComparisonField::~ComparisonField()
 	fileBrowser.reset(nullptr);
 }
 
-// СЃСЂР°РІРЅРёС‚СЊ РґСЂСѓРіРёРµ СЃРѕСЃС‚РѕСЏРЅРёСЏ
+// сравнить другие состояния
 void ComparisonField::on_otherStates_triggered()
 {
-	// СЃРѕР·РґР°РЅРёРµ РЅРѕРІРѕРіРѕ РѕР±РѕР·СЂРµР°С‚РµР»СЏ С„Р°Р№Р»РѕРІ
+	// создание нового обозреателя файлов
 	fileBrowser.reset(new FileBrowser());
-	// РїСЂРёСЃРѕРµРґРёРЅСЏРµРј СЃРёРіРЅР°Р»С‹ Рё СЃР»РѕС‚С‹ РґР»СЏ РѕР±РѕР·СЂРµРІР°С‚РµР»СЏ С„Р°Р№Р»РѕРІ Рё РѕСЃРЅРѕРІРЅРѕРіРѕ РѕРєРЅР° РєР°СЂС‚РѕРіСЂР°РјРјС‹
-	// РёР·РІРµС‰РµРЅРёРµ Рѕ Р·Р°РєСЂС‹С‚РёРё РѕР±РѕР·СЂРµРІР°С‚РµР»СЏ С„Р°Р№Р»РѕРІ
+	// присоединяем сигналы и слоты для обозревателя файлов и основного окна картограммы
+	// извещение о закрытии обозревателя файлов
 	connect(fileBrowser.data(),SIGNAL(closing()),this,SLOT(FileBrowserClosed()));
-	// Р·Р°РїСЂРѕСЃ РѕС‚ РѕР±РѕР·СЂРµРІР°С‚РµР»СЏ С„Р°Р№Р»РѕРІ РїСЂРѕРІРµСЂРёС‚СЊ РЅР°Р»РёС‡РёРµ РєР°СЂС‚РѕРіСЂР°РјРјС‹
+	// запрос от обозревателя файлов проверить наличие картограммы
 	connect(fileBrowser.data(),SIGNAL(isComparisonFieldActive()),this,SLOT(ComparisonFieldAvaliability()));
-	// С„Р°Р№Р»С‹ РІС‹Р±СЂР°РЅС‹ - РЅРµРѕР±С…РѕРґРёРјРѕ РёР·РјРµРЅРёС‚СЊ СЃРѕСЃС‚РѕСЏРЅРёСЏ
+	// файлы выбраны - необходимо изменить состояния
 	connect(fileBrowser.data(),SIGNAL(ChangeStatesFB(const cDataState&, const cDataState&)),this,SLOT(StatesChanged(const cDataState&, const cDataState&)));
-	// РїРѕРєР°Р·С‹РІР°РµРј РѕР±РѕР·СЂРµРІР°С‚РµР»СЊ С„Р°Р№Р»РѕРІ
+	// показываем обозреватель файлов
 	fileBrowser->show();
 }
 
 
-// РІРєР»СЋС‡РµРЅР°/РІС‹РєР»СЋС‡РµРЅР° С†РІРµС‚РѕРІР°СЏ РіР°РјРјР° РїРѕР»СЏ СЂРёСЃРѕРІР°РЅРёСЏ
+// включена/выключена цветовая гамма поля рисования
 void ComparisonField::on_ColorFont_toggled(bool checked)
 {
-	// РґРµР»Р°РµРј РўР’РЎ С†РІРµС‚РЅС‹РјРё/Р±РµР·С†РІРµС‚РЅС‹РјРё
+	// делаем ТВС цветными/безцветными
 	cFA_Box::SetColorful(checked);
-	// РїРµСЂРµСЂРёСЃРѕРІС‹РІР°РµРј РїРѕР»СЏ РґР»СЏ СЂРёСЃРѕРІР°РЅРёСЏ
+	// перерисовываем поля для рисования
 	renderArea->repaint();
 }
 
-// РёР·РјРµРЅРµРЅРёРµ СЂРµР¶РёРјР° РїСЂРѕСЃРјРѕС‚СЂР°
+// изменение режима просмотра
 void ComparisonField::on_ChangeViewMode_toggled(bool DeltaChecked)
 {
-	// РѕС‚РїСЂР°РІРєР° СЃРёРіРЅР°Р»Р° РІ РїРѕР»СЏ РґР»СЏ СЂРёСЃРѕРІР°РЅРёСЏ РґР»СЏ РёР·РјРµРЅРµРЅРёСЏ С‚РµРєСЃС‚РѕРІ Рё С†РІРµС‚РѕРІ
+	// отправка сигнала в поля для рисования для изменения текстов и цветов
 	emit ViewModeChange(DeltaChecked);	
-	// РѕР±РЅРѕРІР»РµРЅРёРµ СЃС‚Р°С‚СѓСЃ-Р±Р°СЂР°
+	// обновление статус-бара
 	StatusBarUpdate();
 }
 
-// РІС‹Р±СЂР°РЅ СЂРµР¶РёРј Kq
+// выбран режим Kq
 void ComparisonField::on_activateKq_triggered()
 {
-	// РІРґР°РІР»РёРІР°РµРј РєРЅРѕРїРєСѓ Kq, РѕСЃС‚Р°Р»СЊРЅС‹Рµ РЅРµ РІРґР°РІР»РµРЅС‹
+	// вдавливаем кнопку Kq, остальные не вдавлены
 	ui.activateKq->setChecked(true);
 	ui.activateBurn->setChecked(false);
 	ui.activateKv->setChecked(false);
-	// РµСЃР»Рё СЂРµР¶РёРј РЅРµ Kq, С‚Рѕ РїСЂРѕРІРѕРґРёРј РёР·РјРµРЅРµРЅРёСЏ
+	// если режим не Kq, то проводим изменения
 	if (!(cFA_Box::ActiveMode()==Parameters::Kq))
 	{
-		// SpinBox РІС‹СЃРѕС‚РЅС‹С… СЃР»РѕРµРІ РґРµР»Р°РµРј РЅРµРІРёРґРёРјС‹Рј
+		// SpinBox высотных слоев делаем невидимым
 		ui.groupBox->setVisible(false);
-		// РєРЅРѕРїРєР° РїРѕРєР°Р·Р°С‚СЊ РјР°РєСЃРёРјСѓРј РЅРµ Р°РєС‚РёРІРЅР°
+		// кнопка показать максимум не активна
 		ui.MaxShow->setEnabled(false);
-		// РёР·РјРµРЅСЏРј С‚РµРєСЃС‚ РїРѕР»СЏ СЂРёСЃРѕРІР°РЅРёСЏ РЅР° С‚РµРєСЃС‚, СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РёР№ Kq
+		// изменям текст поля рисования на текст, соответствующий Kq
 		renderArea->ChangeText(Parameters::Kq, 0);
-		// РїРµСЂРµСЂРёСЃРѕРІС‹РІР°РµРј РїРѕР»Рµ
+		// перерисовываем поле
 		renderArea->repaint();
 
-		// РµСЃР»Рё Р°РєС‚РёРІРЅР° РіРёСЃС‚РѕРіСЂР°РјРјР° Kv - СѓР±РёСЂР°РµРј Р»РёРЅРёСЋ, СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰СѓСЋ СѓСЂРѕРІРЅСЋ СЃР»РѕСЏ
+		// если активна гистограмма Kv - убираем линию, соответствующую уровню слоя
 		if (KvDistrib)
 		{
 			emit hideLayerLine();
@@ -147,23 +147,23 @@ void ComparisonField::on_activateKq_triggered()
 
 void ComparisonField::on_activateBurn_triggered()
 {
-	// РІРґР°РІР»РёРІР°РµРј РєРЅРѕРїРєСѓ Burn, РѕСЃС‚Р°Р»СЊРЅС‹Рµ РЅРµ РІРґР°РІР»РµРЅС‹
+	// вдавливаем кнопку Burn, остальные не вдавлены
 	ui.activateKq->setChecked(false);
 	ui.activateBurn->setChecked(true);
 	ui.activateKv->setChecked(false);
-	// РµСЃР»Рё СЂРµР¶РёРј РЅРµ Burn, С‚Рѕ РїСЂРѕРІРѕРґРёРј РёР·РјРµРЅРµРЅРёСЏ
+	// если режим не Burn, то проводим изменения
 	if (!(cFA_Box::ActiveMode()==Parameters::Burn))
 	{
-		// SpinBox РІС‹СЃРѕС‚РЅС‹С… СЃР»РѕРµРІ РґРµР»Р°РµРј РЅРµРІРёРґРёРјС‹Рј
+		// SpinBox высотных слоев делаем невидимым
 		ui.groupBox->setVisible(false);
-		// РєРЅРѕРїРєР° РїРѕРєР°Р·Р°С‚СЊ РјР°РєСЃРёРјСѓРј РЅРµ Р°РєС‚РёРІРЅР°
+		// кнопка показать максимум не активна
 		ui.MaxShow->setEnabled(false);
-		// РёР·РјРµРЅСЏРј С‚РµРєСЃС‚ РїРѕР»СЏ СЂРёСЃРѕРІР°РЅРёСЏ РЅР° С‚РµРєСЃС‚, СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РёР№ Burn
+		// изменям текст поля рисования на текст, соответствующий Burn
 		renderArea->ChangeText(Parameters::Burn, 0);
-		// РїРµСЂРµСЂРёСЃРѕРІС‹РІР°РµРј РїРѕР»Рµ
+		// перерисовываем поле
 		renderArea->repaint();
 		
-		// РµСЃР»Рё Р°РєС‚РёРІРЅР° РіРёСЃС‚РѕРіСЂР°РјРјР° Kv - СѓР±РёСЂР°РµРј Р»РёРЅРёСЋ, СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰СѓСЋ СѓСЂРѕРІРЅСЋ СЃР»РѕСЏ
+		// если активна гистограмма Kv - убираем линию, соответствующую уровню слоя
 		if (KvDistrib)
 		{
 			emit hideLayerLine();
@@ -173,23 +173,23 @@ void ComparisonField::on_activateBurn_triggered()
 
 void ComparisonField::on_activateKv_triggered()
 {
-	// РІРґР°РІР»РёРІР°РµРј РєРЅРѕРїРєСѓ Kv, РѕСЃС‚Р°Р»СЊРЅС‹Рµ РЅРµ РІРґР°РІР»РµРЅС‹
+	// вдавливаем кнопку Kv, остальные не вдавлены
 	ui.activateKq->setChecked(false);
 	ui.activateBurn->setChecked(false);
 	ui.activateKv->setChecked(true);
-	// РµСЃР»Рё СЂРµР¶РёРј РЅРµ Kv, С‚Рѕ РїСЂРѕРІРѕРґРёРј РёР·РјРµРЅРµРЅРёСЏ
+	// если режим не Kv, то проводим изменения
 	if (!(cFA_Box::ActiveMode()==Parameters::Kv))
 	{
-		// SpinBox РІС‹СЃРѕС‚РЅС‹С… СЃР»РѕРµРІ РґРµР»Р°РµРј РІРёРґРёРјС‹Рј
+		// SpinBox высотных слоев делаем видимым
 		ui.groupBox->setVisible(true);
-		// РєРЅРѕРїРєР° РїРѕРєР°Р·Р°С‚СЊ РјР°РєСЃРёРјСѓРј Р°РєС‚РёРІРЅР°
+		// кнопка показать максимум активна
 		ui.MaxShow->setEnabled(true);
-		// РёР·РјРµРЅСЏРј С‚РµРєСЃС‚ РїРѕР»СЏ СЂРёСЃРѕРІР°РЅРёСЏ РЅР° С‚РµРєСЃС‚, СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РёР№ Kv СЃ С‚РµРєСѓС‰РёРј СѓСЂРѕРІРЅРµРј СЃР»РѕСЏ
+		// изменям текст поля рисования на текст, соответствующий Kv с текущим уровнем слоя
 		renderArea->ChangeText(Parameters::Kv, ui.spinBox->value());
-		// РїРµСЂРµСЂРёСЃРѕРІС‹РІР°РµРј РїРѕР»Рµ
+		// перерисовываем поле
 		renderArea->repaint();
 
-		// РµСЃР»Рё Р°РєС‚РёРІРЅР° РіРёСЃС‚РѕРіСЂР°РјРјР° Kv - РїРµСЂРµСЂРёСЃРѕРІС‹РІР°РµРј РµРµ СЃ Р»РёРЅРёРµР№ СЃР»РѕСЏ
+		// если активна гистограмма Kv - перерисовываем ее с линией слоя
 		if (KvDistrib)
 		{
 			emit select_FA(KvDistrib->currentFA());
@@ -198,17 +198,17 @@ void ComparisonField::on_activateKv_triggered()
 }
 
 
-// РЅР°Р¶Р°С‚Р° РєРЅРѕРїРєР° "РїРѕРєР°Р·Р°С‚СЊ РјР°РєСЃРёРјСѓРј"
+// нажата кнопка "показать максимум"
 void ComparisonField::on_MaxShow_triggered()
 {
-	// РґРѕР»Р¶РЅ Р±С‹С‚СЊ СЂРµР¶РёРј Kv
+	// должн быть режим Kv
 	if (cFA_Box::ActiveMode() != Parameters::Kv) return;
-	// Р·Р°РґР°РµРј Р·РЅР°С‡РµРЅРёРµ СЃР»РѕСЏ = СЃР»РѕСЋ СЃ РјР°РєСЃРёРјР°Р»СЊРЅРѕР№ СЂР°Р·РЅРёС†РµР№ Kv
+	// задаем значение слоя = слою с максимальной разницей Kv
 	ui.spinBox->setValue(cFA_Box::FAwithMaxDeltaKv.Layer);
-	// РµСЃР»Рё Р°РєС‚РёРІРЅР° РіРёСЃС‚РѕРіСЂР°РјРјР° Kv
+	// если активна гистограмма Kv
 	if(KvDistrib)
 	{
-		// Р·Р°РґР°РµРј РўР’РЎ СЃ РјР°РєСЃРёРјР°Р»СЊРЅРѕР№ СЂР°Р·РЅРёС†РµР№ Kv
+		// задаем ТВС с максимальной разницей Kv
 		emit select_FA(cFA_Box::FAwithMaxDeltaKv.FA);
 	}
 }
@@ -217,89 +217,89 @@ void ComparisonField::on_Kv_diagramActivator_triggered()
 {
 	if (!KvDistrib) 
 	{
-		// СЃРѕР·РґР°РµРј РЅРѕРІСѓСЋ РіРёСЃС‚РѕРіСЂР°РјРјСѓ Kv
+		// создаем новую гистограмму Kv
 		KvDistrib.reset(new Kv_Distribution(Kv1SavedPen, Kv2SavedPen, KvSavedAutoAxis));
-		// РїСЂРёСЃРѕРµРґРёРЅСЏРµРј СЃРёРіРЅР°Р»С‹ Рё СЃР»РѕС‚С‹ РґР»СЏ РіРёСЃС‚РѕРіСЂР°РјРјС‹ Рё РѕСЃРЅРѕРІРЅРѕРіРѕ РѕРєРЅР° РєР°СЂС‚РѕРіСЂР°РјРјС‹
+		// присоединяем сигналы и слоты для гистограммы и основного окна картограммы
 		connect(KvDistrib.data(), SIGNAL(closing(const QPen&, const QPen&, const AutoAxis::AutoAxisEnum&)), this, SLOT(KvDiagramClosed(const QPen&, const QPen&, const AutoAxis::AutoAxisEnum&)));
-		// РІС‹Р±РѕСЂ РўР’РЎ РЅР° РіРёСЃС‚РѕРіСЂР°РјРјРµ
+		// выбор ТВС на гистограмме
 		connect(this, SIGNAL(select_FA(int)), KvDistrib.data(), SLOT(FA_selected(int)));
-		// СЃРєСЂС‹С‚РёРµ Р»РёРЅРёРё СЃР»РѕСЏ
+		// скрытие линии слоя
 		connect(this, SIGNAL(hideLayerLine()), KvDistrib.data(), SLOT(LayerLineHiding()));
-		// РЅРµРѕР±С…РѕРґРёРјР° РїРµСЂРµРЅР°СЃС‚СЂРѕР№РєР° РѕСЃРё X РіРёСЃС‚РѕРіСЂР°РјРјС‹
+		// необходима перенастройка оси X гистограммы
 		connect(this, SIGNAL(resetAxisNeeded(int)), KvDistrib.data(), SLOT(ResetAxisNeededTrue()));
-		// РІС‹Р±РѕСЂ РўР’РЎ РЅР° РїРѕР»Рµ РєР°СЂС‚РѕРіСЂР°РјРјС‹ - РїРµСЂРµСЂРёСЃРѕРІРєР° РіРёСЃС‚РѕРіСЂР°РјРјС‹ Kv РїСЂРё РµРµ РЅР°Р»РёС‡РёРё
+		// выбор ТВС на поле картограммы - перерисовка гистограммы Kv при ее наличии
 		connect(renderArea.data(), SIGNAL(select_FA(int)), KvDistrib.data(), SLOT(FA_selected(int)));
-		// РїРѕР»СѓС‡РµРЅРёРµ РіРёСЃС‚РѕРіСЂР°РјРјРѕР№ С‚РµРєСѓС‰РµРіРѕ Р·РЅР°С‡РµРЅРёСЏ РІС‹СЃРѕС‚РЅРѕРіРѕ СЃР»РѕСЏ
+		// получение гистограммой текущего значения высотного слоя
 		connect(KvDistrib.data(), &Kv_Distribution::getSpinBoxValue, [this] () { return ui.spinBox->value();});
-		// РѕС‚РїСЂР°РІРёС‚СЊ РіРёСЃС‚РѕРіСЂР°РјРјРµ СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РїРѕР»Рµ СЂРёСЃРѕРІР°РЅРёСЏ
+		// отправить гистограмме указатель на поле рисования
 		connect(this, SIGNAL(sendRenderAreaPointer(RenderArea *)), KvDistrib.data(), SLOT(getRenderAreaPointer(RenderArea *)));
 		
-		// РѕС‚РїСЂР°РІР»СЏРµРј РіРёСЃС‚РѕРіСЂР°РјРјРµ СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РїРѕР»Рµ СЂРёСЃРѕРІР°РЅРёСЏ
+		// отправляем гистограмме указатель на поле рисования
 		emit sendRenderAreaPointer(renderArea.data());
 
-		// Р·Р°РґР°РµРј СЂР°Р·РјРµСЂС‹ Рё РїРѕР»РѕР¶РµРЅРёРµ РіРёСЃС‚РѕРіСЂР°РјРјС‹ РЅР° СЌРєСЂР°РЅРµ
+		// задаем размеры и положение гистограммы на экране
 		QDesktopWidget Desktop;
 		KvDistrib->setMinimumSize(0.176 * Desktop.screenGeometry(this).width(), 0.338 * Desktop.screenGeometry(this).height());
 		KvDistrib->resize(0.218 * Desktop.screenGeometry(this).width(), 0.465 * Desktop.screenGeometry(this).height());
 		KvDistrib->move(Desktop.screenGeometry(this).x() + Desktop.screenGeometry(this).width() - 0.026 * Desktop.screenGeometry(this).width() - KvDistrib->width(), 
 							   0.046 * Desktop.screenGeometry(this).height());
-		// РїРѕРєР°Р·С‹РІР°РµРј РіРёСЃС‚РѕРіСЂР°РјРјСѓ
+		// показываем гистограмму
 		KvDistrib->show();
 	}
 }
 
 
-// СЃРєСЂРёРЅС€РѕС‚ РєР°СЂС‚РѕРіСЂР°РјРјС‹
+// скриншот картограммы
 void ComparisonField::on_Screenshot_triggered()
 {
-	// РІС‹Р·С‹РІР°РµРј РґРёР°Р»РѕРі СЃРѕС…СЂР°РЅРµРЅРёСЏ С„Р°Р№Р»Р°
+	// вызываем диалог сохранения файла
 	QString ScreenFileName = QFileDialog::getSaveFileName(this,
-														  QString::fromStdWString(L"РЎРѕС…СЂР°РЅРёС‚СЊ РєР°Рє..."),
+														  QString::fromStdWString(L"Сохранить как..."),
 														  defaultPath(),
 														  tr("JPG Files (*.jpg);;PNG Files (*.png);;BMP Files (*.bmp);;All Files (*.*)")
 														  );
-	// РµСЃР»Рё РёРјСЏ С„Р°Р№Р»Р° РІС‹Р±СЂР°РЅРѕ
+	// если имя файла выбрано
 	if (!ScreenFileName.isEmpty()) 
 	{
-		// СЃРѕС…СЂР°РЅСЏРµРј СЃС‚Р°РЅРґР°СЂС‚РЅС‹Р№ РїСѓС‚СЊ
+		// сохраняем стандартный путь
 		setDefaultPath(ScreenFileName.left(ScreenFileName.lastIndexOf('/')+1));
-		// РµСЃР»Рё РІРёРґРµРЅ РЅРѕРјРµСЂ СЃР»РѕСЏ - РїСЂСЏС‡РµРј SpinBox Рё РїРѕРєР°Р·С‹РІР°РµРј РЅР°РґРїРёСЃСЊ СЃ РЅРѕРјРµСЂРѕРј СЃР»РѕСЏ
+		// если виден номер слоя - прячем SpinBox и показываем надпись с номером слоя
 		bool LayersVisible = false;
 		if (ui.groupBox->isVisible()) 
 		{ 
 			LayersVisible = true; 
 			ui.groupBox->setVisible(false); 
-			ui.LayerLabel->setText(QString::fromStdWString( L"РЎР»РѕР№ " + ExtFunctions::to_wstring(ui.spinBox->value()) )); 
+			ui.LayerLabel->setText(QString::fromStdWString( L"Слой " + ExtFunctions::to_wstring(ui.spinBox->value()) )); 
 			ui.LayerLabel->setVisible(true);
 		}
-		// СЃРѕС…СЂР°РЅСЏРµРј РёР·РѕР±СЂР°Р¶РµРЅРёРµ
+		// сохраняем изображение
 		QPixmap screen = QPixmap::grabWidget(ui.centralWidget);
-		// РµСЃР»Рё Р±С‹Р» РІРёРґРµРЅ РЅРѕРјРµСЂ СЃР»РѕСЏ - РїРѕРєР°Р·С‹РІР°РµРј SpinBox РЅРѕРјРµСЂР° СЃР»РѕСЏ
+		// если был виден номер слоя - показываем SpinBox номера слоя
 		if (LayersVisible) { ui.groupBox->setVisible(true); ui.LayerLabel->setVisible(false);}
-		// РїС‹С‚Р°РµРјСЃСЏ СѓР»СѓС‡С€РёС‚СЊ РєР°С‡РµСЃС‚РІРѕ - СѓРІРµР»РёС‡РёР°РµРј СЂР°Р·РјРµСЂС‹ Р±РµР· РїРѕС‚РµСЂРё РєР°С‡РµСЃС‚РІР°
+		// пытаемся улучшить качество - увеличиаем размеры без потери качества
 		screen = screen.scaled(ui.centralWidget->width()*4,ui.centralWidget->height()*4,Qt::KeepAspectRatio,Qt::SmoothTransformation);
-		// СЃРѕС…СЂР°РЅСЏРµРј РєР°СЂРёРЅРєСѓ РІ С„Р°Р№Р»
+		// сохраняем каринку в файл
 		screen.save(ScreenFileName, 0, 100);
 	}
 }
 
-// РІС‹Р·РІР°РЅРѕ РѕРєРЅРѕ РЅР°СЃС‚СЂРѕР№РєРё РєР°СЂС‚РѕРіСЂР°РјРјС‹
+// вызвано окно настройки картограммы
 void ComparisonField::on_ChangeColors_triggered()
 {
-	// РµСЃР»Рё РµРіРѕ РЅРµС‚
+	// если его нет
 	if (!ColorChanger)
 	{
-		// С‚Рѕ СЃРѕР·РґР°РµРј РЅРѕРІРѕРµ РѕРєРЅРѕ
+		// то создаем новое окно
 		ColorChanger.reset(new CF_ColorChanger());
-		// РїСЂРёСЃРѕРµРґРёРЅСЏРµРј СЃРёРіРЅР°Р»С‹ Рё СЃР»РѕС‚С‹ РґР»СЏ РѕРєРЅР° РЅР°СЃС‚СЂРѕР№РєРё Рё РѕСЃРЅРѕРІРЅРѕРіРѕ РѕРєРЅР° РєР°СЂС‚РѕРіСЂР°РјРјС‹
-		// РёР·РІРµС‰РµРЅРёРµ Рѕ Р·Р°РєСЂС‹С‚РёРё РЅР°СЃС‚СЂРѕР№С‰РёРєР° РєР°СЂС‚РѕРіСЂР°РјРјС‹
+		// присоединяем сигналы и слоты для окна настройки и основного окна картограммы
+		// извещение о закрытии настройщика картограммы
 		connect(ColorChanger.data(), SIGNAL(closing()), this, SLOT(ColorChangerClosed()));
-		// РЅРµРѕР±С…РѕРґРёРјРѕ РїРµСЂРµСЂРёСЃРѕРІР°С‚СЊ РєР°СЂС‚РѕРіСЂР°РјРјСѓ
+		// необходимо перерисовать картограмму
 		connect(ColorChanger.data(), SIGNAL(RecolorComparisonField()), this, SLOT(RecolorAll()));
-		// РёР·РјРµРЅРµРЅРёРµ Р°РєС‚РёРІРЅРѕРіРѕ РїР°СЂР°РјРµС‚СЂР° - РїРµСЂРµСЂРёСЃРѕРІРєР° РєР°СЂС‚РѕРіСЂР°РјРјС‹
+		// изменение активного параметра - перерисовка картограммы
 		connect(ColorChanger.data(), &CF_ColorChanger::changeActiveMode, [this] (const Parameters::ParametersEnum& newActiveMode) 
 				{
-					// РїСЂРё РІС‹Р±РѕСЂРµ РЅРѕРІРѕРіРѕ СЂРµР¶РёРјР° РІ РѕРєРЅРµ РЅР°СЃС‚СЂРѕР№РєРё Р±СѓРґРµРј РїРµСЂРµРєР»СЋС‡Р°С‚СЊ СЂРµР¶РёРј Рё РІ РѕРєРЅРµ РєР°СЂС‚РѕРіСЂР°РјРјС‹
+					// при выборе нового режима в окне настройки будем переключать режим и в окне картограммы
 					switch(newActiveMode) {
 					case Parameters::Kq   : ui.activateKq->trigger();
 										    break;
@@ -309,69 +309,69 @@ void ComparisonField::on_ChangeColors_triggered()
 										    break;
 					}
 				});
-		// РїРѕРєР°Р·С‹РІР°РµРј РѕРєРЅРѕ РЅР°СЃС‚СЂРѕР№РєРё
+		// показываем окно настройки
 		ColorChanger->show();
 	}
 }
 
-// РїРµСЂРµРєСЂР°СЃРёС‚СЊ РІСЃРµ РўР’РЎ
+// перекрасить все ТВС
 void ComparisonField::RecolorAll(void)
 {
-	// РР·РјРµРЅСЏРµРј С‚РµРєСЃС‚ РІСЃРµС… РўР’РЎ - Р°РєС‚СѓР°Р»СЊРЅРѕ РїСЂРё РёР·РјРµРЅРµРЅРёРё СЂРµР¶РёРјР° РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ
+	// Изменяем текст всех ТВС - актуально при изменении режима отображения
 	renderArea->ChangeText(cFA_Box::ActiveMode(), ui.spinBox->value());
-	// РїРµСЂРµСЂРёСЃРѕРІС‹РІР°РµРј РїРѕР»Рµ
+	// перерисовываем поле
 	renderArea->repaint();
 }
 
-// РёР·РјРµРЅРµРЅРёРµ Р·РЅР°С‡РµРЅРёСЏ РЅРѕРјРµСЂР° СЃР»РѕСЏ 
+// изменение значения номера слоя 
 void ComparisonField::on_spinBox_valueChanged(int newValue)
 {
-	// РµСЃР»Рё РІРєР»СЋС‡РµРЅ СЂРµР¶РёРј Kv - РёР·РјРµРЅСЏРµРј С‚РµРєСЃС‚ РЅР° РїРѕР»Рµ СЂРёСЃРѕРІР°РЅРёСЏ, РґРµР»Р°СЏ РµРіРѕ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РёРј РЅРѕРІРѕРјСѓ РІС‹СЃРѕС‚РЅРѕРјСѓ СЃР»РѕСЋ, Рё РїРµСЂРµСЂРёСЃРѕРІС‹РІР°РµРј РµРіРѕ
+	// если включен режим Kv - изменяем текст на поле рисования, делая его соответствующим новому высотному слою, и перерисовываем его
 	if (cFA_Box::ActiveMode() == Parameters::Kv)
 	{
 		renderArea->ChangeText(Parameters::Kv, ui.spinBox->value());
 		renderArea->repaint();
 	}
-	// РµСЃР»Рё Р°РєС‚РёРІРЅР° РіРёСЃС‚РѕРіСЂР°РјРјР° Kv - РїРµСЂРµСЂРёСЃРѕРІС‹РІР°РµРј РµРµ (С‡С‚РѕР±С‹ СЃРјРµСЃС‚РёР»Р°СЃСЊ Р»РёРЅРёСЏ, РїРѕРєР°Р·С‹РІР°СЋС‰Р°СЏ СЃР»РѕР№)
+	// если активна гистограмма Kv - перерисовываем ее (чтобы сместилась линия, показывающая слой)
 	if (KvDistrib)
 	{
 		emit select_FA(KvDistrib->currentFA());
 	}
 }
 
-// РѕР±РЅРѕРІР»РµРЅРёРµ СЃС‚Р°С‚СѓСЃ-Р±Р°СЂР° - РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ СЂРµР¶РёРјР° РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ РІС‹РІРѕРґСЏС‚СЃСЏ СЂР°Р·РЅС‹Рµ СЃРѕРѕР±С‰РµРЅРёСЏ, РІРєР»СЋС‡Р°СЋС‰РёРµ РЅР°Р·РІР°РЅРёСЏ С„Р°Р№Р»РѕРІ СЃРѕСЃС‚РѕСЏРЅРёР№
+// обновление статус-бара - в зависимости от режима отображения выводятся разные сообщения, включающие названия файлов состояний
 void ComparisonField::StatusBarUpdate(void)
 {
 	if (cFA_Box::ViewMode() == View::DeltaView)
 	{
-		statusLabel->setText(QString::fromWCharArray(L"Р—РЅР°С‡РµРЅРёРµ: ") + State1FileName() + 
+		statusLabel->setText(QString::fromWCharArray(L"Значение: ") + State1FileName() + 
 							 QString::fromWCharArray(L" - ") + State2FileName());
 	} else if (cFA_Box::ViewMode() == View::TwoStatesView) {
-		statusLabel->setText(QString::fromWCharArray(L"Р—РЅР°С‡РµРЅРёРµ 1: ") + State1FileName() + 
-							 QString::fromWCharArray(L", Р—РЅР°С‡РµРЅРёРµ 2: ") + State2FileName());
+		statusLabel->setText(QString::fromWCharArray(L"Значение 1: ") + State1FileName() + 
+							 QString::fromWCharArray(L", Значение 2: ") + State2FileName());
 	}
 }
 
-// РёР·РјРµРЅРµРЅРёРµ СЂР°Р·РјРµСЂРѕРІ РїРѕР»СЏ - РїСЂРѕРїРѕСЂС†РёРѕРЅР°Р»СЊРЅРѕРµ
+// изменение размеров поля - пропорциональное
 void ComparisonField::resizeEvent(QResizeEvent * res)
 {
-	// РјРµРЅСЏРµС‚СЃСЏ С‚РѕР»СЊРєРѕ С€РёСЂРёРЅР° - РїРѕСЌС‚РѕРјСѓ Р·Р°РґР°РµРј РЅРѕРІСѓСЋ С„РёРєСЃРёСЂРѕРІР°РЅРЅСѓСЋ РІС‹СЃРѕС‚Сѓ, РїСЂРё СЌС‚РѕРј СЂРµРєСѓСЂСЃРёРё РЅРµ РІРѕР·РЅРёРєР°РµС‚
+	// меняется только ширина - поэтому задаем новую фиксированную высоту, при этом рекурсии не возникает
 	this->setFixedHeight(this->width());
-	// РґРІРёРіР°РµРј РІ СѓРіРѕР» SpinBox Рё Label СЃ РЅРѕРјРµСЂРѕРј СЃР»РѕСЏ Рё РїРѕРґСЃС‚СЂР°РёРІР°РµРј СЂР°Р·РјРµСЂС‹ РїРѕР»СЏ РґР»СЏ СЂРёСЃРѕРІР°РЅРёСЏ
+	// двигаем в угол SpinBox и Label с номером слоя и подстраиваем размеры поля для рисования
 	ui.LayerLabel->move( this->width() - (ui.LayerLabel->width() + 2) , this->height() - (ui.LayerLabel->height() + ui.statusBar->height() + ui.mainToolBar->height()+ ui.menuBar->height() + 2));
 	ui.groupBox->move( this->width() - (ui.groupBox->width() + 2) , this->height() - (ui.groupBox->height() + ui.statusBar->height() + ui.mainToolBar->height()+ ui.menuBar->height() + 2));
 	renderArea->resize( this->width(), this->height() - (ui.statusBar->height() + ui.mainToolBar->height()+ ui.menuBar->height()));
 }
 
-// РїСЂРѕРІРµСЂРєР° Р°РєС‚РёРІРЅРѕСЃС‚Рё РіРёСЃС‚РѕРіСЂР°РјРјС‹ Kv
+// проверка активности гистограммы Kv
 bool ComparisonField::KvDiagramAvaliability() const
 { 
-	// СѓРєР°Р·Р°С‚РµР»СЊ РІРѕР·РІСЂР°С‚РёС‚ true, РµСЃР»Рё Сѓ РЅРµРіРѕ РµСЃС‚СЊ Р·РЅР°С‡РµРЅРёРµ, РЅР° РєРѕС‚РѕСЂРѕРµ РѕРЅ СѓРєР°Р·С‹РІР°РµС‚ 
+	// указатель возвратит true, если у него есть значение, на которое он указывает 
 	if (KvDistrib) { return true;} 
 	else {return false;} 
 }
 
-// Р·Р°РєСЂС‹С‚РёРµ РіРёСЃС‚РѕРіСЂР°РјРјС‹ Kv - РѕР±РЅСѓР»СЏРµРј СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РЅРµРіРѕ Рё СЃРѕС…СЂР°РЅСЏРµРј РїР°СЂР°РјРµС‚СЂС‹ РѕС‚СЂРёСЃРѕРІРєРё Рё Р°РІС‚РѕРЅР°СЃС‚СЂРѕР№РєРё РѕСЃРё X
+// закрытие гистограммы Kv - обнуляем указатель на него и сохраняем параметры отрисовки и автонастройки оси X
 void ComparisonField::KvDiagramClosed(const QPen& Kv1PenToSave, const QPen& Kv2PenToSave, const AutoAxis::AutoAxisEnum& KvAutoAxisToSave)
 {
 	Kv1SavedPen = Kv1PenToSave;
@@ -380,36 +380,36 @@ void ComparisonField::KvDiagramClosed(const QPen& Kv1PenToSave, const QPen& Kv2P
 	KvDistrib.reset(nullptr);
 }
 
-// Р·Р°РєСЂС‹С‚РёРµ РѕРєРЅР° РЅР°СЃС‚СЂРѕР№РєРё РєР°СЂС‚РѕРіСЂР°РјРјС‹ - РѕР±РЅСѓР»СЏРµРј СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РЅРµРіРѕ
+// закрытие окна настройки картограммы - обнуляем указатель на него
 void ComparisonField::ColorChangerClosed()
 {
 	ColorChanger.reset(nullptr);
 }
 
-// Р·Р°РєСЂС‹С‚РёРµ РѕР±РѕР·СЂРµРІР°С‚РµР»СЏ С„Р°Р№Р»РѕРІ - РѕР±РЅСѓР»СЏРµРј СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РЅРµРіРѕ
+// закрытие обозревателя файлов - обнуляем указатель на него
 void ComparisonField::FileBrowserClosed()
 {
 	fileBrowser.reset(nullptr);
 }
 
-// РµСЃР»Рё РїРѕР»Рµ РµСЃС‚СЊ - РІРµСЂРЅРµС‚ true
+// если поле есть - вернет true
 bool ComparisonField::ComparisonFieldAvaliability() const
 {
 	return true;
 }
 
-// РёР·РјРµРЅРёС‚СЊ СЃРѕСЃС‚РѕСЏРЅРёСЏ - РІС‹Р±СЂР°РЅС‹ РЅРѕРІС‹Рµ СЃРѕСЃС‚РѕСЏРЅРёСЏ
+// изменить состояния - выбраны новые состояния
 void ComparisonField::StatesChanged(const cDataState& rState1, const cDataState& rState2)
 {
-	// Р·Р°РґР°РµРј РЅРѕРІС‹Р№ РјР°РєСЃРёРјСѓРј РєРѕР»РёС‡РµСЃС‚РІР° РІС‹СЃС‚РЅС‹С… СЃР»РѕРµРІ
+	// задаем новый максимум количества выстных слоев
 	ui.spinBox->setMaximum(cDataState::GetNumLayers());
-	// РѕР±РЅРѕРІР»СЏРµРј СЃС‚Р°С‚СѓСЃ-Р±Р°СЂ
+	// обновляем статус-бар
 	StatusBarUpdate();
-	// РёР·РјРµРЅСЏРµРј СЃРѕСЃС‚РѕСЏРЅРёСЏ РІ РїРѕР»Рµ СЂРёСЃРѕРІР°РЅРёСЏ, РёР·РјРµРЅСЏРµРј С‚РµРєСЃС‚ РўР’РЎ Рё РїРµСЂРµСЂРёСЃРѕРІС‹РІР°РµРј РїРѕР»Рµ
+	// изменяем состояния в поле рисования, изменяем текст ТВС и перерисовываем поле
 	emit ChangeStatesCF(rState1, rState2);
 	renderArea->ChangeText(cFA_Box::ActiveMode(), ui.spinBox->value());
 	renderArea->repaint();
-	// РµСЃР»Рё РµСЃС‚СЊ РіРёСЃС‚РѕРіСЂР°РјРјР° Kv - С‚СЂРµР±СѓРµРј РїРµСЂРµРЅР°СЃС‚СЂРѕР№РєСѓ РѕСЃРё X Рё РїРµСЂРµСЂРёСЃРѕРІС‹РІР°РµРј РІСЃРµ
+	// если есть гистограмма Kv - требуем перенастройку оси X и перерисовываем все
 	if (KvDistrib)
 	{
 		emit resetAxisNeeded();

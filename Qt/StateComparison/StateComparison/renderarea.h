@@ -9,67 +9,67 @@
 #include "cdatastate.h"
 #include "fa_box.h"
 
-// РєР»Р°СЃСЃ РѕР±Р»Р°СЃС‚Рё СЂРёСЃРѕРІР°РЅРёСЏ РЅР° РІРёРґР¶РµС‚Рµ
+// класс области рисования на виджете
 class RenderArea : public QWidget
 {
     Q_OBJECT
 
 public:
-	// РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ Рё РґРµСЃС‚СЂСѓРєС‚РѕСЂ
+	// конструктор и деструктор
 	RenderArea(QWidget *parent, const cDataState &rState1, const cDataState &rState2, const QSize &rSize);
 	~RenderArea();
 
-	// РѕС‚РґР°С‚СЊ РґР°РЅРЅС‹Рµ РїРѕ СЃРѕСЃС‚РѕСЏРЅРёСЏРј
+	// отдать данные по состояниям
 	const cDataState& deltaState() const { return DeltaState;}
 	const cDataState& state1() const { return State1;}
 	const cDataState& state2() const { return State2;}
-	// РѕС‚РґР°С‚СЊ РјР°РєСЃРёРјСѓРј Kv
+	// отдать максимум Kv
 	const double& maxKv() const {return MaxKv;}
-	// РёР·РјРµРЅРёС‚СЊ РѕС‚РѕР±СЂР°Р¶Р°РµРјС‹Рµ РґР°РЅРЅС‹Рµ
+	// изменить отображаемые данные
 	void ChangeText(Parameters::ParametersEnum newActiveMode, int LayerValue);
 
 signals:
-	// РІС‹Р±СЂР°С‚СЊ РўР’РЎ РґР»СЏ РіРёСЃС‚РѕРіСЂР°РјРјС‹
+	// выбрать ТВС для гистограммы
 	void select_FA(int FA_Number);
-	// Р·Р°РїСЂРѕСЃ Р°РєС‚РёРІРЅРѕСЃС‚Рё РіРёСЃС‚РѕРіСЂР°РјРјС‹ Kv
+	// запрос активности гистограммы Kv
 	bool isKvDiagramActive();
 
 protected:
 	void paintEvent(QPaintEvent *) override;
 	void resizeEvent(QResizeEvent * res) override;
-	// РЅР°Р¶Р°С‚РёРµ РјС‹С€Рё РЅР° РїРѕР»Рµ - РЅРµРѕР±С…РѕРґРёРјРѕ РґР»СЏ РІС‹Р±РѕСЂР° РўР’РЎ РЅР° РіРёСЃС‚РѕРіСЂР°РјРјРµ Kv
+	// нажатие мыши на поле - необходимо для выбора ТВС на гистограмме Kv
 	void mousePressEvent(QMouseEvent * mouse) override;
 
 private slots:
-	// РёР·РјРµРЅРµРЅРёРµ СЂРµР¶РёРјР° РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ (СЂР°Р·РЅРѕСЃС‚СЊ СЃРѕСЃС‚РѕСЏРЅРёР№ РёР»Рё РґРІР° СЃРѕСЃС‚РѕСЏРЅРёСЏ)
+	// изменение режима отображения (разность состояний или два состояния)
 	void ViewModeChanged(bool DeltaChecked);
-	// РїСЂРёРІСЏР·РєР° РЅРѕРІС‹С… СЃРѕСЃС‚РѕСЏРЅРёР№
+	// привязка новых состояний
 	void StatesBinding(const cDataState &rState1, const cDataState &rState2);
 
 private:
-	// РџРћР›РЇ
-	// СЃРѕСЃС‚РѕСЏРЅРёСЏ Рё РёС… СЂР°Р·РЅРѕСЃС‚СЊ
+	// ПОЛЯ
+	// состояния и их разность
 	cDataState State1;
 	cDataState State2;
 	cDataState DeltaState;
-	// РјР°РєСЃРёРјР°Р»СЊРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ Kv
+	// максимальное значение Kv
 	double MaxKv;
-	// РІСЃРµ РўР’РЎ РЅР° РєР°СЂС‚РѕРіСЂР°РјРјРµ
+	// все ТВС на картограмме
 	std::vector<cFA_Box> FA;
-	// РўР’РЎ СЃ Р»РµРіРµРЅРґРѕР№
+	// ТВС с легендой
 	cFA_Box titleFA;
 
-	// РІСЃРїРѕРјРѕРіР°С‚РµР»СЊРЅР°СЏ СЃС‚СЂСѓРєС‚СѓСЂР°
+	// вспомогательная структура
 	struct Geom {
 		double x_center;
 		double y_center;
 		double width;
 		double height;
 	};
-	// РіРµРѕРјРµС‚СЂРёСЏ РўР’РЎ
+	// геометрия ТВС
 	std::vector<Geom> FA_geometry;
-	//РњР•РўРћР”Р«
-	// РїРµСЂРµСЃС‡РёС‚Р°С‚СЊ РіРµРѕРјРµС‚СЂРёСЋ РўР’РЎ
+	//МЕТОДЫ
+	// пересчитать геометрию ТВС
 	void RecalculateGeometry();
 };
 

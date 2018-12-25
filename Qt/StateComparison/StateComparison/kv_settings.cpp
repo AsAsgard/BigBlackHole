@@ -2,17 +2,17 @@
 #include "kv_settings.h"
 #include "filebrowser.h"
 
-// РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
-// Р·Р°РґР°РµРј РїР°СЂР°РјРµС‚СЂС‹ РѕС‚СЂРёСЃРѕРІРєРё Рё Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРѕР№ РЅР°СЃС‚СЂРѕР№РєРё РѕСЃРё X
+// конструктор
+// задаем параметры отрисовки и автоматической настройки оси X
 KV_Settings::KV_Settings(const QPen& State1Pen, const QPen& State2Pen, AutoAxis::AutoAxisEnum AutoAxisSetting, QWidget *parent)
 	: QWidget(parent), newState1Pen(State1Pen), newState2Pen(State2Pen), newAutoAxisSetting(AutoAxisSetting)
 {
 	ui.setupUi(this);
-	// РґРµР»Р°РµРј РѕРєРЅРѕ РјРѕРґР°Р»СЊРЅС‹Рј Рё С„РёРєСЃРёСЂРѕРІР°РЅРЅРѕРіРѕ СЂР°Р·РјРµСЂР°
+	// делаем окно модальным и фиксированного размера
 	KV_Settings::setFixedSize(KV_Settings::size());
 	KV_Settings::setWindowModality(Qt::ApplicationModal);
 	
-	// Р·Р°РґР°РµРј РїР°СЂР°РјРµС‚СЂС‹ РґРµРјРѕРЅСЃС‚СЂР°С†РёРѕРЅРЅС‹С… РїРѕР»РµР№ - С†РІРµС‚, Р°РІС‚РѕР·Р°РїРѕР»РЅРµРЅРёРµ Рё РїСЂРёСЃРѕРµРґРёРЅСЏРµРј СЃРёРіРЅР°Р» РїРµСЂРµРґР°С‡Рё РїР°СЂР°РјРµС‚СЂРѕРІ РѕС‚СЂРёСЃРѕРІРєРё
+	// задаем параметры демонстрационных полей - цвет, автозаполнение и присоединяем сигнал передачи параметров отрисовки
 	ui.State1demoArea->setBackgroundRole(QPalette::Base);
 	ui.State1demoArea->setAutoFillBackground(true);
 	connect(ui.State1demoArea, &demoAreaKv::getPen, [this] () { return newState1Pen;});
@@ -20,23 +20,23 @@ KV_Settings::KV_Settings(const QPen& State1Pen, const QPen& State2Pen, AutoAxis:
 	ui.State2demoArea->setAutoFillBackground(true);
 	connect(ui.State2demoArea, &demoAreaKv::getPen, [this] () { return newState2Pen;});
 
-	// РІСЃС‚Р°РІР»СЏРµРј РёРјРµРЅР° С„Р°Р№Р»РѕРІ РІ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РёРµ РїРѕР»СЏ
+	// вставляем имена файлов в соответствующие поля
 	ui.State1Filename->setText(State1FileName() + ":");
 	ui.State2Filename->setText(State2FileName() + ":");
 	
-	// Р·Р°РґР°РµРј 
+	// задаем 
 	showParameters(State1Pen, State2Pen, AutoAxisSetting);
 
-	// РїР°СЂР°РјРµС‚СЂС‹ С€СЂРёС„С‚РѕРІ РґР»СЏ СЃРѕРІРјРµСЃС‚РёРјРѕСЃС‚Рё СЃ high dpi
+	// параметры шрифтов для совместимости с high dpi
 	QFont font(ui.buttonBox->font());
 	font.setPixelSize(11);
 	ui.buttonBox->setFont(font);
 }
 
-// РґРµСЃС‚СЂСѓРєС‚РѕСЂ
+// деструктор
 KV_Settings::~KV_Settings() {}
 
-// РѕС‚РїСЂР°Р»СЏРµРј СЃРёРіРЅР°Р» Рѕ Р·Р°РєСЂС‹С‚РёРё РѕРєРЅР°
+// отпраляем сигнал о закрытии окна
 void KV_Settings::closeEvent(QCloseEvent *)
 {
 	emit closing();
@@ -47,37 +47,37 @@ void KV_Settings::on_buttonBox_clicked(QAbstractButton * button)
 {
 	// OK
 	if (button == ui.buttonBox->button(QDialogButtonBox::Ok)) {
-		// РїСЂРёРјРµРЅСЏРµРј РЅР°СЃС‚СЂРѕР№РєРё Рё Р·Р°РєСЂС‹РІР°РµРј РѕРєРЅРѕ
+		// применяем настройки и закрываем окно
 		applySettings();
 		KV_Settings::close();
 	// CANCEL
 	} else if (button == ui.buttonBox->button(QDialogButtonBox::Cancel)) {
-		// Р·Р°РєСЂС‹РІР°РµРј РѕРєРЅРѕ
+		// закрываем окно
 		KV_Settings::close();
 	// APPLY
 	} else if (button == ui.buttonBox->button(QDialogButtonBox::Apply)) {
-		// РїСЂРёРјРµРЅСЏРµРј РЅР°СЃС‚СЂРѕР№РєРё
+		// применяем настройки
 		applySettings();
 	// DISCARD
 	} else if (button == ui.buttonBox->button(QDialogButtonBox::Discard)) {
-		// СѓСЃС‚Р°РЅРѕРІРєР° С‚РµРєСѓС‰РёС… РїР°СЂР°РјРµС‚СЂРѕРІ РіРёСЃС‚РѕРіСЂР°РјРјС‹
+		// установка текущих параметров гистограммы
 		auto PairPens = emit getCurrentPens();
-		// СѓСЃС‚Р°РЅРѕРІРєР° РЅРѕРІС‹С… РїР°СЂР°РјРµС‚СЂРѕРІ
+		// установка новых параметров
 		showParameters(PairPens.first, PairPens.second, emit getCurrentAutoAxisSetting());
 	// RESTORE DEFAULTS
 	} else if (button == ui.buttonBox->button(QDialogButtonBox::RestoreDefaults)) {
-		// СѓСЃС‚Р°РЅРѕРІРєР° СЃС‚Р°РЅРґР°СЂС‚РЅС‹С… РїР°СЂР°РјРµС‚СЂРѕРІ РіРёСЃС‚РѕРіСЂР°РјРјС‹
+		// установка стандартных параметров гистограммы
 		auto PairPens = emit getDefaultPens();
-		// СѓСЃС‚Р°РЅРѕРІРєР° РЅРѕРІС‹С… РїР°СЂР°РјРµС‚СЂРѕРІ
+		// установка новых параметров
 		showParameters(PairPens.first, PairPens.second, AutoAxis::NoAuto);
 	}
 }
 
 
-//СѓСЃС‚Р°РЅР°РІР»РёРІР°РµРј РїР°СЂР°РјРµС‚СЂС‹ Р°СЂРіСѓРјРµРЅС‚РѕРІ РЅР° РІРёРґР¶РµС‚С‹ 
+//устанавливаем параметры аргументов на виджеты 
 void KV_Settings::showParameters(const QPen& State1Pen, const QPen& State2Pen, AutoAxis::AutoAxisEnum AutoAxisSetting)
 {
-	// Р·РЅР°С‡РµРЅРёРµ Р°РІС‚РѕРЅР°СЃС‚СЂРѕР№РєРё РѕСЃРё РІ RadioButton-Р°С…
+	// значение автонастройки оси в RadioButton-ах
 	switch (AutoAxisSetting) {
 	case AutoAxis::NoAuto:			ui.NoAuto->setChecked(true);
 									break;
@@ -87,28 +87,28 @@ void KV_Settings::showParameters(const QPen& State1Pen, const QPen& State2Pen, A
 									break;
 	}
 
-	// СЃРјРµРЅР° РѕС‚СЂРёСЃРѕРІРѕРє РґРµРјРѕРЅСЃС‚СЂР°С†РёРѕРЅРЅС‹С… РїРѕР»РµР№ Рё РёС… РїРµСЂРµСЂРёСЃРѕРІРєР°
+	// смена отрисовок демонстрационных полей и их перерисовка
 	newState1Pen.setColor(State1Pen.color());
 	ui.State1demoArea->repaint();
 	newState2Pen.setColor(State2Pen.color());
 	ui.State2demoArea->repaint();
 
-	// СѓСЃС‚Р°РЅРѕРІРєР° СЃС‚РёР»СЏ Р»РёРЅРёРё РІ ComboBox-Р°С…
+	// установка стиля линии в ComboBox-ах
 	ui.State1lineStyleBox->setCurrentIndex(State1Pen.style());
 	ui.State2lineStyleBox->setCurrentIndex(State2Pen.style());
 	
-	// СѓСЃС‚Р°РЅРѕРІРєР° Р·РЅР°С‡РµРЅРёР№ С€РёСЂРёРЅС‹ Р»РёРЅРёРё РІ SpinBox-Р°С…
+	// установка значений ширины линии в SpinBox-ах
 	ui.State1WidthBox->setValue(State1Pen.widthF());
 	ui.State2WidthBox->setValue(State2Pen.widthF());
 }
 
-// РїСЂРёРјРµРЅРёС‚СЊ РЅР°СЃС‚СЂРѕР№РєРё Рє РіРёСЃС‚РѕРіСЂР°РјРјРµ
+// применить настройки к гистограмме
 void KV_Settings::applySettings()
 {
 	emit sendNewSettings(newState1Pen, newState2Pen, newAutoAxisSetting);
 }
 
-// РЅРѕРІС‹Р№ СЃС‚РёР»СЊ Р»РёРЅРёРё РїРµСЂРІРѕРіРѕ СЃРѕСЃС‚РѕСЏРЅРёСЏ
+// новый стиль линии первого состояния
 void KV_Settings::on_State1lineStyleBox_currentIndexChanged(int index)
 {
 	switch(index) {
@@ -131,12 +131,12 @@ void KV_Settings::on_State1lineStyleBox_currentIndexChanged(int index)
 		newState1Pen.setStyle(Qt::DashDotDotLine);
 		break;
 	}
-	// РїРµСЂРµСЂРёСЃРѕРІС‹РІР°РµРј РїРµСЂРІСѓСЋ РґРµРјРѕРЅСЃС‚СЂР°С†РёРѕРЅРЅСѓСЋ РѕР±Р»Р°СЃС‚СЊ
+	// перерисовываем первую демонстрационную область
 	ui.State1demoArea->repaint();
 }
 
 
-// РЅРѕРІС‹Р№ СЃС‚РёР»СЊ Р»РёРЅРёРё РІС‚РѕСЂРѕРіРѕ СЃРѕСЃС‚РѕСЏРЅРёСЏ
+// новый стиль линии второго состояния
 void KV_Settings::on_State2lineStyleBox_currentIndexChanged(int index)
 {
 	switch(index) {
@@ -159,81 +159,81 @@ void KV_Settings::on_State2lineStyleBox_currentIndexChanged(int index)
 		newState2Pen.setStyle(Qt::DashDotDotLine);
 		break;
 	}
-	// РїРµСЂРµСЂРёСЃРѕРІС‹РІР°РµРј РІС‚РѕСЂСѓСЋ РґРµРјРѕРЅСЃС‚СЂР°С†РёРѕРЅРЅСѓСЋ РѕР±Р»Р°СЃС‚СЊ
+	// перерисовываем вторую демонстрационную область
 	ui.State2demoArea->repaint();
 }
 
 
-// РёР·РјРµРЅРµРЅРёРµ Р·РЅР°С‡РµРЅРёСЏ С€РёСЂРёРЅС‹ РїРµСЂРІРѕР№ Р»РёРЅРёРё
+// изменение значения ширины первой линии
 void KV_Settings::on_State1WidthBox_valueChanged(double value)
 {
-	// Р·Р°РґР°РµРј РЅРѕРІСѓСЋ С€РёСЂРёРЅСѓ РїРµСЂРІРѕР№ Р»РёРЅРёРё
+	// задаем новую ширину первой линии
 	newState1Pen.setWidthF(value);
-	// РїРµСЂРµСЂРёСЃРѕРІС‹РІР°РµРј РїРµСЂРІСѓСЋ РґРµРјРѕРЅСЃС‚СЂР°С†РёРѕРЅРЅСѓСЋ РѕР±Р»Р°СЃС‚СЊ
+	// перерисовываем первую демонстрационную область
 	ui.State1demoArea->repaint();
 }
 
-// РёР·РјРµРЅРµРЅРёРµ Р·РЅР°С‡РµРЅРёСЏ С€РёСЂРёРЅС‹ РІС‚РѕСЂРѕР№ Р»РёРЅРёРё
+// изменение значения ширины второй линии
 void KV_Settings::on_State2WidthBox_valueChanged(double value)
 {
-	// Р·Р°РґР°РµРј РЅРѕРІСѓСЋ С€РёСЂРёРЅСѓ РІС‚РѕСЂРѕР№ Р»РёРЅРёРё
+	// задаем новую ширину второй линии
 	newState2Pen.setWidthF(value);
-	// РїРµСЂРµСЂРёСЃРѕРІС‹РІР°РµРј РІС‚РѕСЂСѓСЋ РґРµРјРѕРЅСЃС‚СЂР°С†РёРѕРЅРЅСѓСЋ РѕР±Р»Р°СЃС‚СЊ
+	// перерисовываем вторую демонстрационную область
 	ui.State2demoArea->repaint();
 }
 
 
-// РёР·РјРµРЅРµРЅРёРµ Р·РЅР°С‡РµРЅРёСЏ С†РІРµС‚Р° РїРµСЂРІРѕР№ Р»РёРЅРёРё
+// изменение значения цвета первой линии
 void KV_Settings::on_State1ColorChange_clicked()
 {
-	// РІС‹Р·С‹РІР°РµРј ColorDialog
+	// вызываем ColorDialog
 	QColor newState1Color = QColorDialog::getColor( newState1Pen.color(),
 													this,
-													QString::fromWCharArray(L"Р’С‹Р±РµСЂРµС‚Рµ С†РІРµС‚"));
-	// РµСЃР»Рё С†РІРµС‚ РІС‹Р±СЂР°РЅ
+													QString::fromWCharArray(L"Выберете цвет"));
+	// если цвет выбран
 	if (newState1Color.isValid())
 	{
-		// Р·Р°РґР°РµРј РЅРѕРІС‹Р№ С†РІРµС‚ РѕС‚СЂРёСЃРѕРІРєРё
+		// задаем новый цвет отрисовки
 		newState1Pen.setColor(newState1Color);
-		// РїРµСЂРµСЂРёСЃРѕРІС‹РІР°РµРј РїРµСЂРІСѓСЋ РґРµРјРѕРЅСЃС‚СЂР°С†РёРѕРЅРЅСѓСЋ РѕР±Р»Р°СЃС‚СЊ
+		// перерисовываем первую демонстрационную область
 		ui.State1demoArea->repaint();
 	}
 }
 
 
-// РёР·РјРµРЅРµРЅРёРµ Р·РЅР°С‡РµРЅРёСЏ С†РІРµС‚Р° РІС‚РѕСЂРѕР№ Р»РёРЅРёРё
+// изменение значения цвета второй линии
 void KV_Settings::on_State2ColorChange_clicked()
 {
-	// РІС‹Р·С‹РІР°РµРј ColorDialog
+	// вызываем ColorDialog
 	QColor newState2Color = QColorDialog::getColor( newState2Pen.color(),
 													this,
-													QString::fromWCharArray(L"Р’С‹Р±РµСЂРµС‚Рµ С†РІРµС‚"));
-	// РµСЃР»Рё С†РІРµС‚ РІС‹Р±СЂР°РЅ
+													QString::fromWCharArray(L"Выберете цвет"));
+	// если цвет выбран
 	if (newState2Color.isValid())
 	{
-		// Р·Р°РґР°РµРј РЅРѕРІС‹Р№ С†РІРµС‚ РѕС‚СЂРёСЃРѕРІРєРё
+		// задаем новый цвет отрисовки
 		newState2Pen.setColor(newState2Color);
-		// РїРµСЂРµСЂРёСЃРѕРІС‹РІР°РµРј РІС‚РѕСЂСѓСЋ РґРµРјРѕРЅСЃС‚СЂР°С†РёРѕРЅРЅСѓСЋ РѕР±Р»Р°СЃС‚СЊ
+		// перерисовываем вторую демонстрационную область
 		ui.State2demoArea->repaint();
 	}
 }
 
 
-// РµСЃР»Рё РІС‹Р±СЂР°РЅ СЂРµР¶РёРј Р±РµР· РЅР°СЃС‚СЂРѕР№РєРё РѕСЃРё - С„РёРєСЃРёСЂСѓРµРј СЌС‚Рѕ РІ РїРµСЂРµРјРµРЅРЅРѕР№
+// если выбран режим без настройки оси - фиксируем это в переменной
 void KV_Settings::on_NoAuto_toggled(bool checked)
 {
 	if (checked) newAutoAxisSetting = AutoAxis::NoAuto;
 }
 
 
-// РµСЃР»Рё РІС‹Р±СЂР°РЅ СЂРµР¶РёРј СЃ С‡Р°СЃС‚РёС‡РЅРѕР№ РЅР°СЃС‚СЂРѕР№РєРѕР№ РѕСЃРё - С„РёРєСЃРёСЂСѓРµРј СЌС‚Рѕ РІ РїРµСЂРµРјРµРЅРЅРѕР№
+// если выбран режим с частичной настройкой оси - фиксируем это в переменной
 void KV_Settings::on_HighBorderAuto_toggled(bool checked)
 {
 	if (checked) newAutoAxisSetting = AutoAxis::HighBorderAuto;
 }
 
 
-// РµСЃР»Рё РІС‹Р±СЂР°РЅ СЂРµР¶РёРј СЃ РїРѕР»РЅРѕР№ РЅР°СЃС‚СЂРѕР№РєРѕР№ - С„РёРєСЃРёСЂСѓРµРј СЌС‚Рѕ РІ РїРµСЂРµРјРµРЅРЅРѕР№
+// если выбран режим с полной настройкой - фиксируем это в переменной
 void KV_Settings::on_AllAuto_toggled(bool checked)
 {
 	if (checked) newAutoAxisSetting = AutoAxis::AllAuto;

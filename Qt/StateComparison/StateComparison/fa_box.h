@@ -5,7 +5,7 @@
 #include <QLabel>
 #include <QPainterPath>
 
-// РїРµСЂРµС‡РёСЃР»РµРЅРёРµ РїР°СЂР°РјРµС‚СЂРѕРІ, РѕС‚РѕР±СЂР°Р¶Р°РµРјС‹С… РІ РїСЂРѕРіСЂР°РјРјРµ
+// перечисление параметров, отображаемых в программе
 namespace  Parameters {
 	enum ParametersEnum {
 		Kq = 0,
@@ -14,7 +14,7 @@ namespace  Parameters {
 	};
 }
 
-// РїРµСЂРµС‡РёСЃР»РµРЅРёРµ СЂРµР¶РёРјРѕРІ РІС‹РІРѕРґР° РґР°РЅРЅС‹С…
+// перечисление режимов вывода данных
 namespace View {
 	enum ViewEnum {
 		DeltaView = 0,
@@ -22,76 +22,76 @@ namespace View {
 	};
 }
 
-// РўР’РЎ, РѕС‚СЂРёСЃРѕРІС‹РІР°СЋС‰Р°СЏСЃСЏ РЅР° РїРѕР»Рµ
+// ТВС, отрисовывающаяся на поле
 class cFA_Box{
 private : 
-	// РџРћР›РЇ
-	// РіСЂР°РЅРёС†Р° РўР’РЎ
+	// ПОЛЯ
+	// 
 	QPainterPath painterPath;
-	// РЅР°РґРїРёСЃСЊ СЃ РЅРѕРјРµСЂРѕРј РўР’РЎ
+	// надпись с номером ТВС
 	QLabel FA_Number;
-	// С‚РµРєСЃС‚ СЃ СЂР°Р·РЅРёС†РµР№ Р·РЅР°С‡РµРЅРёР№
+	// текст с разницей значений
 	QLabel Delta;
-	// С‚РµРєСЃС‚ СЃ РїРµСЂРІС‹Рј СЃРѕСЃС‚РѕСЏРЅРёРµРј
+	// текст с первым состоянием
 	QLabel State1;
-	// С‚РµРєСЃС‚ СЃРѕ РІС‚РѕСЂС‹Рј СЃРѕСЃС‚РѕСЏРЅРёРµРј
+	// текст со вторым состоянием
 	QLabel State2;
-	// С€РёСЂРёРЅР° Рё РІС‹СЃРѕС‚Р° РўР’РЎ РЅР° РїР»РѕСЃРєРѕСЃС‚Рё
+	// ширина и высота ТВС на плоскости
 	int _width;
 	int _height;
-	// РєРѕРѕСЂРґРёРЅР°С‚С‹ С†РµРЅС‚СЂР° РўР’РЎ
+	// координаты центра ТВС
 	QPoint center;
-	// С†РІРµС‚ РўР’РЎ
+	// цвет ТВС
 	QColor Color;
-	// СЂРѕРґРёС‚РµР»СЊ РўР’РЎ
+	// родитель ТВС
 	QWidget * Parent;
-	// РѕС‚СЂРёСЃРѕРІС‹РІР°РµС‚СЃСЏ Р»Рё РўР’РЎ
+	// отрисовывается ли ТВС
 	bool Visible;
-	// СЏРІР»СЏРµС‚СЃСЏ Р»Рё РўР’РЎ - РўР’РЎ СЃ Р»РµРіРµРЅРґРѕР№
+	// является ли ТВС - ТВС с легендой
 	const bool titleFA;
 	
-	// РІРєР»СЋС‡РµРЅРѕ Р»Рё РѕС‚РѕР±СЂР°Р¶РµРЅРёРµ С†РІРµС‚РѕРІ
+	// включено ли отображение цветов
 	static bool Colorful;
-	// Р°РєС‚РёРІРЅС‹Р№ РїР°СЂР°РјРµС‚СЂ
+	// активный параметр
 	static Parameters::ParametersEnum activeMode;
-	// Р°РєС‚РёРІРЅС‹Р№ СЂРµР¶РёРј РїСЂРѕСЃРјРѕС‚СЂР°
+	// активный режим просмотра
 	static View::ViewEnum viewMode;
 	
-	// РІСЃРїРѕРјРѕРіР°С‚РµР»СЊРЅР°СЏ СЃС‚СЂСѓРєС‚СѓСЂР° - РјР°РєСЃРёРјР°Р»СЊРЅРѕРµ Рё РјРёРЅРёРјР°Р»СЊРЅРѕРµ Р·РЅР°С‡РµРЅРёСЏ
+	// вспомогательная структура - максимальное и минимальное значения
 	struct Lim {
 		double maxValue;
 		double minValue;
 	};
-	// РІСЃРїРѕРјРѕРіР°С‚РµР»СЊРЅР°СЏ СЃС‚СЂСѓРєС‚СѓСЂР° - Р·РЅР°С‡РµРЅРёСЏ С†РІРµС‚РѕРІ РјР°РєСЃРёРјСѓРјР° Рё РјРёРЅРёРјСѓРјР°
+	// вспомогательная структура - значения цветов максимума и минимума
 	struct LimColors {
 		QColor maxColor;
 		QColor minColor;
 	};
 
-	// РїСЂРµРґРµР»СЊРЅС‹Рµ Р·РЅР°С‡РµРЅРёСЏ РїР°СЂР°РјРµС‚СЂРѕРІ - РїРѕСЃР»Рµ РёС… РїСЂРµРІС‹С€РµРЅРёСЏ С†РІРµС‚ РЅРµ РјРµРЅСЏРµС‚СЃСЏ
+	// предельные значения параметров - после их превышения цвет не меняется
 	static std::map<Parameters::ParametersEnum, Lim> Limiters;
-	// С†РІРµС‚Р° РїСЂРµРґРµР»РѕРІ
+	// цвета пределов
 	static std::map<Parameters::ParametersEnum, LimColors> LimitColors;
-	// С†РІРµС‚Р° РїСЂРµРґРµР»РѕРІ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
+	// цвета пределов по умолчанию
 	static std::map<Parameters::ParametersEnum, LimColors> defaultLimitColors;
 
-	// РњР•РўРћР”Р«
-	// СѓСЃС‚Р°РЅРѕРІРёС‚СЊ РїСЂРµРґРµР»С‹ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
+	// МЕТОДЫ
+	// установить пределы по умолчанию
 	static void SetDefaultLimiters();
-	// СѓСЃС‚Р°РЅРѕРІРёС‚СЊ С†РІРµС‚Р° РїСЂРµРґРµР»РѕРІ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
+	// установить цвета пределов по умолчанию
 	static void SetDefaultLimitColors();
-	// СѓСЃС‚Р°РЅРѕРІРёС‚СЊ С†РІРµС‚ РўР’РЎ
+	// установить цвет ТВС
 	void SetColor(QColor newColor) {Color = newColor;}
-	// РїРµСЂРµСЃС‡РёС‚Р°С‚СЊ РІСЃРµ
+	// пересчитать все
 	void recalculate(void);
-	// РїРµСЂРµРєСЂР°СЃРёС‚СЊ РўР’РЎ РІ СЃРѕРѕС‚РІРµС‚СЃС‚РІРёРё СЃРѕ Р·РЅР°С‡РµРЅРёРµРј
+	// перекрасить ТВС в соответствии со значением
 	void recolor(const double &newValue);
-	// СѓСЃС‚Р°РЅРѕРІРёС‚СЊ РїР°СЂР°РјРµС‚СЂС‹ С‚РµРєСЃС‚Р° РІ РўР’РЎ
+	// установить параметры текста в ТВС
 	void SetLabelParameters(void);
-	// СѓСЃС‚Р°РЅРѕРІРёС‚СЊ РїР°СЂР°РјРµС‚СЂС‹ С‚РµРєСЃС‚Р° РІ РўР’РЎ, РµСЃР»Рё РѕРЅР° - РўР’РЎ СЃ Р»РµРіРµРЅРґРѕР№
+	// установить параметры текста в ТВС, если она - ТВС с легендой
 	void SetTitleLabelParameters(void);
 public :
-	// РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂС‹
+	// конструкторы
 	cFA_Box(int x_cent = 0, int y_cent = 0, 
 			int newWidth = 0, int newHeight = 0, 
 			int newFA_Number = 0, QWidget *parent = 0) : 
@@ -150,18 +150,18 @@ public :
 					if (defaultLimitColors.empty()) SetDefaultLimitColors();
 					if (LimitColors.empty()) SetLimitColorsFromDefaults();
 					if (titleFA) {
-						FA_Number.setText(QString::fromWCharArray(L"в„–"));
-						Delta.setText(QString::fromWCharArray(L"Р—РЅР°С‡РµРЅРёРµ"));
-						State1.setText(QString::fromWCharArray(L"Р—РЅР°С‡РµРЅРёРµ 1"));
-						State2.setText(QString::fromWCharArray(L"Р—РЅР°С‡РµРЅРёРµ 2"));
+						FA_Number.setText(QString::fromWCharArray(L"№"));
+						Delta.setText(QString::fromWCharArray(L"Значение"));
+						State1.setText(QString::fromWCharArray(L"Значение 1"));
+						State2.setText(QString::fromWCharArray(L"Значение 2"));
 						SetColor(Qt::white);
 					}
 				}
 	cFA_Box(const cFA_Box &rFA);
 	cFA_Box& operator=(const cFA_Box &rFA);
-	// РґРµСЃС‚СЂСѓРєС‚РѕСЂ
+	// деструктор
 	~cFA_Box() {}
-	// РїРѕР»СѓС‡РµРЅРёРµ РґР°РЅРЅС‹С…
+	// получение данных
 	int x_center() const {return center.x();}
 	int y_center() const {return center.y();}
 	int width() const {return _width;}
@@ -181,22 +181,22 @@ public :
 	static QColor GetDefaultMaxColor(const Parameters::ParametersEnum& parameter);
 	static Parameters::ParametersEnum ActiveMode() {return activeMode;}
 	static View::ViewEnum ViewMode() {return viewMode;}
-	// СѓСЃС‚Р°РЅРѕРІРєР° РЅРѕРІС‹С… РґР°РЅРЅС‹С…
+	// установка новых данных
 	void SetCenterX(int newCenterX) {center.setX(newCenterX);}
 	void SetCenterY(int newCenterY) {center.setY(newCenterY);}
 	void SetWidth(int newWidth) {_width = newWidth;}
 	void SetHeight(int newHeight) {_height = newHeight;}
 	void SetFA_Number(const int &newFA_Number);
-	// СѓСЃС‚Р°РЅРѕРІРєР° СЂР°Р·РЅРѕСЃС‚Рё СЃРѕСЃС‚РѕСЏРЅРёР№ РёР· С‚РµРєСЃС‚Р°, РµСЃР»Рё РўР’РЎ РЅРµ Р»РµРіРµРЅРґР°. РџРµСЂРµРєСЂР°С€РёРІР°РµРј РўР’РЎ РІ СЃРµСЂС‹Р№ (С‚.Рє. С‡РёСЃР»РѕРІРѕРіРѕ Р·РЅР°С‡РµРЅРёСЏ РЅРµС‚, С‚.Рµ. РІ РѕСЃРЅРѕРІРЅРѕРј NaN)
+	// установка разности состояний из текста, если ТВС не легенда. Перекрашиваем ТВС в серый (т.к. числового значения нет, т.е. в основном NaN)
 	void SetDelta(const QString &newDeltaText) { if (!titleFA) { Delta.setText(newDeltaText); this->SetColor(Qt::gray); } }
 	void SetDelta(const double &newDelta);
-	// СѓСЃС‚Р°РЅРѕРІРєР° СЃРѕСЃС‚РѕСЏРЅРёРµ 1 РёР· С‚РµРєСЃС‚Р°, РµСЃР»Рё РўР’РЎ РЅРµ Р»РµРіРµРЅРґР°
+	// установка состояние 1 из текста, если ТВС не легенда
 	void SetState1(const QString &newState1Text) { if (!titleFA) State1.setText(newState1Text);}
 	void SetState1(const double &newState1);
-	// СѓСЃС‚Р°РЅРѕРІРєР° СЃРѕСЃС‚РѕСЏРЅРёРµ 2 РёР· С‚РµРєСЃС‚Р°, РµСЃР»Рё РўР’РЎ РЅРµ Р»РµРіРµРЅРґР°
+	// установка состояние 2 из текста, если ТВС не легенда
 	void SetState2(const QString &newState2Text) { if (!titleFA) State2.setText(newState2Text);}
 	void SetState2(const double &newState2);
-	// СѓСЃС‚Р°РЅРѕРІРєР° СЂРѕРґРёС‚РµР»РµР№ РґР»СЏ РІСЃРµС… Label-РѕРІ Рё РЅРѕРІРѕРіРѕ Р·РЅР°С‡РµРЅРёСЏ РїРµСЂРµРјРµРЅРЅРѕР№
+	// установка родителей для всех Label-ов и нового значения переменной
 	void SetParent(QWidget * parent) {Parent = parent; Delta.setParent(Parent); FA_Number.setParent(Parent); State1.setParent(Parent); State2.setParent(Parent);}
 	void SetVisible(bool visible);
 	static void SetColorful(bool colorful);
@@ -206,23 +206,23 @@ public :
 	static void SetActiveMode(const Parameters::ParametersEnum& newActiveMode) {activeMode = newActiveMode;}
 	static void SetViewMode(const View::ViewEnum& newViewMode) {viewMode = newViewMode;}
 	static void SetLimitColorsFromDefaults();
-	// РёР·РјРµРЅРёС‚СЊ РІРёРґ РЅР° С‚РµРєСѓС‰РёР№
+	// изменить вид на текущий
 	void ChangeView(void);
-	// СѓСЃС‚Р°РЅРѕРІРёС‚СЊ РіРµРѕРјРµС‚СЂРёСЋ
+	// установить геометрию
 	void SetGeometry(int newCenterX, int newCenterY, int newWidth, int newHeight);
-	// РїРµСЂРµРґРІРёРЅСѓС‚СЊ РўР’РЎ
+	// передвинуть ТВС
 	void move(int newCenterX, int newCenterY);
-	// РёР·РјРµРЅРёС‚СЊ СЂР°Р·РјРµСЂ РўР’РЎ
+	// изменить размер ТВС
 	void resize(int newWidth, int newHeight);
 
-	// РџРЈР‘Р›РР§РќР«Р• РџРћР›РЇ
-	// РІСЃРїРѕРјРѕРіР°С‚РµР»СЊРЅР°СЏ РїСѓР±Р»РёС‡РЅР°СЏ СЃС‚СЂСѓРєС‚СѓСЂР° - РўР’РЎ Рё СЃР»РѕР№
+	// ПУБЛИЧНЫЕ ПОЛЯ
+	// вспомогательная публичная структура - ТВС и слой
 	struct FAandLayer {
 		FAandLayer() : FA(1), Layer(1) {}
 		int FA;
 		int Layer;
 	};
-	// РўР’РЎ Рё СЃР»РѕР№ СЃ РјР°РєСЃРёРјР°Р»СЊРЅРѕР№ СЂР°Р·РЅРёС†РµР№ Kv
+	// ТВС и слой с максимальной разницей Kv
 	static FAandLayer FAwithMaxDeltaKv;
 };
 

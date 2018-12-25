@@ -7,62 +7,62 @@
 #include "cdatastate.h"
 #include "ui_filebrowser.h"
 
-// РєР»Р°СЃСЃ С„РѕСЂРјС‹ - РІС‹Р±РѕСЂ С„Р°Р№Р»РѕРІ СЃ СЃРѕСЃС‚РѕСЏРЅРёСЏРјРё РґР»СЏ СЃСЂР°РІРЅРµРЅРёСЏ
+// класс формы - выбор файлов с состояниями для сравнения
 class FileBrowser : public QMainWindow
 {
 	Q_OBJECT
 
 public:
-	// РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ Рё РґРµСЃС‚СЂСѓРєС‚РѕСЂ
+	// конструктор и деструктор
 	FileBrowser(QWidget *parent = 0);
 	~FileBrowser();
 
 signals:
-	// Р·Р°РїСЂРѕСЃ Р°РєС‚РёРІРЅРѕСЃС‚Рё РїРѕР»СЏ РєР°СЂС‚РѕРіСЂР°РјРјС‹
+	// запрос активности поля картограммы
 	bool isComparisonFieldActive();
-	// РёР·РјРµРЅРёС‚СЊ С‚РµРєСѓС‰РёРµ СЃРѕСЃС‚РѕСЏРЅРёСЏ
+	// изменить текущие состояния
 	void ChangeStatesFB(const cDataState& State1, const cDataState& State2);
-	// Р·Р°РєСЂС‹С‚РёРµ РѕРєРЅР°
+	// закрытие окна
 	void closing();
 
 protected:
 	void closeEvent(QCloseEvent *) override;
 
 private slots:
-	// РІС‹Р±РѕСЂ С„Р°Р№Р»РѕРІ С‡РµСЂРµР· РѕР±РѕР·СЂРµРІР°С‚РµР»СЊ
+	// выбор файлов через обозреватель
 	void on_File1Button_clicked();
 	void on_File2Button_clicked();
 
-	// РєРЅРѕРїРєР° СЃСЂР°РІРЅРµРЅРёВ¤
+	// кнопка сравнения
 	void on_Compare_clicked();
 
-	// РґРѕР±Р°РІР»РµРЅРёРµ РёРјРµРЅРё С„Р°Р№Р»РѕРІ РІСЂСѓС‡РЅСѓСЋ
+	// добавление имени файлов вручную
 	void on_File1lineEdit_editingFinished();
 	void on_File1lineEdit_textEdited(QString);
 	void on_File2lineEdit_editingFinished();
 	void on_File2lineEdit_textEdited(QString);
 
 private:
-	// РџРћР›РЇ
+	//ПОЛЯ
 	Ui::FileBrowserClass ui;
-	// РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Р№ Label РґР»В¤ СЃС‚Р°С‚СѓСЃ-Р±Р°СЂР°
+	// дополнительный Label для статус-бара
 	QScopedPointer<QLabel> statusLabel;
-	// РњР•РўРћР”Р«
-	// РїСЂРѕРІРµСЂРёС‚СЊ РїСЂР°РІРёР»СЊРЅРѕСЃС‚СЊ РІС…РѕРґРЅС‹С… РґР°РЅРЅС‹С… (РґР»СЏ СЃС‚Р°С‚СѓСЃ-Р±Р°СЂР°)
+	//МЕТОДЫ
+	// проверить правильность входных данных (для статус-бара)
 	void CheckingFileNames(void); 
 };
 
-// РїРѕР»СѓС‡РёС‚СЊ/СѓСЃС‚Р°РЅРѕРІРёС‚СЊ РїР°РїРєСѓ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ РґР»СЏ РѕС‚РєСЂС‹С‚РёСЏ FileDialog
+// получить/установить папку по умолчанию для открытия FileDialog
 QString defaultPath();
 void setDefaultPath(const QString &NewDefaultPath);
 void setDefaultPath(QString &&NewDefaultPath);
 
-// РїРѕР»СѓС‡РёС‚СЊ/СѓСЃС‚Р°РЅРѕРІРёС‚СЊ РёРјСЏ С„Р°Р№Р»Р° СЃ РїРµСЂРІС‹Рј СЃРѕСЃС‚РѕВ¤РЅРёРµРј
+// получить/установить имя файла с первым состоянием
 QString State1FileName();
 void setState1FileName(const QString &NewState1FileName);
 void setState1FileName(QString &&NewState1FileName);
 
-// РїРѕР»СѓС‡РёС‚СЊ/СѓСЃС‚Р°РЅРѕРІРёС‚СЊ РёРјСЏ С„Р°Р№Р»Р° СЃРѕ РІС‚РѕСЂС‹Рј СЃРѕСЃС‚РѕСЏРЅРёРµРј
+// получить/установить имя файла со вторым состоянием
 QString State2FileName();
 void setState2FileName(const QString &NewState2FileName);
 void setState2FileName(QString &&NewState2FileName);

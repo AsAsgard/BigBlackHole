@@ -6,69 +6,69 @@
 #include <QPen>
 #include "ui_kv_settings.h"
 
-// РїРµСЂРµС‡РёСЃР»РµРЅРёРµ РІР°СЂРёР°РЅС‚РѕРІ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРѕР№ РЅР°СЃС‚СЂРѕР№РєРё РѕСЃРё X
+// перечисление вариантов автоматической настройки оси X
 namespace AutoAxis {
 	enum AutoAxisEnum {
-		NoAuto,			// Р±РµР· Р°РІС‚РѕРЅР°СЃС‚СЂРѕР№РєРё
-		HighBorderAuto,	// Р°РІС‚РѕРЅР°СЃС‚СЂРѕР№РєР° С‚РѕР»СЊРєРѕ РїРѕ РІРµСЂС…РЅРµР№ РіСЂР°РЅРёС†Рµ
-		AllAuto			// Р°РІС‚РѕРЅР°СЃС‚СЂРѕР№РєР° РїРѕ РІРµСЂС…РЅРµР№ Рё РЅРёР¶РЅРµР№ РіСЂР°РЅРёС†Р°Рј
+		NoAuto,			// без автонастройки
+		HighBorderAuto,	// автонастройка только по верхней границе
+		AllAuto			// автонастройка по верхней и нижней границам
 	};
 }
 
-// РєР»Р°СЃСЃ С„РѕСЂРјС‹ - РЅР°СЃС‚СЂРѕР№РєР° РїР°СЂР°РјРµС‚СЂРѕРІ РіРёСЃС‚РѕРіСЂР°РјРјС‹ Kv
+// класс формы - настройка параметров гистограммы Kv
 class KV_Settings : public QWidget
 {
 	Q_OBJECT
 
 public:
-	// РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ Рё РґРµСЃС‚СЂСѓРєС‚РѕСЂ
+	// конструктор и деструктор
 	KV_Settings(const QPen& newState1Pen, const QPen& newState2Pen, AutoAxis::AutoAxisEnum AutoAxisSetting, QWidget *parent = 0);
 	~KV_Settings();
 
 signals:
-	// Р·Р°РєСЂС‹С‚РёРµ РѕРєРЅР°
+	// закрытие окна
 	void closing();
-	// РїРѕР»СѓС‡РёС‚СЊ С‚РµРєСѓС‰РёРµ РїР°СЂР°РјРµС‚СЂС‹ РѕС‚СЂРёСЃРѕРІРєРё
+	// получить текущие параметры отрисовки
 	QPair<QPen, QPen> getCurrentPens();
-	// РїРѕР»СѓС‡РёС‚СЊ РїР°СЂР°РјРµС‚СЂС‹ РѕС‚СЂРёСЃРѕРІРєРё РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
+	// получить параметры отрисовки по умолчанию
 	QPair<QPen, QPen> getDefaultPens();
-	// РїРѕР»СѓС‡РёС‚СЊ С‚РµРєСѓС‰РёРµ СЂРµР¶РёРј Р°РІС‚РѕРЅР°СЃС‚СЂРѕР№РєРё РѕСЃРё
+	// получить текущие режим автонастройки оси
 	AutoAxis::AutoAxisEnum getCurrentAutoAxisSetting();
-	// РѕС‚РїСЂР°РІРёС‚СЊ РЅРѕРІС‹Рµ РїР°СЂР°РјРµС‚СЂС‹ РѕС‚СЂРёСЃРѕРІРєРё
+	// отправить новые параметры отрисовки
 	void sendNewSettings(const QPen& newState1Pen, const QPen& newState2Pen, AutoAxis::AutoAxisEnum newAutoAxisSetting);
 
 protected:
 	void closeEvent(QCloseEvent *) override;
 
 private slots:
-	// РЅР°Р¶Р°С‚РёРµ РЅР° РєРЅРѕРїРєРё СЃРЅРёР·Сѓ С„РѕСЂРјС‹
+	// нажатие на кнопки снизу формы
 	void on_buttonBox_clicked(QAbstractButton * button);
-	// РІС‹Р±РѕСЂ СЃС‚РёР»РµР№ Р»РёРЅРёР№
+	// выбор стилей линий
 	void on_State1lineStyleBox_currentIndexChanged(int index);
 	void on_State2lineStyleBox_currentIndexChanged(int index);
-	// РІС‹Р±РѕСЂ С‚РѕР»С‰РёРЅС‹ Р»РёРЅРёР№
+	// выбор толщины линий
 	void on_State1WidthBox_valueChanged(double value);
 	void on_State2WidthBox_valueChanged(double value);
-	// РІС‹Р±РѕСЂ С†РІРµС‚Р° Р»РёРЅРёР№
+	// выбор цвета линий
 	void on_State1ColorChange_clicked();
 	void on_State2ColorChange_clicked();
-	// РІС‹Р±РѕСЂ СЂРµР¶РёРјР° Р°РІС‚РѕРЅР°СЃС‚СЂРѕР№РєРё РѕСЃРё X РіРёСЃС‚РѕРіСЂР°РјРјС‹
+	// выбор режима автонастройки оси X гистограммы
 	void on_NoAuto_toggled(bool checked);
 	void on_HighBorderAuto_toggled(bool checked);
 	void on_AllAuto_toggled(bool checked);
 
 private:
-	// РџРћР›РЇ
+	// ПОЛЯ
 	Ui::KV_Settings ui;
-	// РїР°СЂР°РјРµС‚СЂС‹ РЅР°СЃС‚СЂРѕР№РєРё РіРёСЃС‚РѕРіСЂР°РјРјС‹
+	// параметры настройки гистограммы
 	QPen newState1Pen;
 	QPen newState2Pen;
 	AutoAxis::AutoAxisEnum newAutoAxisSetting;
 
-	// РњР•РўРћР”Р«
-	// РїСЂРёРјРµРЅРёС‚СЊ РЅР°СЃС‚СЂРѕР№РєРё
+	// МЕТОДЫ
+	// применить настройки
 	void applySettings();
-	// СѓСЃС‚Р°РЅРѕРІРёС‚СЊ РЅСѓР¶РЅС‹Рµ РїР°СЂР°РјРµС‚СЂС‹ РЅР° РІРёРґР¶РµС‚Р°С…
+	// установить нужные параметры на виджетах
 	void showParameters(const QPen& State1Pen, const QPen& State2Pen, AutoAxis::AutoAxisEnum AutoAxisSetting);
 };
 

@@ -5,61 +5,61 @@
 #include "fa_box.h"
 #include "ui_cf_colorchanger.h"
 
-// РєР»Р°СЃСЃ С„РѕСЂРјС‹ - РјРµРЅСЋ РЅР°СЃС‚СЂРѕР№РєРё РѕРєРЅР° РєР°СЂС‚РѕРіСЂР°РјРјС‹
+// класс формы - меню настройки окна картограммы
 class CF_ColorChanger : public QWidget
 {
 	Q_OBJECT
 
 public:
-	// РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ Рё РґРµСЃС‚СЂСѓРєС‚РѕСЂ
+	// конструктор и деструктор
 	CF_ColorChanger(QWidget *parent = 0);
 	~CF_ColorChanger();
 
 signals:
-	// Р·Р°РєСЂС‹С‚РёРµ РѕРєРЅР°
+	// закрытие окна
 	void closing();
-	// РёР·РјРµРЅРёС‚СЊ С†РІРµС‚Р° РѕРєРЅР° РєР°СЂС‚РѕРіСЂР°РјРјС‹
+	// изменить цвета окна картограммы
 	void RecolorComparisonField();
-	// РёР·РјРµРЅРёС‚СЊ РїСЂРѕСЃРјР°С‚СЂРёРІР°РµРјС‹Р№ РїР°СЂР°РјРµС‚СЂ
+	// изменить просматриваемый параметр
 	void changeActiveMode(const Parameters::ParametersEnum &);
-	// РїРµСЂРµСЂРёСЃРѕРІР°С‚СЊ РґРµРјРѕРЅСЃС‚СЂР°С†РёРѕРЅРЅС‹Рµ РїРѕР»СЏ
+	// перерисовать демонстрационные ТВС
 	void sendDemoStates(const QPair<double,double>& demoStates);
 
 protected:
 	void closeEvent(QCloseEvent *) override;
 
 private slots:
-	// РІС‹Р·РѕРІ ColorDialog-РѕРІ Рё СЃС‡РёС‚С‹РІР°РЅРёРµ СЃ РЅРёС… С†РІРµС‚РѕРІ
+	// вызов ColorDialog-ов и считывание с них цветов
 	void on_ChangeMaxColor_clicked();
 	void on_ChangeMinColor_clicked();
 
-	// РЅР°Р¶Р°С‚РёРµ РЅР° РєРЅРѕРїРєРё СЃРЅРёР·Сѓ
+	// нажатие на кнопки снизу
 	void on_buttonBox_clicked(QAbstractButton * button);
 	
-	// РІС‹Р±РѕСЂ СЂРµР¶РёРјР°
+	// выбор режима
 	void on_KqButton_clicked();
 	void on_BurnButton_clicked();
 	void on_KvButton_clicked();
 
 private:
-	// РџРћР›РЇ
+	// ПОЛЯ
 	Ui::CF_ColorChanger ui;
-	// Р°РєС‚РёРІРЅС‹Р№ РїР°СЂР°РјРµС‚СЂ
+	// активный параметр
 	Parameters::ParametersEnum activeMode;
 
-	// РІСЃРїРѕРјРѕРіР°С‚РµР»СЊРЅР°СЏ СЃС‚СЂСѓРєС‚СѓСЂР°
+	// вспомогательная структура
 	struct LimColors {
 		QColor maxColor;
 		QColor minColor;
 	};
 
-	// РЅРѕРІС‹Рµ С†РІРµС‚Р°
+	// новые цвета
 	std::map<Parameters::ParametersEnum, LimColors> newLimitColors;
 
-	// РњР•РўРћР”Р«
-	// РїСЂРёРјРµРЅРёС‚СЊ С†РІРµС‚Р° Рє РєР°СЂС‚РѕРіСЂР°РјРјРµ
+	// МЕТОДЫ
+	// применить цвета к картограмме
 	void applyColors();
-	// РїСЂРёРјРµРЅРёС‚СЊ С†РІРµС‚Р° Рє РґРµРјРѕРЅСЃС‚СЂР°С†РёРѕРЅРЅРѕРјСѓ РїРѕР»СЋ
+	// применить цвета к демонстрационному полю
 	void changeColorField();
 };
 

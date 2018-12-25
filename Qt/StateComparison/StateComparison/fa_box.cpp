@@ -3,17 +3,17 @@
 #include <cmath>
 #include "fa_box.h"
 
-// Р·Р°РґР°РµРј РЅР°С‡Р°Р»СЊРЅС‹Рµ Р·РЅР°С‡РµРЅРёСЏ РўР’РЎ Рё СЃР»РѕСЏ СЃ РјР°РєСЃРёРјР°Р»СЊРЅС‹Рј Kv 
+// задаем начальные значения ТВС и слоя с максимальным Kv 
 cFA_Box::FAandLayer cFA_Box::FAwithMaxDeltaKv;
 
-// Р·Р°РґР°РµРј РЅР°С‡Р°Р»СЊРЅС‹Рµ Р·РЅР°С‡РµРЅРёСЏ Р°РєС‚РёРІРЅРѕРіРѕ РїР°СЂР°РјРµС‚СЂР° Рё СЂРµР¶РёРјР° РїСЂРѕСЃРјРѕС‚СЂР°
+// задаем начальные значения активного параметра и режима просмотра
 Parameters::ParametersEnum cFA_Box::activeMode = Parameters::Kv;
 View::ViewEnum cFA_Box::viewMode = View::TwoStatesView;
  
-// РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ СЃР»РѕРІР°СЂСЏ РїСЂРµРґРµР»СЊРЅС‹С… Р·РЅР°С‡РµРЅРёР№
+// инициализация словаря предельных значений
 std::map<Parameters::ParametersEnum, cFA_Box::Lim> cFA_Box::Limiters;
 
-// Р·Р°РґР°РЅРёРµ СЃС‚Р°РЅРґР°СЂС‚РЅС‹С… Р·РЅР°С‡РµРЅРёР№ РїСЂРµРґРµР»СЊРЅС‹С… РѕС‚РєР»РѕРЅРµРЅРёР№
+// задание стандартных значений предельных отклонений
 void cFA_Box::SetDefaultLimiters()
 {
 	Limiters[Parameters::Kq].maxValue = 1.0;
@@ -24,10 +24,10 @@ void cFA_Box::SetDefaultLimiters()
 	Limiters[Parameters::Kv].minValue = -1.0;
 }
 
-// Р·Р°РґР°РЅРёРµ РїСЂРµРґРµР»СЊРЅС‹С… РѕС‚РєР»РѕРЅРµРЅРёР№ РґР»СЏ РєРѕРЅРєСЂРµС‚РЅРѕРіРѕ РїР°СЂР°РјРµС‚СЂР°
+// задание предельных отклонений для конкретного параметра
 void cFA_Box::SetLimiters(const Parameters::ParametersEnum& parameter, const double &max)
 {	
-	// Р·РЅР°С‡РµРЅРёРµ РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ != 0 - С‡СѓС‚СЊ Р±РѕР»СЊС€Рµ, С‚.Рє. РІ Р°Р»РіРѕСЂРёС‚РјРµ РµСЃС‚СЊ РґРµР»РµРЅРёРµ РЅР° СЌС‚Рѕ Р·РЅР°С‡РµРЅРёРµ
+	// значение должно быть != 0 - чуть больше, т.к. в алгоритме есть деление на это значение
 	if ( abs(max) > pow(10.0, -7) ) 
 	{
 		Limiters[parameter].maxValue = abs(max);
@@ -35,16 +35,16 @@ void cFA_Box::SetLimiters(const Parameters::ParametersEnum& parameter, const dou
 	}
 }
 
-// Р·Р°РґР°РЅРёРµ СЃС‚Р°РЅРґР°СЂС‚РЅРѕРіРѕ Р·РЅР°С‡РµРЅРёСЏ РЅР°Р»РёС‡РёСЏ С†РІРµС‚Р° Сѓ РїРѕР»СЏ Рё РјРµС‚РѕРґРѕРІ СѓСЃС‚Р°РЅРѕРІРєРё Рё РїРѕР»СѓС‡РµРЅРёСЏ СЌС‚РѕРіРѕ Р·РЅР°С‡РµРЅРёСЏ
+// задание стандартного значения наличия цвета у поля и методов установки и получения этого значения
 bool cFA_Box::Colorful = false;
 bool cFA_Box::isColorful() { return cFA_Box::Colorful;}
 void cFA_Box::SetColorful(bool colorful) { cFA_Box::Colorful = colorful;}
 
-// РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ СЃР»РѕРІР°СЂРµР№ СЃС‚Р°РЅРґР°СЂС‚РЅРѕРіРѕ Рё С‚РµРєСѓС‰РµРіРѕ Р·РЅР°С‡РµРЅРёСЏ С†РІРµС‚РѕРІ РјР°РєСЃРёРјР°Р»СЊРЅС‹С… РѕС‚РєР»РѕРЅРµРЅРёР№
+// инициализация словарей стандартного и текущего значения цветов максимальных отклонений
 std::map<Parameters::ParametersEnum, cFA_Box::LimColors> cFA_Box::LimitColors;
 std::map<Parameters::ParametersEnum, cFA_Box::LimColors> cFA_Box::defaultLimitColors;
 
-// Р·Р°РґР°РЅРёРµ СЃС‚Р°РЅРґР°СЂС‚РЅС‹С… Р·РЅР°С‡РµРЅРёР№ С†РІРµС‚РѕРІ РјР°РєСЃРёРјР°Р»СЊРЅС‹С… РѕС‚РєР»РѕРЅРµРЅРёР№
+// задание стандартных значений цветов максимальных отклонений
 void cFA_Box::SetDefaultLimitColors()
 {
 	defaultLimitColors[Parameters::Kq].maxColor = QColor(158,0,91);
@@ -55,7 +55,7 @@ void cFA_Box::SetDefaultLimitColors()
 	defaultLimitColors[Parameters::Kv].minColor = QColor(0,255,0);
 }
 
-// Р·Р°РґР°РЅРёРµ С†РІРµС‚РѕРІ РёР· СЃС‚Р°РЅРґР°СЂС‚РЅС‹С… Р·РЅР°С‡РµРЅРёР№
+// задание цветов из стандартных значений
 void cFA_Box::SetLimitColorsFromDefaults()
 {
 	LimitColors[Parameters::Kq].maxColor = defaultLimitColors.at(Parameters::Kq).maxColor; // QColor(158,0,91);
@@ -66,18 +66,18 @@ void cFA_Box::SetLimitColorsFromDefaults()
 	LimitColors[Parameters::Kv].minColor = defaultLimitColors.at(Parameters::Kv).minColor; //QColor(0,255,0);
 }
 
-// РїРѕР»СѓС‡РµРЅРёРµ СЃС‚Р°РЅРґР°СЂС‚РЅС‹С… Рё С‚РµРєСѓС‰РёС… С†РІРµС‚РѕРІ РјР°РєСЃРёРјР°Р»СЊРЅС‹С… РѕС‚РєР»РѕРЅРµРЅРёР№
+// получение стандартных и текущих цветов максимальных отклонений
 QColor cFA_Box::GetDefaultMinColor(const Parameters::ParametersEnum& parameter) { return defaultLimitColors.at(parameter).minColor;}
 QColor cFA_Box::GetDefaultMaxColor(const Parameters::ParametersEnum& parameter) { return defaultLimitColors.at(parameter).maxColor;}
 
 QColor cFA_Box::GetMinColor(const Parameters::ParametersEnum& parameter) { return LimitColors.at(parameter).minColor;}
 QColor cFA_Box::GetMaxColor(const Parameters::ParametersEnum& parameter) { return LimitColors.at(parameter).maxColor;}
 
-// СѓСЃС‚Р°РЅРѕРІРєР° РЅРѕРІС‹С… С†РІРµС‚РѕРІ РјР°РєСЃРёРјР°Р»СЊРЅС‹С… РѕС‚РєР»РѕРЅРµРЅРёР№
+// установка новых цветов максимальных отклонений
 void cFA_Box::SetMinColor(const Parameters::ParametersEnum& parameter, const QColor& NewMinColor) { LimitColors[parameter].minColor = NewMinColor;}
 void cFA_Box::SetMaxColor(const Parameters::ParametersEnum& parameter, const QColor& NewMaxColor) { LimitColors[parameter].maxColor = NewMaxColor;}
 
-// РєРѕРїРёСЂСѓСЋС‰РёР№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ - РєРѕРїРёСЂРѕРІР°РЅРёРµ РІСЃРµС… РїР°СЂР°РјРµС‚СЂРѕРІ
+// копирующий конструктор - копирование всех параметров
 cFA_Box::cFA_Box(const cFA_Box &rFA) : titleFA(rFA.titleFA)
 {
 	Parent = rFA.Parent;
@@ -101,7 +101,7 @@ cFA_Box::cFA_Box(const cFA_Box &rFA) : titleFA(rFA.titleFA)
 	if (LimitColors.empty()) SetLimitColorsFromDefaults();
 }
 
-// РєРѕРїРёСЂСѓСЋС‰РёР№ РѕРїРµСЂР°С‚РѕСЂ= - РєРѕРїРёСЂРѕРІР°РЅРёРµ РІСЃРµС… РїР°СЂР°РјРµС‚СЂРѕРІ
+// копирующий оператор= - копирование всех параметров
 cFA_Box& cFA_Box::operator=(const cFA_Box &rFA)
 {
 	Parent = rFA.Parent;
@@ -126,60 +126,60 @@ cFA_Box& cFA_Box::operator=(const cFA_Box &rFA)
 	return (*this);
 }
 
-// СѓСЃС‚Р°РЅР°РІР»РёРІР°РµРј Р·РЅР°С‡РµРЅРёРµ РЅРѕРјРµСЂР° РўР’РЎ РёР· Р·РЅР°С‡РµРЅРёСЏ С‚РёРїР° int
+// устанавливаем значение номера ТВС из значения типа int
 void cFA_Box::SetFA_Number(const int &newFA_Number) 
 { 
-	// РўР’РЎ РЅРµ РґРѕР»Р¶РЅР° Р±С‹С‚СЊ Р»РµРіРµРЅРґРѕР№
+	// ТВС не должна быть легендой
 	if (!titleFA) {
-		// Р·Р°РґР°РµРј С‚РµРєСЃС‚ РІ РІРёРґРµ С†РµР»РѕРіРѕ С‡РёСЃР»Р°
+		// задаем текст в виде целого числа
 		std::stringstream ss(""); 
 		ss << std::fixed << newFA_Number; 
 		FA_Number.setText(QString::fromStdString(ss.str()));
 	}
 }
 
-// СѓСЃС‚Р°РЅРѕРІРёС‚СЊ РЅРѕРІС‹Р№ С‚РµРєСЃС‚ РґР»СЏ СЂР°Р·РЅРѕСЃС‚Рё СЃРѕСЃС‚РѕСЏРЅРёР№ РёР· Р·РЅР°С‡РµРЅРёСЏ С‚РёРїР° double
+// установить новый текст для разности состояний из значения типа double
 void cFA_Box::SetDelta(const double &newDelta) 
 { 
-	// РўР’РЎ РЅРµ РґРѕР»Р¶РЅР° Р±С‹С‚СЊ Р»РµРіРµРЅРґРѕР№
+	// ТВС не должна быть легендой
 	if (!titleFA) {
-		// Р·Р°РґР°РµРј Р·РЅР°С‡РµРЅРёРµ СЃ С‚РѕС‡РєРѕР№ Рё 3 Р·РЅР°РєР°РјРё РїРѕСЃР»Рµ Р·Р°РїСЏС‚РѕР№
+		// задаем значение с точкой и 3 знаками после запятой
 		std::stringstream ss(""); 
 		ss << std::fixed << std::setprecision(3) << newDelta;
 		Delta.setText(QString::fromStdString(ss.str()));
-		// Р·Р°РґР°РµРј РЅРѕРІС‹Р№ С†РІРµС‚ РўР’РЎ РёСЃС…РѕРґСЏ РёР· Р·РЅР°С‡РµРЅРёСЏ СЂР°Р·РЅРѕСЃС‚Рё
+		// задаем новый цвет ТВС исходя из значения разности
 		recolor(newDelta);
 	}
 }
 
-// СѓСЃС‚Р°РЅРѕРІРёС‚СЊ РЅРѕРІС‹Р№ С‚РµРєСЃС‚ РґР»СЏ СЃРѕСЃС‚РѕСЏРЅРёСЏ 1 РёР· Р·РЅР°С‡РµРЅРёСЏ С‚РёРїР° double
+// установить новый текст для состояния 1 из значения типа double
 void cFA_Box::SetState1(const double &newState1) 
 { 
-	// РўР’РЎ РЅРµ РґРѕР»Р¶РЅР° Р±С‹С‚СЊ Р»РµРіРµРЅРґРѕР№
+	// ТВС не должна быть легендой
 	if (!titleFA) {
-		// Р·Р°РґР°РµРј Р·РЅР°С‡РµРЅРёРµ СЃ С‚РѕС‡РєРѕР№ Рё 2 Р·РЅР°РєР°РјРё РїРѕСЃР»Рµ Р·Р°РїСЏС‚РѕР№
+		// задаем значение с точкой и 2 знаками после запятой
 		std::stringstream ss(""); 
 		ss << std::fixed << std::setprecision(2) << newState1;
 		State1.setText(QString::fromStdString(ss.str()));
 	}
 }
 
-// СѓСЃС‚Р°РЅРѕРІРёС‚СЊ РЅРѕРІС‹Р№ С‚РµРєСЃС‚ РґР»СЏ СЃРѕСЃС‚РѕСЏРЅРёСЏ 2 РёР· Р·РЅР°С‡РµРЅРёСЏ С‚РёРїР° double
+// установить новый текст для состояния 2 из значения типа double
 void cFA_Box::SetState2(const double &newState2) 
 {
-	// РўР’РЎ РЅРµ РґРѕР»Р¶РЅР° Р±С‹С‚СЊ Р»РµРіРµРЅРґРѕР№
+	// ТВС не должна быть легендой
 	if (!titleFA) {
-		// Р·Р°РґР°РµРј Р·РЅР°С‡РµРЅРёРµ СЃ С‚РѕС‡РєРѕР№ Рё 2 Р·РЅР°РєР°РјРё РїРѕСЃР»Рµ Р·Р°РїСЏС‚РѕР№
+		// задаем значение с точкой и 2 знаками после запятой
 		std::stringstream ss(""); 
 		ss << std::fixed << std::setprecision(2) << newState2;
 		State2.setText(QString::fromStdString(ss.str()));
 	}
 }
 
-// РїРѕР»СѓС‡РµРЅРёРµ С‚РµРєСѓС‰РµРіРѕ С†РІРµС‚Р° РўР’РЎ
+// получение текущего цвета ТВС
 QColor cFA_Box::GetColor() const 
 { 
-	// РµСЃР»Рё РїРѕР»Рµ С†РІРµС‚РЅРѕРµ - РІРѕР·РІСЂР°С‰Р°РµРј С†РІРµС‚ РўР’РЎ, РёРЅР°С‡Рµ - Р±РµР»С‹Р№
+	// если поле цветное - возвращаем цвет ТВС, иначе - белый
 	if (cFA_Box::isColorful()) 
 	{ 
 		return Color;
@@ -188,7 +188,7 @@ QColor cFA_Box::GetColor() const
 	}
 }
 
-// РёР·РјРµРЅРµРЅРёРµ СЂРµР¶РёРјР° РїСЂРѕСЃРјРѕС‚СЂР° - РѕСЃСѓС‰РµСЃС‚РІР»СЏС‚СЃСЏ РІ РјРµС‚РѕРґР°С… recalculate Рё SetVisible
+// изменение режима просмотра - осуществлятся в методах recalculate и SetVisible
 void cFA_Box::ChangeView(void)
 {
 	recalculate();
@@ -215,7 +215,7 @@ void cFA_Box::SetVisible(bool visible)
 	}
 }
 
-// СѓСЃС‚Р°РЅРѕРІРєР° РЅРѕРІС‹С… Р·РЅР°С‡РµРЅРёР№ С€РёСЂРёРЅС‹, РІС‹СЃРѕС‚С‹ Рё С†РµРЅС‚СЂР° РўР’РЎ, РїРµСЂРµСЂР°СЃС‡РµС‚ РїР°СЂР°РјРµС‚СЂРѕРІ
+// установка новых значений ширины, высоты и центра ТВС, перерасчет параметров
 void cFA_Box::SetGeometry(int newCenterX, int newCenterY, int newWidth, int newHeight) 
 {
 	center.setX(newCenterX);
@@ -225,7 +225,7 @@ void cFA_Box::SetGeometry(int newCenterX, int newCenterY, int newWidth, int newH
 	recalculate();
 }
 
-// СѓСЃС‚Р°РЅРѕРІРєР° РЅРѕРІРѕРіРѕ Р·РЅР°С‡РµРЅРёСЏ С†РµРЅС‚СЂР° РўР’РЎ, РїРµСЂРµСЂР°СЃС‡РµС‚ РїР°СЂР°РјРµС‚СЂРѕРІ
+// установка нового значения центра ТВС, перерасчет параметров
 void cFA_Box::move(int newCenterX, int newCenterY)
 {
 	center.setX(newCenterX);
@@ -233,7 +233,7 @@ void cFA_Box::move(int newCenterX, int newCenterY)
 	recalculate();
 }
 
-// СѓСЃС‚Р°РЅРѕРІРєР° РЅРѕРІС‹С… Р·РЅР°С‡РµРЅРёР№ С€РёСЂРёРЅС‹ Рё РІС‹СЃРѕС‚С‹ РўР’РЎ, РїРµСЂРµСЂР°СЃС‡РµС‚ РїР°СЂР°РјРµС‚СЂРѕРІ
+// установка новых значений ширины и высоты ТВС, перерасчет параметров
 void cFA_Box::resize(int newWidth, int newHeight)
 {
 	_width = newWidth;
@@ -241,10 +241,10 @@ void cFA_Box::resize(int newWidth, int newHeight)
 	recalculate();
 }
 
-// РїРµСЂРµСЂР°СЃС‡РµС‚ РіРµРѕРјРµС‚СЂРёРё РўР’РЎ
+// перерасчет геометрии ТВС
 void cFA_Box::recalculate(void)
 {
-	// РѕС‚СЂРёСЃРѕРІРєР° РєРѕРЅС‚СѓСЂР° РўР’РЎ
+	// отрисовка контура ТВС
 	painterPath = QPainterPath();
 	painterPath.moveTo(center.x()-_width/2,center.y()-_height/4);
 	painterPath.lineTo(center.x(),center.y()-_height/2);
@@ -253,9 +253,9 @@ void cFA_Box::recalculate(void)
 	painterPath.lineTo(center.x(),center.y()+_height/2);
 	painterPath.lineTo(center.x()-_width/2,center.y()+_height/4);
 	painterPath.closeSubpath();
-	// Р·Р°РґР°РЅРёРµ РіРµРѕРјРµС‚СЂРёРё Label-Р° СЃ РЅРѕРјРµСЂРѕРј РўР’РЎ
+	// задание геометрии Label-а с номером ТВС
 	FA_Number.setGeometry(center.x()-7*_width/48, center.y()-5*_height/12, 7*_width/24, _height/6); 
-	// СЂР°СЃС‡РµС‚ РіРµРѕРјРµС‚СЂРёРё РЅРµРѕР±С…РѕРґРёРјС‹С… Label-РѕРІ РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ СЂРµР¶РёРјР° РїСЂРѕСЃРјРѕС‚СЂР°
+	// расчет геометрии необходимых Label-ов в зависимости от режима просмотра
 	if (viewMode == View::DeltaView) 
 	{
 		Delta.setGeometry(center.x()-5*_width/12, center.y()-7*_height/48, 5*_width/6, 7*_height/24);
@@ -265,7 +265,7 @@ void cFA_Box::recalculate(void)
 		State1.setGeometry(center.x()-5*_width/12, center.y()-10*_height/48, 5*_width/6, 11*_height/48);
 		State2.setGeometry(center.x()-5*_width/12, center.y()+3*_height/48, 5*_width/6, 11*_height/48);
 	}
-	// Р·Р°РґР°РЅРёРµ С€СЂРёС„С‚РѕРІ - РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ С‚РѕРіРѕ, СЏРІР»СЏРµС‚СЃСЏ Р»Рё РўР’РЎ Р»РµРіРµРЅРґРѕР№
+	// задание шрифтов - в зависимости от того, является ли ТВС легендой
 	if (!titleFA) {
 		SetLabelParameters();
 	} else {
@@ -273,43 +273,43 @@ void cFA_Box::recalculate(void)
 	}
 }
 
-// РёР·РјРµРЅРµРЅРёРµ С†РІРµС‚Р° РѕС‚СЂРёСЃРѕРІРєРё РўР’РЎ РІ СЃРѕРѕС‚РІРµС‚СЃС‚РІРёРё СЃРѕ Р·РЅР°С‡РµРЅРёРµРј
+// изменение цвета отрисовки ТВС в соответствии со значением
 void cFA_Box::recolor(const double &newValue)
 {
-	// РµСЃР»Рё Р·РЅР°С‡РµРЅРёРµ Р±РѕР»СЊС€Рµ РјР°РєСЃРёРјР°Р»СЊРЅРѕРіРѕ РёР»Рё РјРµРЅСЊС€Рµ РјРёРЅРёРјР°Р»СЊРЅРѕРіРѕ (= РїРѕ РјРѕРґСѓР»СЋ РјР°РєСЃРёРјР°Р»СЊРЅРѕРјСѓ, РЅРѕ СЃРѕ Р·РЅР°РєРѕРј -), С‚Рѕ СѓСЃС‚Р°РЅР°РІР»РёРІР°РµРј С†РІРµС‚ РјР°РєСЃРёРјСѓРјР°/РјРёРЅРёРјСѓРјР° 
+	// если значение больше максимального или меньше минимального (= по модулю максимальному, но со знаком -), то устанавливаем цвет максимума/минимума 
 	if ( newValue >= Limiters.at(activeMode).maxValue ) { SetColor(GetMaxColor(activeMode)); return;}
 	if ( newValue <= Limiters.at(activeMode).minValue ) { SetColor(GetMinColor(activeMode)); return;}
-	// РµСЃР»Рё РЅРѕР»СЊ - С‚Рѕ С†РІРµС‚ Р±РµР»С‹Р№
+	// если ноль - то цвет белый
 	if ( newValue == 0 ) { SetColor(Qt::white); return;}
-	// РµСЃР»Рё Р·РЅР°С‡РµРЅРёРµ Р±РѕР»СЊС€Рµ 0 (СЃРѕСЃС‚РѕСЏРЅРёРµ 1 > СЃРѕСЃС‚РѕСЏРЅРёСЏ 2)
+	// если значение больше 0 (состояние 1 > состояния 2)
 	if ( newValue > 0 ) 
 	{
-		// РЅРѕРІС‹Рµ Р·РЅР°С‡РµРЅРёСЏ С†РІРµС‚РѕРІ
+		// новые значения цветов
 		int r, g, b;
-		// С†РІРµС‚ РјР°РєСЃРёРјСѓРјР°
+		// цвет максимума
 		QColor Max = GetMaxColor(activeMode);
-		// РІС‹С‡РёСЃР»СЏРµРј РЅРѕРІРѕРµ Р·РЅР°С‡РµРЅРёРµ С†РІРµС‚Р° - С‚РѕС‡РєР° РЅР° Р»РёРЅРёРё [(Rmax, Gmax, Bmax); Max] - [(255,255,255), 0] РїСЂРѕРїРѕСЂС†РёРѕРЅР°Р»СЊРЅРѕ Р·РЅР°С‡РµРЅРёСЋ
+		// вычисляем новое значение цвета - точка на линии [(Rmax, Gmax, Bmax); Max] - [(255,255,255), 0] пропорционально значению
 		r = Max.red() + ( 255 - Max.red() ) * (Limiters[activeMode].maxValue - newValue) / Limiters[activeMode].maxValue;
 		g = Max.green() + ( 255 - Max.green() ) * (Limiters[activeMode].maxValue - newValue) / Limiters[activeMode].maxValue;
 		b = Max.blue() + ( 255 - Max.blue() ) * (Limiters[activeMode].maxValue - newValue) / Limiters[activeMode].maxValue;
-		// РІС‹СЃС‚Р°РІР»СЏРµРј РІС‹С‡РёСЃР»РµРЅРЅС‹Р№ С†РІРµС‚
+		// выставляем вычисленный цвет
 		SetColor(QColor(r, g, b));
-	// РµСЃР»Рё Р·РЅР°С‡РµРЅРёРµ РјРµРЅСЊС€Рµ 0 (СЃРѕСЃС‚РѕСЏРЅРёРµ 1 < СЃРѕСЃС‚РѕСЏРЅРёСЏ 2)
+	// если значение меньше 0 (состояние 1 < состояния 2)
 	} else {
-		// РЅРѕРІС‹Рµ Р·РЅР°С‡РµРЅРёСЏ С†РІРµС‚РѕРІ
+		// новые значения цветов
 		int r, g, b;
-		// С†РІРµС‚ РјРёРЅРёРјСѓРјР°
+		// цвет минимума
 		QColor Min = GetMinColor(activeMode);
-		// РІС‹С‡РёСЃР»СЏРµРј РЅРѕРІРѕРµ Р·РЅР°С‡РµРЅРёРµ С†РІРµС‚Р° - С‚РѕС‡РєР° РЅР° Р»РёРЅРёРё [(Rmin, Gmin, Bmin); Min] - [(255,255,255), 0] РїСЂРѕРїРѕСЂС†РёРѕРЅР°Р»СЊРЅРѕ Р·РЅР°С‡РµРЅРёСЋ
+		// вычисляем новое значение цвета - точка на линии [(Rmin, Gmin, Bmin); Min] - [(255,255,255), 0] пропорционально значению
 		r = Min.red() + ( 255 - Min.red() ) * (Limiters[activeMode].minValue - newValue) / Limiters[activeMode].minValue;
 		g = Min.green() + ( 255 - Min.green() ) * (Limiters[activeMode].minValue - newValue) / Limiters[activeMode].minValue;
 		b = Min.blue() + ( 255 - Min.blue() ) * (Limiters[activeMode].minValue - newValue) / Limiters[activeMode].minValue;
-		// РІС‹СЃС‚Р°РІР»СЏРµРј РІС‹С‡РёСЃР»РµРЅРЅС‹Р№ С†РІРµС‚
+		// выставляем вычисленный цвет
 		SetColor(QColor(r, g, b));
 	}
 }
 
-// РІС‹СЂР°РІРЅРёРІР°РЅРёРµ С‚РµРєСЃС‚Р° РІСЃРµРіРґР° РїРѕСЃРµСЂРµРґРёРЅРµ, СѓСЃС‚Р°РЅРѕРІРєР° Р·РЅР°С‡РµРЅРёР№ С€СЂРёС„С‚РѕРІ РґР»СЏ РЅСѓР¶РЅС‹С… Label-РѕРІ (РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ СЂРµР¶РёРјР° РїСЂРѕСЃРјРѕС‚СЂР°)
+// выравнивание текста всегда посередине, установка значений шрифтов для нужных Label-ов (в зависимости от режима просмотра)
 void cFA_Box::SetLabelParameters(void)
 {
 	// FA_Number
@@ -372,7 +372,7 @@ void cFA_Box::SetLabelParameters(void)
 	}
 }
 
-// РўР’РЎ-Р»РµРіРµРЅРґР°: РІС‹СЂР°РІРЅРёРІР°РЅРёРµ С‚РµРєСЃС‚Р° РІСЃРµРіРґР° РїРѕСЃРµСЂРµРґРёРЅРµ, СѓСЃС‚Р°РЅРѕРІРєР° Р·РЅР°С‡РµРЅРёР№ С€СЂРёС„С‚РѕРІ РґР»СЏ РЅСѓР¶РЅС‹С… Label-РѕРІ (РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ СЂРµР¶РёРјР° РїСЂРѕСЃРјРѕС‚СЂР°)
+// ТВС-легенда: выравнивание текста всегда посередине, установка значений шрифтов для нужных Label-ов (в зависимости от режима просмотра)
 void cFA_Box::SetTitleLabelParameters(void)
 {
 	// FA_Number
