@@ -3,6 +3,8 @@
 
 #include <QLabel>
 #include <QScopedPointer>
+#include <QSharedPointer>
+#include <QWeakPointer>
 #include <QMainWindow>
 #include "ui_comparisonfield.h"
 #include "kv_distribution.h"
@@ -32,7 +34,7 @@ signals:
 	// необходимо спрятать линию слоя на гистограмме Kv
 	void hideLayerLine();
 	// отправить указатель на поле рисования
-	void sendRenderAreaPointer(RenderArea *);
+	void sendRenderAreaPointer(QWeakPointer<RenderArea>);
 
 protected:
 	void resizeEvent(QResizeEvent * res) override;
@@ -79,7 +81,7 @@ private:
 	// форма гистограммы Kv
 	QScopedPointer<Kv_Distribution> KvDistrib;
 	// область рисования
-	QScopedPointer<RenderArea> renderArea;
+	QSharedPointer<RenderArea> renderArea;
 	// дополнитльный Label в статус-бар
 	QScopedPointer<QLabel> statusLabel;
 	// форма настройки параметров картограммы

@@ -54,11 +54,7 @@ FileBrowser::FileBrowser(QWidget *parent)
 }
 
 // деструктор
-FileBrowser::~FileBrowser() 
-{
-	// перестраховка - освобождение памяти (из-за того, что были проблемы с памятью при завершении приложения)
-	statusLabel.reset(nullptr);
-}
+FileBrowser::~FileBrowser() {}
 
 // обозреватель первого состояния
 void FileBrowser::on_File1Button_clicked() 

@@ -58,8 +58,7 @@ Kv_Distribution::Kv_Distribution(const QPen& oldState1Pen, const QPen& oldState2
 	
 	// задаем нулевой указатель настройщику гистограммы
 	Setter.reset(nullptr);
-	// задаем нулевой указатель поля гистограммы
-	renderArea = nullptr;
+	// указатель на поле картограммы уже нулевой
 
 	// очищаем все графики
 	ui.plotArea->clearGraphs();
@@ -90,14 +89,7 @@ Kv_Distribution::Kv_Distribution(const QPen& oldState1Pen, const QPen& oldState2
 }
 
 // деструктор
-Kv_Distribution::~Kv_Distribution() 
-{
-	// память у renderArea не освобождаем! это делается с помощью QScopedPointer в основном окне картограммы!
-	renderArea = nullptr;
-	// перестраховка - освобождение памяти (из-за того, что были проблемы с памятью при завершении приложения)
-	FA_Num.reset(nullptr);
-	Setter.reset(nullptr);
-}
+Kv_Distribution::~Kv_Distribution() {}
 
 void Kv_Distribution::MouseOnPlot(QMouseEvent * mouse)
 {
@@ -234,7 +226,7 @@ void Kv_Distribution::getNewSettings(const QPen& newState1Pen, const QPen& newSt
 }
 
 // получение указателя на поле рисования
-void Kv_Distribution::getRenderAreaPointer(RenderArea * RA)
+void Kv_Distribution::getRenderAreaPointer(QWeakPointer<RenderArea> RA)
 {
 	// приравниваем указатели
 	renderArea = RA;
@@ -256,7 +248,7 @@ void Kv_Distribution::XAxisSetting()
 		if (AutoAxisSetting == AutoAxis::NoAuto)
 		{
 			// то задается новый максимум исходя из глобального максимума Kv состояний
-			while(xMax < renderArea->maxKv()) 
+			while(xMax < renderArea.data()->maxKv()) 
 			{
 				// делается это с определенным шагом - для дальнейшей разметки шкалы
 				// вычитается малая константа из-за неточности типа double
@@ -269,8 +261,8 @@ void Kv_Distribution::XAxisSetting()
 		// если есть автонастройка 
 		} else if (AutoAxisSetting == AutoAxis::HighBorderAuto || AutoAxisSetting == AutoAxis::AllAuto) {
 			// то копируются вектора Kv для состояний
-			std::vector<double> State1Kv = renderArea->state1()[CurrentFA].GetKv();
-			std::vector<double> State2Kv = renderArea->state2()[CurrentFA].GetKv();
+			std::vector<double> State1Kv = renderArea.data()->state1()[CurrentFA].GetKv();
+			std::vector<double> State2Kv = renderArea.data()->state2()[CurrentFA].GetKv();
 			// из них исключаются элементы NaN - переносятся в конец вектора и возвращается итератор на новый его конец
 			auto it1 = std::remove_if(State1Kv.begin(), State1Kv.end(), [] (const double& elem) { return qIsNaN(elem);});
 			auto it2 = std::remove_if(State2Kv.begin(), State2Kv.end(), [] (const double& elem) { return qIsNaN(elem);});
@@ -397,7 +389,7 @@ void Kv_Distribution::FA_selected(int FA_Number)
 		// добавляем график так, чтобы осью абсцисс была ось Y, а ординат - ось X
 		ui.plotArea->addGraph(ui.plotArea->axisRect()->axis(QCPAxis::atLeft),ui.plotArea->axisRect()->axis(QCPAxis::atBottom));
 		// добавляем в него данные - вектор слоев и вектор значений Kv для состояния 1
-		ui.plotArea->graph(0)->addData(LayersVector, QVector<double>::fromStdVector(renderArea->state1()[FA_Number].GetKv()), true);
+		ui.plotArea->graph(0)->addData(LayersVector, QVector<double>::fromStdVector(renderArea.data()->state1()[FA_Number].GetKv()), true);
 		// задаем параметры отрисовки и имя графика
 		ui.plotArea->graph(0)->setPen(State1Pen);
 		ui.plotArea->graph(0)->setName(State1FileName());
@@ -405,7 +397,7 @@ void Kv_Distribution::FA_selected(int FA_Number)
 		// добавляем график так, чтобы осью абсцисс была ось Y, а ординат - ось X
 		ui.plotArea->addGraph(ui.plotArea->axisRect()->axis(QCPAxis::atLeft),ui.plotArea->axisRect()->axis(QCPAxis::atBottom));
 		// добавляем в него данные - вектор слоев и вектор значений Kv для состояния 2
-		ui.plotArea->graph(1)->addData(LayersVector, QVector<double>::fromStdVector(renderArea->state2()[FA_Number].GetKv()), true);
+		ui.plotArea->graph(1)->addData(LayersVector, QVector<double>::fromStdVector(renderArea.data()->state2()[FA_Number].GetKv()), true);
 		// задаем параметры отрисовки и имя графика
 		ui.plotArea->graph(1)->setPen(State2Pen);
 		ui.plotArea->graph(1)->setName(State2FileName());

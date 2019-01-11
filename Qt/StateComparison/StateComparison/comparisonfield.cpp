@@ -73,15 +73,7 @@ ComparisonField::ComparisonField(QWidget *parent, const cDataState &rState1, con
 }
 
 // деструктор
-ComparisonField::~ComparisonField() 
-{
-	// перестраховка - освобождение памяти (из-за того, что были проблемы с памятью при завершении приложения)
-	KvDistrib.reset(nullptr);
-	renderArea.reset(nullptr);
-	statusLabel.reset(nullptr);
-	ColorChanger.reset(nullptr);
-	fileBrowser.reset(nullptr);
-}
+ComparisonField::~ComparisonField() {}
 
 // сравнить другие состояния
 void ComparisonField::on_otherStates_triggered()
@@ -232,10 +224,10 @@ void ComparisonField::on_Kv_diagramActivator_triggered()
 		// получение гистограммой текущего значения высотного слоя
 		connect(KvDistrib.data(), &Kv_Distribution::getSpinBoxValue, [this] () { return ui.spinBox->value();});
 		// отправить гистограмме указатель на поле рисования
-		connect(this, SIGNAL(sendRenderAreaPointer(RenderArea *)), KvDistrib.data(), SLOT(getRenderAreaPointer(RenderArea *)));
+		connect(this, SIGNAL(sendRenderAreaPointer(QWeakPointer<RenderArea>)), KvDistrib.data(), SLOT(getRenderAreaPointer(QWeakPointer<RenderArea>)));
 		
 		// отправляем гистограмме указатель на поле рисования
-		emit sendRenderAreaPointer(renderArea.data());
+		emit sendRenderAreaPointer(renderArea);
 
 		// задаем размеры и положение гистограммы на экране
 		QDesktopWidget Desktop;

@@ -326,18 +326,18 @@ void cFA_Box::SetLabelParameters(void)
 	if (viewMode == View::DeltaView) {
 		// DeltaLabel
 		Delta.setAlignment(Qt::AlignCenter);
-		if (this->Delta.height() <= 8) {font.setPixelSize(8);}
-		else if (this->Delta.height() <= 9) {font.setPixelSize(9);}
-		else if (this->Delta.height() <= 10) {font.setPixelSize(10);}
-		else if (this->Delta.height() <= 11) {font.setPixelSize(11);}
-		else if (this->Delta.height() <= 12) {font.setPixelSize(12);}
-		else if (this->Delta.height() <= 13) {font.setPixelSize(13);}
-		else if (this->Delta.height() <= 14) {font.setPixelSize(14);}
-		else if (this->Delta.height() <= 16) {font.setPixelSize(15);}
-		else if (this->Delta.height() <= 18) {font.setPixelSize(16);}
-		else if (this->Delta.height() <= 21) {font.setPixelSize(17);}
-		else if (this->Delta.height() <= 24) {font.setPixelSize(19);}
-		else {font.setPixelSize(21);}
+		if (this->Delta.height() <= 8) {font.setPixelSize(7);}
+		else if (this->Delta.height() <= 9) {font.setPixelSize(8);}
+		else if (this->Delta.height() <= 10) {font.setPixelSize(9);}
+		else if (this->Delta.height() <= 11) {font.setPixelSize(10);}
+		else if (this->Delta.height() <= 12) {font.setPixelSize(11);}
+		else if (this->Delta.height() <= 13) {font.setPixelSize(12);}
+		else if (this->Delta.height() <= 14) {font.setPixelSize(13);}
+		else if (this->Delta.height() <= 16) {font.setPixelSize(14);}
+		else if (this->Delta.height() <= 18) {font.setPixelSize(15);}
+		else if (this->Delta.height() <= 21) {font.setPixelSize(16);}
+		else if (this->Delta.height() <= 24) {font.setPixelSize(18);}
+		else {font.setPixelSize(20);}
 		Delta.setFont(font);
 	}
 	if (viewMode == View::TwoStatesView) {
@@ -403,7 +403,7 @@ void cFA_Box::SetTitleLabelParameters(void)
 		else if (this->Delta.height() <= 29) {font.setPixelSize(16);}
 		else if (this->Delta.height() <= 32) {font.setPixelSize(17);}
 		else if (this->Delta.height() <= 35) {font.setPixelSize(19);}
-		else {font.setPixelSize(21);}
+		else {font.setPixelSize(20);}
 		Delta.setFont(font);
 	}
 	if (viewMode == View::TwoStatesView) {

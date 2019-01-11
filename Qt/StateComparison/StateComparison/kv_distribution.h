@@ -2,6 +2,8 @@
 #define KV_DISTRIBUTION_H
 
 #include <QMainWindow>
+#include <QScopedPointer>
+#include <QWeakPointer>
 #include <QCloseEvent>
 #include <QResizeEvent>
 #include <QMouseEvent>
@@ -28,7 +30,7 @@ public:
 
 signals:
 	// закрытие гистограммы с отправкой текущих параметров отрисовки
-	void closing(const QPen& State1Pen, const QPen& State2Pen, const AutoAxis::AutoAxisEnum& AutoAxisSetting);\
+	void closing(const QPen& State1Pen, const QPen& State2Pen, const AutoAxis::AutoAxisEnum& AutoAxisSetting);
 	// получить значение текущего высотного слоя
 	int getSpinBoxValue();
 
@@ -60,7 +62,7 @@ private slots:
 	// необходимо пересчитать параметры оси
 	void ResetAxisNeededTrue() { AxisSettingNeeded = true;}
 	// получить указатель на поле рисования
-	void getRenderAreaPointer(RenderArea *);
+	void getRenderAreaPointer(QWeakPointer<RenderArea>);
 
 private:
 	// ПОЛЯ
@@ -74,7 +76,7 @@ private:
 	// окно параметров отрисовки гистограммы
 	QScopedPointer<KV_Settings> Setter;
 	// указатель на поле рисования
-	RenderArea * renderArea;
+	QWeakPointer<RenderArea> renderArea;
 	// параметры отрисовки по умолчанию
 	QPen defaultState1Pen;
 	QPen defaultState2Pen;
