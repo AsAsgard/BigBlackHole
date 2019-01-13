@@ -43,7 +43,7 @@ public:
   InvertedIndex() {}
 
   void Add(string&& document);
-  const vector<size_t>& Lookup(string_view word) const;
+  const vector<pair<size_t,size_t>>& Lookup(string_view word) const;
 
   const string& GetDocument(size_t id) const {
     return docs[id];
@@ -52,8 +52,8 @@ public:
   size_t DocsCount() const { return docs.size();}
 
 private:
-  unordered_map<string_view, vector<size_t>> index;
-  vector<size_t> empty_lookup;
+  unordered_map<string_view, vector<pair<size_t,size_t>>> index;
+  vector<pair<size_t,size_t>> empty_lookup;
   deque<string> docs;
 };
 
