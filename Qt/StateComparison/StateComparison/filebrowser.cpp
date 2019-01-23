@@ -148,16 +148,16 @@ void FileBrowser::on_File2lineEdit_textEdited(QString) { CheckingFileNames();}
 // макрос проверки ошибок при считывании файлов
 #define ERR_CHECK(ErrFlag, FileName)			{	\
 	/* если функция завершилась неудачно	*/		\
-	if (ErrFlag.first == false) {					\
+	if (ErrFlag != 0) {								\
 		/* выводим сообщение об ошибке		*/		\
 		ui.textBrowser->append("");					\
 		ui.textBrowser->append(QString::fromWCharArray(L"ОШИБКА!"));		\
-		if (ErrFlag.second == 1) {											\
+		if (ErrFlag == 1)		{											\
 			/* выводим сообщение об ошибке в пути к файлу		*/			\
 			ui.textBrowser->append(QString::fromWCharArray(L"Ошибка при открытии файла! Такого файла не существует!"));			\
 			ui.textBrowser->append(QString::fromWCharArray(L"Проблема с файлом ")+FileName+QString::fromWCharArray(L". Проверьте правильность указанного пути."));			\
 			statusLabel->setText(QString::fromWCharArray(L"Проверьте правильность пути файла с проблемой."));					\
-		} else if (ErrFlag.second == 2) {			\
+		} else if (ErrFlag == 2) {					\
 			/* выводим сообщение об ошибке в формате файла		*/			\
 			ui.textBrowser->append(QString::fromWCharArray(L"Ошибка при считывании файла! Неверный формат файла! Данные не были считаны!"));		\
 			ui.textBrowser->append(QString::fromWCharArray(L"Проблема с файлом ")+FileName+QString::fromWCharArray(L". Проверьте правильность формата файла."));			\
@@ -206,7 +206,7 @@ void FileBrowser::on_Compare_clicked()
 	// создаем состояния, в которые будем считывать, а также переменные с именами файлов и флаг ошибки
 	cDataState State1, State2;
 	QString FileName1 = "", FileName2 = "";
-	pair<bool, ErrCode> ErrFlag;
+	ErrCode ErrFlag;
 
 	// запоминаем текущее число высотных слоев
 	cDataState::rememberNumLayers();

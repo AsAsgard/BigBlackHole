@@ -33,11 +33,11 @@ cState& cDataState::add(int FA_Number)
 }
 
 // считывание данных из файла
-pair<bool, ErrCode> cDataState::ReadDataFromFile(const wstring &FileName)
+ErrCode cDataState::ReadDataFromFile(const wstring &FileName)
 {
 	// открываем файл, если файла нет - возвращаем ошибку
     ifstream InputFile(FileName);
-	if(!InputFile.is_open()) return pair<bool, ErrCode>(false, 1);
+	if(!InputFile.is_open()) return ErrCode(1);
     
 	// перечисление считываемых данных
 	enum Decl {
@@ -180,9 +180,9 @@ pair<bool, ErrCode> cDataState::ReadDataFromFile(const wstring &FileName)
 	// закрываем считываемый файл
 	InputFile.close();
 	// если данных нет - выкидываем исключение
-	if (Data.empty()) return pair<bool, ErrCode>(false, 2);
+	if (Data.empty()) return ErrCode(2);
 	// если все хорошо - код возврата 0
-	return pair<bool, ErrCode>(true, 0);
+	return ErrCode(0);
 }
 
 // сравнение состояний
