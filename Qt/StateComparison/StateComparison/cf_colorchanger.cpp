@@ -3,6 +3,7 @@
 #include "cf_colorchanger.h"
 #include "fa_box.h"
 #include "filebrowser.h"
+#include "pathandfiles.h"
 
 // конструктор
 CF_ColorChanger::CF_ColorChanger(QWidget *parent)

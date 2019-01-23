@@ -33,11 +33,11 @@ cState& cDataState::add(int FA_Number)
 }
 
 // считывание данных из файла
-void cDataState::ReadDataFromFile(const wstring &FileName)
+pair<bool, ErrCode> cDataState::ReadDataFromFile(const wstring &FileName)
 {
-	// открываем файл, если файла нет - выкидываем исключение
+	// открываем файл, если файла нет - возвращаем ошибку
     ifstream InputFile(FileName);
-    if(!InputFile.is_open()) throw ios_base::failure("Not possible to open the file! Try to check the correctness of the path.");
+	if(!InputFile.is_open()) return pair<bool, ErrCode>(false, 1);
     
 	// перечисление считываемых данных
 	enum Decl {
@@ -178,9 +178,11 @@ void cDataState::ReadDataFromFile(const wstring &FileName)
 		}
 	}
 	// закрываем считываемый файл
-    InputFile.close();
+	InputFile.close();
 	// если данных нет - выкидываем исключение
-	if (Data.empty()) throw invalid_argument("Error during reading file! Bad format! No data was read.");
+	if (Data.empty()) return pair<bool, ErrCode>(false, 2);
+	// если все хорошо - код возврата 0
+	return pair<bool, ErrCode>(true, 0);
 }
 
 // сравнение состояний

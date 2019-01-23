@@ -1,6 +1,7 @@
 ﻿#include "kv_distribution.h"
 #include "filebrowser.h"
 #include "fa_box.h"
+#include "pathandfiles.h"
 
 Kv_Distribution::Kv_Distribution(const QPen& oldState1Pen, const QPen& oldState2Pen, const AutoAxis::AutoAxisEnum& oldAutoAxisSetting, QWidget *parent)
 	: QMainWindow(parent),

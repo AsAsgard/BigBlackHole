@@ -5,6 +5,8 @@
 
 #include "cstate.h"
 
+typedef unsigned int ErrCode;
+
 // данные конкретного состояния в активной зоне
 class cDataState
 {
@@ -34,7 +36,7 @@ public:
 	cDataState& operator=(const cDataState &rState) {Data = rState.Data; return (*this);}
 	cDataState& operator=(cDataState &&rrState) {if (this != &rrState) Data = rrState.Data; return (*this);}
     // считывание данных из файла
-    void ReadDataFromFile(const std::wstring &FileName);
+    std::pair<bool, ErrCode> ReadDataFromFile(const std::wstring &FileName);
     // оператор []
     const cState& operator[](int FA_Number) const;
     // получение числа ТВС

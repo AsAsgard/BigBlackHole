@@ -5,6 +5,7 @@
 #include "comparisonfield.h"
 #include "kv_distribution.h"
 #include "extfunctions.h"
+#include "pathandfiles.h"
 
 // конструктор
 ComparisonField::ComparisonField(QWidget *parent, const cDataState &rState1, const cDataState &rState2, const QRect &ScreenParameters)

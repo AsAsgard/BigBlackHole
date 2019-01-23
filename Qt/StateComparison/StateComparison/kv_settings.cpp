@@ -1,6 +1,7 @@
 ﻿#include <QColorDialog>
 #include "kv_settings.h"
 #include "filebrowser.h"
+#include "pathandfiles.h"
 
 // конструктор
 // задаем параметры отрисовки и автоматической настройки оси X

@@ -4,23 +4,9 @@
 #include <QFont>
 #include "filebrowser.h"
 #include "comparisonfield.h"
+#include "pathandfiles.h"
 
 using namespace std;
-
-// реализация стандартного пути - его получение и задание
-static QString _defaultPath = "./";
-QString defaultPath() {return _defaultPath;}
-void setDefaultPath(const QString &NewDefaultPath) { _defaultPath = NewDefaultPath;}
-void setDefaultPath(QString &&NewDefaultPath) { if (&_defaultPath != &NewDefaultPath) _defaultPath = NewDefaultPath;}
-
-// реализация имен файлов - их получение и задание
-static QString _State1FileName = "", _State2FileName = "";
-QString State1FileName() { return _State1FileName;}
-void setState1FileName(const QString &NewState1FileName) { _State1FileName = NewState1FileName;}
-void setState1FileName(QString &&NewState1FileName) { if (&_State1FileName != &NewState1FileName) _State1FileName = NewState1FileName;}
-QString State2FileName() { return _State2FileName;}
-void setState2FileName(const QString &NewState2FileName) { _State2FileName = NewState2FileName;}
-void setState2FileName(QString &&NewState2FileName) { if (&_State2FileName != &NewState2FileName) _State2FileName = NewState2FileName;}
 
 
 FileBrowser::FileBrowser(QWidget *parent)
@@ -159,6 +145,36 @@ void FileBrowser::on_File2lineEdit_editingFinished()
 void FileBrowser::on_File2lineEdit_textEdited(QString) { CheckingFileNames();}
 
 
+// макрос проверки ошибок при считывании файлов
+#define ERR_CHECK(ErrFlag, FileName)			{	\
+	/* если функция завершилась неудачно	*/		\
+	if (ErrFlag.first == false) {					\
+		/* выводим сообщение об ошибке		*/		\
+		ui.textBrowser->append("");					\
+		ui.textBrowser->append(QString::fromWCharArray(L"ОШИБКА!"));		\
+		if (ErrFlag.second == 1) {											\
+			/* выводим сообщение об ошибке в пути к файлу		*/			\
+			ui.textBrowser->append(QString::fromWCharArray(L"Ошибка при открытии файла! Такого файла не существует!"));			\
+			ui.textBrowser->append(QString::fromWCharArray(L"Проблема с файлом ")+FileName+QString::fromWCharArray(L". Проверьте правильность указанного пути."));			\
+			statusLabel->setText(QString::fromWCharArray(L"Проверьте правильность пути файла с проблемой."));					\
+		} else if (ErrFlag.second == 2) {			\
+			/* выводим сообщение об ошибке в формате файла		*/			\
+			ui.textBrowser->append(QString::fromWCharArray(L"Ошибка при считывании файла! Неверный формат файла! Данные не были считаны!"));		\
+			ui.textBrowser->append(QString::fromWCharArray(L"Проблема с файлом ")+FileName+QString::fromWCharArray(L". Проверьте правильность формата файла."));			\
+			statusLabel->setText(QString::fromWCharArray(L"Проверьте правильность формата файла с проблемой."));				\
+		} else {									\
+			/* выводим сообщение о непредвиденной ошибке		*/			\
+			ui.textBrowser->append(QString::fromWCharArray(L"Проблема с файлом ")+FileName);									\
+			ui.textBrowser->append(QString::fromWCharArray(L"Попробуйте изменить файл и перезапустить программу. Если проблема останется, свяжитесь с разработчиком."));	\
+			statusLabel->setText(QString::fromWCharArray(L"Попробуйте изменить файл с проблемой и перезапустить программу."));	\
+		}											\
+		/* возвращаем предыдущее число слоев и выходим из функции	*/		\
+		cDataState::setRememberedNumLayers();		\
+		return;										\
+	}												\
+}
+
+
 // нажата кнопка "Сравнить"
 void FileBrowser::on_Compare_clicked()
 {
@@ -187,67 +203,33 @@ void FileBrowser::on_Compare_clicked()
 		statusLabel->setText(QString::fromStdWString(L"Необходимо выбрать различные файлы для сравнения."));
 		return;
 	}
-	// создаем состояния, в которые будем считывать, а также переменные с именами файлов
+	// создаем состояния, в которые будем считывать, а также переменные с именами файлов и флаг ошибки
 	cDataState State1, State2;
-	QString FileName = "", FileName1 = "", FileName2 = "";
-	try {
-		// запоминаем текущее число высотных слоев
-		cDataState::rememberNumLayers();
-		// ставим число слоев = 1
-		cDataState::reduceNumLayers();
-		// считываем первое имя файла
-		FileName = FileName1 = ui.File1lineEdit->text();
-		// пытаемся считать первое состояние
-		State1.ReadDataFromFile(FileName.toStdWString());
-		// считываем второе имя файла
-		FileName = FileName2 = ui.File2lineEdit->text();
-		// пытаемся считать второе состояние
-		State2.ReadDataFromFile(FileName.toStdWString());
-	} catch(const ios_base::failure &ex) {
-		// выводим сообщение об ошибке
-		ui.textBrowser->append("");
-		ui.textBrowser->append(QString::fromWCharArray(L"ОШИБКА!"));
-		ui.textBrowser->append(QString(ex.what()));
-		ui.textBrowser->append(QString::fromWCharArray(L"Проблема с файлом ")+FileName+QString::fromWCharArray(L". Проверьте правильность указанного пути."));
-		statusLabel->setText(QString::fromWCharArray(L"Проверьте правильность пути файла с проблемой."));
-		// возвращаем предыдущее число слоев и выходим из функции
-		cDataState::setRememberedNumLayers();
-		return;
-	} catch(const invalid_argument &ex) {
-		// выводим сообщение об ошибке
-		ui.textBrowser->append("");
-		ui.textBrowser->append(QString::fromWCharArray(L"ОШИБКА!"));
-		ui.textBrowser->append(QString(ex.what()));
-		ui.textBrowser->append(QString::fromWCharArray(L"Проблема с файлом ")+FileName+QString::fromWCharArray(L". Проверьте правильность формата файла."));
-		statusLabel->setText(QString::fromWCharArray(L"Проверьте правильность формата файла с проблемой."));
-		// возвращаем предыдущее число слоев и выходим из функции
-		cDataState::setRememberedNumLayers();
-		return;
-	} catch(const exception &ex) {
-		// выводим сообщение об ошибке
-		ui.textBrowser->append("");
-		ui.textBrowser->append(QString::fromWCharArray(L"НЕПРЕДВИДЕННАЯ ОШИБКА!"));
-		ui.textBrowser->append(QString(ex.what()));
-		ui.textBrowser->append(QString::fromWCharArray(L"Проблема с файлом ")+FileName);
-		ui.textBrowser->append(QString::fromWCharArray(L"Попробуйте изменить файл и перезапустить программу. Если проблема останется, свяжитесь с разработчиком."));
-		statusLabel->setText(QString::fromWCharArray(L"Попробуйте изменить файл с проблемой и перезапустить программу."));
-		// возвращаем предыдущее число слоев и выходим из функции
-		cDataState::setRememberedNumLayers();
-		return;
-	} catch(...) {
-		// выводим сообщение об ошибке
-		ui.textBrowser->append("");
-		ui.textBrowser->append(QString::fromWCharArray(L"НЕПРЕДВИДЕННАЯ ОШИБКА!"));
-		ui.textBrowser->append(QString::fromWCharArray(L"Проблема с файлом ")+FileName);
-		ui.textBrowser->append(QString::fromWCharArray(L"Попробуйте изменить файл и перезапустить программу. Если проблема останется, свяжитесь с разработчиком."));
-		statusLabel->setText(QString::fromWCharArray(L"Попробуйте изменить файл с проблемой и перезапустить программу."));
-		// возвращаем предыдущее число слоев и выходим из функции
-		cDataState::setRememberedNumLayers();
-		return;
-	}
+	QString FileName1 = "", FileName2 = "";
+	pair<bool, ErrCode> ErrFlag;
+
+	// запоминаем текущее число высотных слоев
+	cDataState::rememberNumLayers();
+	// ставим число слоев = 1
+	cDataState::reduceNumLayers();
+
+	// считываем первое имя файла
+	FileName1 = ui.File1lineEdit->text();
+	// пытаемся считать первое состояние
+	ErrFlag = State1.ReadDataFromFile(FileName1.toStdWString());
+	//проверка на отсутствие ошибок
+	ERR_CHECK(ErrFlag, FileName1);
+
+	// считываем второе имя файла
+	FileName2 = ui.File2lineEdit->text();
+	// пытаемся считать второе состояние
+	ErrFlag = State2.ReadDataFromFile(FileName2.toStdWString());
+	//проверка на отсутствие ошибок
+	ERR_CHECK(ErrFlag, FileName2);
+	
 	// если все хорошо - запоминаем имена файлов со считанными состояниями
-	setState1FileName(FileName1.mid(FileName.lastIndexOf('/')+1));
-	setState2FileName(FileName2.mid(FileName.lastIndexOf('/')+1));
+	setState1FileName(FileName1.mid(FileName1.lastIndexOf('/')+1));
+	setState2FileName(FileName2.mid(FileName2.lastIndexOf('/')+1));
 	/*
 		если картограмма активна - меняем состояния
 		если картограмма не активна - создаем ее, ставим аттрибут - удалить при закрытии - и выводим на экран
@@ -263,7 +245,7 @@ void FileBrowser::on_Compare_clicked()
 		w->show();
 	}
 	// закрываем обозреватель
-	FileBrowser::close();
+	this->close();
 }
 
 // обновление статус-бара
