@@ -6,6 +6,8 @@
 #include <limits>
 #include <tuple>
 
+class cDataState;
+
 // данные для конкретной ТВС
 class cState
 {
