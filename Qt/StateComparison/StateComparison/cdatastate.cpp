@@ -180,6 +180,8 @@ ErrCode cDataState::ReadDataFromFile(const QString &FileName)
 			this->add(FANum).SetKv(LayerNum, KvValue);
 		}
 	}
+    // отключаем текстовый поток от файла
+    InputStream.setDevice(NULL);
 	// закрываем считываемый файл
 	InputFile.close();
     // если данных нет - возвращаем код ошибки 2
