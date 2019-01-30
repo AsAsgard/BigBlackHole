@@ -1,6 +1,7 @@
 ﻿#ifndef CDATASTATE_H
 #define CDATASTATE_H
 
+#include <QString>
 #include <map>
 
 #include "cstate.h"
@@ -36,7 +37,7 @@ public:
 	cDataState& operator=(const cDataState &rState) {Data = rState.Data; return (*this);}
 	cDataState& operator=(cDataState &&rrState) {if (this != &rrState) Data = rrState.Data; return (*this);}
     // считывание данных из файла
-    ErrCode ReadDataFromFile(const std::wstring &FileName);
+    ErrCode ReadDataFromFile(const QString &FileName);
     // оператор []
     const cState& operator[](int FA_Number) const;
     // получение числа ТВС

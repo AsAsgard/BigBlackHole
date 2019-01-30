@@ -216,14 +216,14 @@ void FileBrowser::on_Compare_clicked()
 	// считываем первое имя файла
 	FileName1 = ui.File1lineEdit->text();
 	// пытаемся считать первое состояние
-	ErrFlag = State1.ReadDataFromFile(FileName1.toStdWString());
+    ErrFlag = State1.ReadDataFromFile(FileName1);
 	//проверка на отсутствие ошибок
 	ERR_CHECK(ErrFlag, FileName1);
 
 	// считываем второе имя файла
 	FileName2 = ui.File2lineEdit->text();
 	// пытаемся считать второе состояние
-	ErrFlag = State2.ReadDataFromFile(FileName2.toStdWString());
+    ErrFlag = State2.ReadDataFromFile(FileName2);
 	//проверка на отсутствие ошибок
 	ERR_CHECK(ErrFlag, FileName2);
 	
@@ -240,7 +240,7 @@ void FileBrowser::on_Compare_clicked()
 		emit ChangeStatesFB(State1, State2);
 	} else {
 		QDesktopWidget Desktop;
-		ComparisonField *w = new ComparisonField(0,State1,State2,Desktop.screenGeometry(this));
+        ComparisonField *w = new ComparisonField(NULL,State1,State2,Desktop.screenGeometry(this));
 		w->setAttribute(Qt::WA_DeleteOnClose);	
 		w->show();
 	}

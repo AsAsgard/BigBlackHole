@@ -1,4 +1,5 @@
-﻿#include <fstream>
+﻿#include <QFile>
+#include <QTextStream>
 
 #include "cdatastate.h"
 #include "extfunctions.h"
@@ -33,11 +34,12 @@ cState& cDataState::add(int FA_Number)
 }
 
 // считывание данных из файла
-ErrCode cDataState::ReadDataFromFile(const wstring &FileName)
+ErrCode cDataState::ReadDataFromFile(const QString &FileName)
 {
-	// открываем файл, если файла нет - возвращаем ошибку
-    ifstream InputFile(FileName);
-	if(!InputFile.is_open()) return ErrCode(1);
+    // открываем файл, если файла нет - возвращаем ошибку 1
+    QFile InputFile(FileName);
+    if(!InputFile.open(QIODevice::ReadOnly | QIODevice::Text)) return ErrCode(1);
+    QTextStream InputStream(&InputFile);
     
 	// перечисление считываемых данных
 	enum Decl {
@@ -54,9 +56,10 @@ ErrCode cDataState::ReadDataFromFile(const wstring &FileName)
 	Decl Declaration = None;
 	stringstream ss("");
 	string str = "";
-	while (!InputFile.eof()) {
+    QString QStr("");
+    while (!InputStream.atEnd()) {
 		// если не было ошибки считывания - считываем следующую строку
-		if (!ReadFail) getline(InputFile, str);
+        if (!ReadFail) { QStr = InputStream.readLine(); str = QStr.toStdString();}
 		// если была ошибка считывания - очищаем поток и считываем строку, которую не удалось считать
 		if (ReadFail) { ss.clear(); getline(ss, str); ReadFail = false;}
 		// пропускаем пустую строку
@@ -179,7 +182,7 @@ ErrCode cDataState::ReadDataFromFile(const wstring &FileName)
 	}
 	// закрываем считываемый файл
 	InputFile.close();
-	// если данных нет - выкидываем исключение
+    // если данных нет - возвращаем код ошибки 2
 	if (Data.empty()) return ErrCode(2);
 	// если все хорошо - код возврата 0
 	return ErrCode(0);

@@ -36,7 +36,7 @@ signals:
 
 protected:
 	void closeEvent(QCloseEvent *) override;
-	void resizeEvent(QResizeEvent * res) override;
+    void resizeEvent(QResizeEvent *) override;
 
 private slots:
 	//определение положения мыши на графике - отрисовка доп линий

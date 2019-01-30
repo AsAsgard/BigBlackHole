@@ -47,9 +47,8 @@ ComparisonField::ComparisonField(QWidget *parent, const cDataState &rState1, con
 	// создаем поле для рисования
 	renderArea.reset(new RenderArea(ui.centralWidget, 
 									rState1,
-									rState2,
-									QSize(this->width(),this->height() - (ui.statusBar->height() + ui.mainToolBar->height()+ ui.menuBar->height() - 7))	
-									));
+                                    rState2
+                                    ));
 	// присоединяем сигналы и слоты для поля рисования и основного окна картограммы
 	// проверка активности гистограммы Kv
 	connect(renderArea.data(), SIGNAL(isKvDiagramActive()), this, SLOT(KvDiagramAvaliability()));
@@ -272,7 +271,7 @@ void ComparisonField::on_Screenshot_triggered()
 		// пытаемся улучшить качество - увеличиаем размеры без потери качества
 		screen = screen.scaled(ui.centralWidget->width()*4,ui.centralWidget->height()*4,Qt::KeepAspectRatio,Qt::SmoothTransformation);
 		// сохраняем каринку в файл
-		screen.save(ScreenFileName, 0, 100);
+        screen.save(ScreenFileName, NULL, 100);
 	}
 }
 
@@ -317,7 +316,7 @@ void ComparisonField::RecolorAll(void)
 }
 
 // изменение значения номера слоя 
-void ComparisonField::on_spinBox_valueChanged(int newValue)
+void ComparisonField::on_spinBox_valueChanged(int)
 {
 	// если включен режим Kv - изменяем текст на поле рисования, делая его соответствующим новому высотному слою, и перерисовываем его
 	if (cFA_Box::ActiveMode() == Parameters::Kv)
@@ -346,7 +345,7 @@ void ComparisonField::StatusBarUpdate(void)
 }
 
 // изменение размеров поля - пропорциональное
-void ComparisonField::resizeEvent(QResizeEvent * res)
+void ComparisonField::resizeEvent(QResizeEvent *)
 {
 	// меняется только ширина - поэтому задаем новую фиксированную высоту, при этом рекурсии не возникает
 	this->setFixedHeight(this->width());

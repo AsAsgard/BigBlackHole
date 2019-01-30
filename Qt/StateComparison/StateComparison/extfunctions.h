@@ -5,6 +5,11 @@
 #include <sstream>
 #include <string>
 
+// для сравнения double с 0
+#ifndef DBL_CALIBRATION
+#define DBL_CALIBRATION 1.e-07
+#endif // DBL_CALIBRATION
+
 // шаблонные функции перевода в строки (отсутствуют в компиляторе msvc-2010)
 namespace ExtFunctions {
 	template<typename T> std::string to_string(const T &inparam)

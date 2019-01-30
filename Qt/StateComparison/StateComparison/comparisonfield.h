@@ -37,7 +37,7 @@ signals:
 	void sendRenderAreaPointer(QWeakPointer<RenderArea>);
 
 protected:
-	void resizeEvent(QResizeEvent * res) override;
+    void resizeEvent(QResizeEvent *) override;
 
 private slots:
 	// выбрать другие состояния
@@ -59,7 +59,7 @@ private slots:
 	// включить/выключить цвета
 	void on_ColorFont_toggled(bool checked);
 	// изменение значения слоя Kv
-	void on_spinBox_valueChanged(int newValue);
+    void on_spinBox_valueChanged(int);
 	// ответ на запрос активности гистограммы Kv
 	bool KvDiagramAvaliability() const;
 	// Гистограмма Kv была закрыта

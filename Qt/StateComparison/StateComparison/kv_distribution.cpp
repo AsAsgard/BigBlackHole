@@ -153,7 +153,7 @@ void Kv_Distribution::on_Screenshot_triggered()
 }
 
 // изменение размера картограммы - меняем размер области отрисовки графика
-void Kv_Distribution::resizeEvent(QResizeEvent * res)
+void Kv_Distribution::resizeEvent(QResizeEvent *)
 {
 	ui.plotArea->resize(ui.centralWidget->width(), ui.centralWidget->height());
 }
@@ -253,11 +253,11 @@ void Kv_Distribution::XAxisSetting()
 			{
 				// делается это с определенным шагом - для дальнейшей разметки шкалы
 				// вычитается малая константа из-за неточности типа double
-				if (xMax >= 3 - 0.0000001) xMax += 1;
-				if (xMax >= 2 - 0.0000001 && xMax < 3 - 0.0000001) xMax +=0.5;
-				if (xMax >= 1 - 0.0000001 && xMax < 2 - 0.0000001) xMax += 0.25;
-				if (xMax >= 0.6 - 0.0000001 && xMax < 1 - 0.0000001) xMax += 0.2;
-				if (xMax < 0.6 - 0.0000001) xMax += 0.1;
+                if (xMax >= 3 - DBL_CALIBRATION) xMax += 1;
+                if (xMax >= 2 - DBL_CALIBRATION && xMax < 3 - DBL_CALIBRATION) xMax +=0.5;
+                if (xMax >= 1 - DBL_CALIBRATION && xMax < 2 - DBL_CALIBRATION) xMax += 0.25;
+                if (xMax >= 0.6 - DBL_CALIBRATION && xMax < 1 - DBL_CALIBRATION) xMax += 0.2;
+                if (xMax < 0.6 - DBL_CALIBRATION) xMax += 0.1;
 			}
 		// если есть автонастройка 
 		} else if (AutoAxisSetting == AutoAxis::HighBorderAuto || AutoAxisSetting == AutoAxis::AllAuto) {
@@ -296,7 +296,7 @@ void Kv_Distribution::XAxisSetting()
 					xMin += 0.1;
 				}
 				xMin -= 0.1;
-				if (xMin <= 0.0000001) xMin = 0;
+                if (xMin <= DBL_CALIBRATION) xMin = 0;
 			}
 
 			// находятся максимальные элементы этих векторов - на них возвращается итератор
@@ -322,16 +322,16 @@ void Kv_Distribution::XAxisSetting()
 			// ищем новый максимум оси с определенным шагом
 			while(xMax < maxKv)
 			{
-				if (xMax >= 3 + xMin - 0.0000001) xMax += 1;
-				if (xMax >= 2 + xMin - 0.0000001 && xMax < 3 + xMin - 0.0000001) xMax +=0.5;
-				if (xMax >= 1 + xMin - 0.0000001 && xMax < 2 + xMin - 0.0000001) xMax += 0.25;
-				if (xMax >= 0.6 + xMin - 0.0000001 && xMax < 1 + xMin - 0.0000001) xMax += 0.2;
-				if (xMax < 0.6 + xMin - 0.0000001) xMax += 0.1;
+                if (xMax >= 3 + xMin - DBL_CALIBRATION) xMax += 1;
+                if (xMax >= 2 + xMin - DBL_CALIBRATION && xMax < 3 + xMin - DBL_CALIBRATION) xMax +=0.5;
+                if (xMax >= 1 + xMin - DBL_CALIBRATION && xMax < 2 + xMin - DBL_CALIBRATION) xMax += 0.25;
+                if (xMax >= 0.6 + xMin - DBL_CALIBRATION && xMax < 1 + xMin - DBL_CALIBRATION) xMax += 0.2;
+                if (xMax < 0.6 + xMin - DBL_CALIBRATION) xMax += 0.1;
 			}
 		}
 
 		// устанавливаются новые пределы осей (константы из-за неточности double)
-		ui.plotArea->xAxis->setRange(xMin - 0.0000001, xMax + 0.0000001);
+        ui.plotArea->xAxis->setRange(xMin - DBL_CALIBRATION, xMax + DBL_CALIBRATION);
 
 		// создаем новый тикер и  применяем его к оси X
 		QSharedPointer<QCPAxisTickerFixed> xfixedTicker(new QCPAxisTickerFixed);
@@ -341,19 +341,19 @@ void Kv_Distribution::XAxisSetting()
 		// начало отсчета - минимум
 		xfixedTicker->setTickOrigin(xMin);
 		// задание шагов сетки в зависимости от разности максимума и минимума
-		if (xMax - xMin <= 0.6 - 0.0000001)
+        if (xMax - xMin <= 0.6 - DBL_CALIBRATION)
 		{
 			xfixedTicker->setTickStep(0.1);
-		} else if (xMax - xMin > 0.6 - 0.0000001 && xMax - xMin <= 1 - 0.0000001) 
+        } else if (xMax - xMin > 0.6 - DBL_CALIBRATION && xMax - xMin <= 1 - DBL_CALIBRATION)
 		{
 			xfixedTicker->setTickStep(0.2);
-		} else if (xMax - xMin > 1 - 0.0000001 && xMax - xMin <= 2 - 0.0000001) 
+        } else if (xMax - xMin > 1 - DBL_CALIBRATION && xMax - xMin <= 2 - DBL_CALIBRATION)
 		{
 			xfixedTicker->setTickStep(0.25);
-		} else if (xMax - xMin > 2 - 0.0000001 && xMax - xMin <= 3 - 0.0000001) 
+        } else if (xMax - xMin > 2 - DBL_CALIBRATION && xMax - xMin <= 3 - DBL_CALIBRATION)
 		{
 			xfixedTicker->setTickStep(0.5);
-		} else if (xMax - xMin > 3 - 0.0000001) 
+        } else if (xMax - xMin > 3 - DBL_CALIBRATION)
 		{
 			xfixedTicker->setTickStep(1);
 		}

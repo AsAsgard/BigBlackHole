@@ -2,6 +2,7 @@
 #include <iomanip>
 #include <cmath>
 #include "fa_box.h"
+#include "extfunctions.h"
 
 // задаем начальные значения ТВС и слоя с максимальным Kv 
 cFA_Box::FAandLayer cFA_Box::FAwithMaxDeltaKv;
@@ -28,10 +29,10 @@ void cFA_Box::SetDefaultLimiters()
 void cFA_Box::SetLimiters(const Parameters::ParametersEnum& parameter, const double &max)
 {	
 	// значение должно быть != 0 - чуть больше, т.к. в алгоритме есть деление на это значение
-	if ( abs(max) > pow(10.0, -7) ) 
+    if ( std::abs(max) > DBL_CALIBRATION )
 	{
-		Limiters[parameter].maxValue = abs(max);
-		Limiters[parameter].minValue = -abs(max);
+        Limiters[parameter].maxValue = std::abs(max);
+        Limiters[parameter].minValue = -std::abs(max);
 	}
 }
 
@@ -280,7 +281,7 @@ void cFA_Box::recolor(const double &newValue)
 	if ( newValue >= Limiters.at(activeMode).maxValue ) { SetColor(GetMaxColor(activeMode)); return;}
 	if ( newValue <= Limiters.at(activeMode).minValue ) { SetColor(GetMinColor(activeMode)); return;}
 	// если ноль - то цвет белый
-	if ( newValue == 0 ) { SetColor(Qt::white); return;}
+    if ( std::abs(newValue) <= DBL_CALIBRATION ) { SetColor(Qt::white); return;}
 	// если значение больше 0 (состояние 1 > состояния 2)
 	if ( newValue > 0 ) 
 	{

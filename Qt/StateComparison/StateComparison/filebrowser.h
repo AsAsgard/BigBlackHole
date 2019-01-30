@@ -15,7 +15,7 @@ class FileBrowser : public QMainWindow
 public:
 	// конструктор и деструктор
 	FileBrowser(QWidget *parent = 0);
-	~FileBrowser();
+    ~FileBrowser();
 
 signals:
 	// запрос активности поля картограммы

@@ -16,7 +16,7 @@ class RenderArea : public QWidget
 
 public:
 	// конструктор и деструктор
-	RenderArea(QWidget *parent, const cDataState &rState1, const cDataState &rState2, const QSize &rSize);
+    RenderArea(QWidget *parent, const cDataState &rState1, const cDataState &rState2);
 	~RenderArea();
 
 	// отдать данные по состояниям
@@ -36,7 +36,7 @@ signals:
 
 protected:
 	void paintEvent(QPaintEvent *) override;
-	void resizeEvent(QResizeEvent * res) override;
+    void resizeEvent(QResizeEvent *) override;
 	// нажатие мыши на поле - необходимо для выбора ТВС на гистограмме Kv
 	void mousePressEvent(QMouseEvent * mouse) override;
 

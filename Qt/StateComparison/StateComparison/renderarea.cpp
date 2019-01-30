@@ -6,9 +6,9 @@
 using namespace std;
 
 // конструктор
-RenderArea::RenderArea(QWidget *parent, const cDataState &rState1, const cDataState &rState2, const QSize &rSize) 
-	: QWidget(parent), FA(cDataState::GetNumberFAs()), FA_geometry(cDataState::GetNumberFAs()),
-	  titleFA(cFA_Box(true))
+RenderArea::RenderArea(QWidget *parent, const cDataState &rState1, const cDataState &rState2)
+    : QWidget(parent), FA(cDataState::GetNumberFAs()),
+      titleFA(cFA_Box(true)), FA_geometry(cDataState::GetNumberFAs())
 {
 	// белый фон
 	setBackgroundRole(QPalette::Base);
@@ -39,7 +39,7 @@ RenderArea::RenderArea(QWidget *parent, const cDataState &rState1, const cDataSt
 RenderArea::~RenderArea() {}
 
 // изменение размера поля для рисования
-void RenderArea::resizeEvent(QResizeEvent * res)
+void RenderArea::resizeEvent(QResizeEvent *)
 {
 	// пересчитываем геометрию ТВС
 	RecalculateGeometry();
@@ -252,7 +252,7 @@ void RenderArea::StatesBinding(const cDataState& rState1, const cDataState& rSta
 		}
 	}
 	// задаем новые максимумы, если они не 0
-	if(maxKq!=0)	cFA_Box::SetLimiters(Parameters::Kq, maxKq);
-	if(maxBurn!=0)	cFA_Box::SetLimiters(Parameters::Burn, maxBurn);
-	if(maxKv!=0)	cFA_Box::SetLimiters(Parameters::Kv, maxKv);
+    if(maxKq > DBL_CALIBRATION)	cFA_Box::SetLimiters(Parameters::Kq, maxKq);
+    if(maxBurn > DBL_CALIBRATION)	cFA_Box::SetLimiters(Parameters::Burn, maxBurn);
+    if(maxKv > DBL_CALIBRATION)	cFA_Box::SetLimiters(Parameters::Kv, maxKv);
 }

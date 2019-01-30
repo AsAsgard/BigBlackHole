@@ -39,14 +39,14 @@ private :
 	// ширина и высота ТВС на плоскости
 	int _width;
 	int _height;
+    // отрисовывается ли ТВС
+    bool Visible;
 	// координаты центра ТВС
 	QPoint center;
 	// цвет ТВС
 	QColor Color;
 	// родитель ТВС
 	QWidget * Parent;
-	// отрисовывается ли ТВС
-	bool Visible;
 	// является ли ТВС - ТВС с легендой
 	const bool titleFA;
 	
