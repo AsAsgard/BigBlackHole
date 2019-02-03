@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icons/UIR.ico</file>
+        <file>icons/PrepareFiles.ico</file>
+        <file>icons/ResultsProcessing.ico</file>
+    </qresource>
+</RCC>

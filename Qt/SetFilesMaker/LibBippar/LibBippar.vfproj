@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VisualStudioProject ProjectType="typeStaticLibrary" ProjectCreator="Intel Fortran" Keyword="Static Library" Version="11.0" ProjectIdGuid="{1D04FF30-F13C-491E-A992-0C8B44D3CDCF}">
+	<Platforms>
+		<Platform Name="Win32"/></Platforms>
+	<Configurations>
+		<Configuration Name="Debug|Win32" TargetName="Bippar" ConfigurationType="typeStaticLibrary">
+				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" DebugInformationFormat="debugEnabled" Optimization="optimizeDisabled" WarnInterfaces="true" Traceback="true" BoundsCheck="true" StackFrameCheck="true" RuntimeLibrary="rtMultiThreadedDebugDLL"/>
+				<Tool Name="VFLibrarianTool"/>
+				<Tool Name="VFResourceCompilerTool"/>
+				<Tool Name="VFMidlTool" SuppressStartupBanner="true"/>
+				<Tool Name="VFCustomBuildTool"/>
+				<Tool Name="VFPreLinkEventTool"/>
+				<Tool Name="VFPreBuildEventTool"/>
+				<Tool Name="VFPostBuildEventTool"/></Configuration>
+		<Configuration Name="Release|Win32" ConfigurationType="typeStaticLibrary">
+				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true"/>
+				<Tool Name="VFLibrarianTool"/>
+				<Tool Name="VFResourceCompilerTool"/>
+				<Tool Name="VFMidlTool" SuppressStartupBanner="true"/>
+				<Tool Name="VFCustomBuildTool"/>
+				<Tool Name="VFPreLinkEventTool"/>
+				<Tool Name="VFPreBuildEventTool"/>
+				<Tool Name="VFPostBuildEventTool"/></Configuration></Configurations>
+	<Files>
+		<Filter Name="Source Files" Filter="fi;fd">
+		<File RelativePath=".\DataSimmetryArray.f90"/>
+		<File RelativePath=".\FuelSortsLibrary.F90"/>
+		<File RelativePath=".\IRset.f90"/>
+		<File RelativePath=".\TWIC.f90"/>
+		<File RelativePath=".\WriteMasterSet.F90"/>
+		<File RelativePath=".\WriteShlaki.f90"/>
+		<File RelativePath=".\WriteTOPL.F90"/>
+		<File RelativePath=".\WriteUserSet.F90"/></Filter>
+		<Filter Name="Resource Files" Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"/>
+		<Filter Name="Header Files" Filter="f90;for;f;fpp;ftn;def;odl;idl">
+		<File RelativePath=".\DataFilesModule.f90"/>
+		<File RelativePath=".\FuelSortsModule.F90"/>
+		<File RelativePath=".\module_IR.f90"/>
+		<File RelativePath=".\module_KSK.f90"/></Filter></Files>
+	<Globals/></VisualStudioProject>
