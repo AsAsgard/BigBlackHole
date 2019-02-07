@@ -1,12 +1,10 @@
-﻿#ifndef SETFILESMAKER
-#define SETFILESMAKER
+#ifndef SETFILESMAKER_H
+#define SETFILESMAKER_H
 
 #include <QWidget>
-#include <QTextBrowser>
-#include <QPushButton>
-#include <QGroupBox>
-#include <QMessageBox>
 #include <QFileDialog>
+#include <QMessageBox>
+#include "ui_setfilesmaker.h"
 
 #define CALL __declspec(dllexport)
 
@@ -18,28 +16,34 @@ extern "C" void FUELSORTSLIBRARY(int& ExitCode,const char* adress, int& len_dir,
 
 extern "C" void GENERWRITEPROGRAM(int& Debug);
 
-
 class SetFilesMaker : public QWidget
 {
 	Q_OBJECT
 
 public:
-	SetFilesMaker(int LanguageKey,int SetDebug = 0);
+	explicit SetFilesMaker(int LanguageKey,int SetDebug = 0, QWidget *parent = 0);
 	~SetFilesMaker();
 
-	QPushButton *FileFound;
-	QPushButton *OpenDirect;
-	QTextBrowser *TextBrowser;
+	void AddTextDisplay(const QString& text);
+	void addPlainText(const QString& text);
+	void clearText();
+
+	void setEnabledOpenDirect(bool enabled) { ui.OpenDirect->setEnabled(enabled);}
+	void setEnabledFileFound(bool enabled) { ui.FileFound->setEnabled(enabled);}
+
 	int SetLanguage;
 	int Set_Debug;
 	char* File_Name_C;
 	char DirToSave_Bippar[127];
 
 private slots:
-	void Open_Finder();
-	void Open_Direct();
+	void on_OpenDirect_clicked();
+	void on_FileFound_clicked();
+
+private:
+	Ui::SetFilesMaker ui;
 };
 
 extern SetFilesMaker * setFilesMaker;
 
-#endif // SETFILESMAKER
+#endif // SETFILESMAKER_H

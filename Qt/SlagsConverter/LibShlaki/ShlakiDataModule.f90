@@ -1,9 +1,9 @@
-!__________________________________________________________________________________________________
+п»ї!__________________________________________________________________________________________________
 module ShlakiDataModule
 !__________________________________________________________________________________________________
- !                                                  ! параметры
- integer,parameter :: nTVS = 163                    ! число ТВС
- real, parameter :: Height_ActiveZone = 374.0       ! высота АкЗ
+ !                                                  ! РїР°СЂР°РјРµС‚СЂС‹
+ integer,parameter :: nTVS = 163                    ! С‡РёСЃР»Рѕ РўР’РЎ
+ real, parameter :: Height_ActiveZone = 374.0       ! РІС‹СЃРѕС‚Р° РђРєР—
  !
  character*128 ShlakiAdressNew,OldShlakiName,NewShlakiName,ShlakiAdress,directivetosave,printNew,ShlakiDirect,SmDirect,PmDirect,directive
  integer NZSHL,nLayersNew,nLayersOld,Lenght_OldShlakiName,lengthNew,leghtofdirect,ExIndex2

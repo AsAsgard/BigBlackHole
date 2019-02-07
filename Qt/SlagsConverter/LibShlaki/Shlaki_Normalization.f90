@@ -1,4 +1,4 @@
-!__________________________________________________________________________________________________
+п»ї!__________________________________________________________________________________________________
 !
 !__________________________________________________________________________________________________
 subroutine Shlaki_Normalization
@@ -18,17 +18,17 @@ subroutine Shlaki_Normalization
  integer iTVS,iLayer,iFirstDelta,maxDeltaTVS
 !__________________________________________________________________________________________________
 !
-!                                                   ! находим сумму шлаков (старые) по реактору.
-SumShlakiOld = 0.;SumSmOld = 0.;SumPmOld = 0.       ! зануляем изначальные массивы.
+!                                                   ! РЅР°С…РѕРґРёРј СЃСѓРјРјСѓ С€Р»Р°РєРѕРІ (СЃС‚Р°СЂС‹Рµ) РїРѕ СЂРµР°РєС‚РѕСЂСѓ.
+SumShlakiOld = 0.;SumSmOld = 0.;SumPmOld = 0.       ! Р·Р°РЅСѓР»СЏРµРј РёР·РЅР°С‡Р°Р»СЊРЅС‹Рµ РјР°СЃСЃРёРІС‹.
 !
 do iTVS = 1,nTVS
-!                                                   ! находим сумму шлаков (старые) для каждой ТВС.
+!                                                   ! РЅР°С…РѕРґРёРј СЃСѓРјРјСѓ С€Р»Р°РєРѕРІ (СЃС‚Р°СЂС‹Рµ) РґР»СЏ РєР°Р¶РґРѕР№ РўР’РЎ.
  do iLayer = 1,nLayersOld  
      SumShlakiOld(iTVS) = SumShlakiOld(iTVS) + Shlaki(iLayer,iTVS)
      SumSmOld(iTVS)     = SumSmOld(iTVS) + Sm(iLayer,iTVS)
      SumPmOld(iTVS)     = SumPmOld(iTVS) + Pm(iLayer,iTVS)
  enddo
- !                                                   ! усредняем сумму для каждой ТВС по числу слоев  (старые).
+ !                                                   ! СѓСЃСЂРµРґРЅСЏРµРј СЃСѓРјРјСѓ РґР»СЏ РєР°Р¶РґРѕР№ РўР’РЎ РїРѕ С‡РёСЃР»Сѓ СЃР»РѕРµРІ  (СЃС‚Р°СЂС‹Рµ).
  SumShlakiOld(iTVS) = SumShlakiOld(iTVS)  / nLayersOld
  SumSmOld(iTVS)     = SumSmOld(iTVS) / nLayersOld
  SumPmOld(iTVS)     = SumPmOld(iTVS) / nLayersOld 
@@ -38,13 +38,13 @@ enddo
 SumShlakiNew = 0.;SumSmNew = 0.;SumPmNew = 0.
 !
 do iTVS = 1,nTVS
-!                                                   ! находим сумму шлаков (новые) для каждой ТВС.
+!                                                   ! РЅР°С…РѕРґРёРј СЃСѓРјРјСѓ С€Р»Р°РєРѕРІ (РЅРѕРІС‹Рµ) РґР»СЏ РєР°Р¶РґРѕР№ РўР’РЎ.
  do iLayer = 1,nLayersNew  
      SumShlakiNew(iTVS) = SumShlakiNew(iTVS) + ShlakiNew(iLayer,iTVS)
      SumSmNew(iTVS)     = SumSmNew(iTVS) + SmNew(iLayer,iTVS)
      SumPmNew(iTVS)     = SumPmNew(iTVS) + PmNew(iLayer,iTVS)
  enddo
- !                                                   ! усредняем сумму для каждой ТВС по числу слоев  (новые).
+ !                                                   ! СѓСЃСЂРµРґРЅСЏРµРј СЃСѓРјРјСѓ РґР»СЏ РєР°Р¶РґРѕР№ РўР’РЎ РїРѕ С‡РёСЃР»Сѓ СЃР»РѕРµРІ  (РЅРѕРІС‹Рµ).
  SumShlakiNew(iTVS) = SumShlakiNew(iTVS)  / nLayersNew
  SumSmNew(iTVS)     = SumSmNew(iTVS) / nLayersNew
  SumPmNew(iTVS)     = SumPmNew(iTVS) / nLayersNew 
@@ -52,13 +52,13 @@ enddo
 !
 !
 do iTVS = 1,nTVS
-!                                                   ! вводим нормировочный коэффициент для выполнения условия сохранения числа шлаков в АкЗ.     
+!                                                   ! РІРІРѕРґРёРј РЅРѕСЂРјРёСЂРѕРІРѕС‡РЅС‹Р№ РєРѕСЌС„С„РёС†РёРµРЅС‚ РґР»СЏ РІС‹РїРѕР»РЅРµРЅРёСЏ СѓСЃР»РѕРІРёСЏ СЃРѕС…СЂР°РЅРµРЅРёСЏ С‡РёСЃР»Р° С€Р»Р°РєРѕРІ РІ РђРєР—.     
  if(SumShlakiNew(iTVS).ne.0)NormalizationKoeffShlaki(iTVS) = SumShlakiOld(iTVS) / SumShlakiNew(iTVS)
  if(SumSmNew(iTVS).ne.0)    NormalizationKoeffSm(iTVS)     = SumSmOld(iTVS) / SumSmNew(iTVS)
  if(SumPmNew(iTVS).ne.0)    NormalizationKoeffPm(iTVS)     = SumPmOld(iTVS) / SumPmNew(iTVS)
 enddo
 !
-!                                                   ! нормируем новые шлаки на полученный коэффициент.
+!                                                   ! РЅРѕСЂРјРёСЂСѓРµРј РЅРѕРІС‹Рµ С€Р»Р°РєРё РЅР° РїРѕР»СѓС‡РµРЅРЅС‹Р№ РєРѕСЌС„С„РёС†РёРµРЅС‚.
 do iTVS = 1,nTVS
  do iLayer = 1,nLayersNew
     if(SumShlakiNew(iTVS).ne.0)ShlakiNew(iLayer,iTVS) = NormalizationKoeffShlaki(iTVS) * ShlakiNew(iLayer,iTVS)
@@ -66,34 +66,34 @@ do iTVS = 1,nTVS
     if(SumPmNew(iTVS).ne.0)PmNew(iLayer,iTVS)        = NormalizationKoeffPm(iTVS) * PmNew(iLayer,iTVS)
  enddo
 enddo
-!                                                   ! рассчитываем сумму еще раз для проверки.
+!                                                   ! СЂР°СЃСЃС‡РёС‚С‹РІР°РµРј СЃСѓРјРјСѓ РµС‰Рµ СЂР°Р· РґР»СЏ РїСЂРѕРІРµСЂРєРё.
 !
 SumShlakiNew = 0.;SumSmNew = 0.;SumPmNew = 0.
 !
 do iTVS = 1,nTVS
-!                                                   ! находим сумму шлаков (новые) для каждой ТВС.
+!                                                   ! РЅР°С…РѕРґРёРј СЃСѓРјРјСѓ С€Р»Р°РєРѕРІ (РЅРѕРІС‹Рµ) РґР»СЏ РєР°Р¶РґРѕР№ РўР’РЎ.
  do iLayer = 1,nLayersNew  
      SumShlakiNew(iTVS) = SumShlakiNew(iTVS) + ShlakiNew(iLayer,iTVS)
      SumSmNew(iTVS)     = SumSmNew(iTVS) + SmNew(iLayer,iTVS)
      SumPmNew(iTVS)     = SumPmNew(iTVS) + PmNew(iLayer,iTVS)
  enddo
- !                                                   ! усредняем сумму для каждой ТВС по числу слоев  (новые).
+ !                                                   ! СѓСЃСЂРµРґРЅСЏРµРј СЃСѓРјРјСѓ РґР»СЏ РєР°Р¶РґРѕР№ РўР’РЎ РїРѕ С‡РёСЃР»Сѓ СЃР»РѕРµРІ  (РЅРѕРІС‹Рµ).
  SumShlakiNew(iTVS) = SumShlakiNew(iTVS)  / nLayersNew
  SumSmNew(iTVS)     = SumSmNew(iTVS) / nLayersNew
  SumPmNew(iTVS)     = SumPmNew(iTVS) / nLayersNew 
 enddo
-!                                                   ! находим различия в суммах новых и старых шлаков.
+!                                                   ! РЅР°С…РѕРґРёРј СЂР°Р·Р»РёС‡РёСЏ РІ СЃСѓРјРјР°С… РЅРѕРІС‹С… Рё СЃС‚Р°СЂС‹С… С€Р»Р°РєРѕРІ.
 do iTVS = 1,nTVS
     if(SumShlakiNew(iTVS).ne.0) DeltaShlaki(iTVS) = (( SumShlakiNew(iTVS) - SumShlakiOld(iTVS) ) / SumShlakiNew(iTVS) ) * 100. !,%
     if(SumShlakiNew(iTVS)==0.and.SumShlakiNew(iTVS).ne.0)then
-        call error_C('Ошибка при вычислении SumShlakiNew.')
+        call error_C('РћС€РёР±РєР° РїСЂРё РІС‹С‡РёСЃР»РµРЅРёРё SumShlakiNew.')
         if (debug==1) then
              write(999,'(1x,a34)')'Error in calculation SumShlakiNew.'
         end if
     endif
     if(SumShlakiNew(iTVS)==0.and.SumShlakiNew(iTVS)==0)DeltaShlaki(iTVS) = 0.     
 enddo
-!                                                   ! находим наибольшее различие в суммах новых и старых шлаков.
+!                                                   ! РЅР°С…РѕРґРёРј РЅР°РёР±РѕР»СЊС€РµРµ СЂР°Р·Р»РёС‡РёРµ РІ СЃСѓРјРјР°С… РЅРѕРІС‹С… Рё СЃС‚Р°СЂС‹С… С€Р»Р°РєРѕРІ.
 FirstDelta = DeltaShlaki(1)
 do iTVS = 1,nTVS
  if(abs(DeltaShlaki(iTVS)).gt.FirstDelta)then

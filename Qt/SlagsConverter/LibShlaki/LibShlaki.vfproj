@@ -28,7 +28,6 @@
 		<File RelativePath=".\ShlakiDataModule.f90"/></Filter>
 		<Filter Name="Resource Files" Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"/>
 		<Filter Name="Source Files" Filter="f90;for;f;fpp;ftn;def;odl;idl">
-		<File RelativePath=".\ArrayOf_10Numbers.f90"/>
 		<File RelativePath=".\Read_ShlakiNew.f90"/>
 		<File RelativePath=".\Read_ShlakiOld.f90"/>
 		<File RelativePath=".\Shlaki_DataRewrite.f90"/>

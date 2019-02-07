@@ -31,6 +31,9 @@ SOURCES += \
 HEADERS += \
     setfilesmaker.h
 
+FORMS += \
+    setfilesmaker.ui
+
 CONFIG(debug, debug|release):LIBS += -L../../LibBippar/Debug/  -lLibBippard
 
 CONFIG(release, debug|release):LIBS += -L../../LibBippar/Release/  -lLibBippar

@@ -8,80 +8,19 @@ char OldName[127];
 char NewAdress[127];
 char nLayersNewCh[2];
 
-ConverterSlags::ConverterSlags(int LanguageKey,int SetDebug)
+ConverterSlags::ConverterSlags(int LanguageKey,int SetDebug, QWidget * parent)
+	: QWidget(parent)
 {
-	 setFixedSize(600, 161);
+	 ui.setupUi(this);
+	 this->setFixedSize(this->size());
 
 	 SetLanguage=LanguageKey;
 	 Set_Debug=SetDebug;
-
-     FileFound = new QPushButton(QString::fromWCharArray(L"Открыть файл"),this);
-	 if (LanguageKey==1)
-	 {
-		 FileFound->setText(QString::fromWCharArray(L"Open file"));
-	 }
-     FileFound->setGeometry(20, 10, 135, 25);
-     FileFound->setFont(QFont("Times", 12));
-	 FileFound->setStyleSheet(
-            "QPushButton{"
-			"background-color: rgb(220,220,220);"
-			"border-style: outset;"
-			"border-width: 2px;"
-			"border-radius: 10px;"
-			"border-color: beige;"
-			"min-width: 10em;}");
-	 FileFound->setEnabled(true);
-
-	 OpenDirect = new QPushButton(QString::fromWCharArray(L"Открыть папку"),this);
-	 if (LanguageKey==1)
-	 {
-		 OpenDirect->setText(QString::fromWCharArray(L"Open directory"));
-	 }
-     OpenDirect->setGeometry(20, 125, 135, 25);
-     OpenDirect->setFont(QFont("Times", 11));
-	 OpenDirect->setStyleSheet(
-            "QPushButton{"
-			"background-color: rgb(220,220,220);"
-			"border-style: outset;"
-			"border-width: 2px;"
-			"border-radius: 10px;"
-			"border-color: beige;"
-			"min-width: 10em;}");
-	 OpenDirect->setEnabled(false);
-
-	 QGroupBox *Shadow = new QGroupBox(this);
-	 Shadow->setGeometry(20, 45, 135, 70);
-
-	 OldRead = new QSpinBox(this);
-	 OldRead->setGeometry(30, 70, 45, 25);
-	 OldRead->setMinimum(1);
-	 OldRead->setMaximum(99);
-     OldRead->setFont(QFont("Times", 12, QFont::Bold));
-	 OldRead->setEnabled(false);
-
-	 TransformSlags = new QPushButton(QString::fromWCharArray(L"OK"),this);
-     TransformSlags->setGeometry(85, 70, 60, 25);
-     TransformSlags->setFont(QFont("Times", 12));
-	 TransformSlags->setStyleSheet(
-            "QPushButton{"
-			"background-color: rgb(220,220,220);"
-			"border-style: outset;"
-			"border-width: 2px;"
-			"border-radius: 10px;"
-			"border-color: beige;}");
-	 TransformSlags->setEnabled(false);
-
-	 TextBrowser = new QTextBrowser (this);
-	 TextBrowser->setGeometry(190, 10, 400, 140);
-
-	 connect(FileFound, SIGNAL(clicked()), this, SLOT(File_Founds()));
-	 connect(TransformSlags, SIGNAL(clicked()), this, SLOT(ReadOld_Function()));
-	 connect(OpenDirect, SIGNAL(clicked()), this, SLOT(Open_Direct()));
 }
 
 ConverterSlags::~ConverterSlags() {}
 
-void ConverterSlags::Open_Direct()
+void ConverterSlags::on_OpenDirect_clicked()
 {
 	int z=strlen(DirToSave);
 	TWIC(DirToSave,z);
@@ -89,30 +28,38 @@ void ConverterSlags::Open_Direct()
 
 void ConverterSlags::ChangeSpiner(int NZSHL_C) 
 {
-	OldRead->setValue(NZSHL_C);
+	ui.OldRead->setValue(NZSHL_C);
 }
 
-void ConverterSlags::AddTextDisplay(char* text) 
+void ConverterSlags::AddTextDisplay(const QString& text) 
 {
-	TextBrowser->append(text);
+	ui.TextBrowser->append(text);
 }
 
- void ConverterSlags::File_Founds()
+void ConverterSlags::addPlainText(const QString& text) 
 {
-	QFileDialog *FileFinder = new QFileDialog();
-	QString fileName = FileFinder->getOpenFileName();
-	if (fileName!=NULL){
-	QByteArray ba = fileName.toLocal8Bit();
-	File_Name_C = ba.data();
-	SHLAKIOLD(Set_Debug);	
-	this->FileFound->setEnabled(false);
-	this->TransformSlags->setEnabled(true);
-	this->OldRead->setEnabled(true);}
+	ui.TextBrowser->insertPlainText(text);
 }
 
-void ConverterSlags::ReadOld_Function()
+ void ConverterSlags::on_FileFound_clicked()
 {
-	nLayersNew = this->OldRead->value();
+	QString fileName = QFileDialog::getOpenFileName(this,
+													tr("Choose slags file."),
+													"./");
+	if (!fileName.isNull())
+	{
+		QByteArray ba = fileName.toLocal8Bit();
+		File_Name_C = ba.data();
+		SHLAKIOLD(Set_Debug);	
+		ui.FileFound->setEnabled(false);
+		ui.TransformSlags->setEnabled(true);
+		ui.OldRead->setEnabled(true);
+	}
+}
+
+void ConverterSlags::on_TransformSlags_clicked()
+{
+	nLayersNew = ui.OldRead->value();
 	LISTCONV(Set_Debug);
 	DATAREWRITE(Set_Debug);
 }
@@ -160,14 +107,14 @@ extern "C" void CALL Param(int& NZSHL)
 	   if (Converter) 
 	   {
 		   Converter->ChangeSpiner(NZSHL);
-		   if (Converter->SetLanguage==1){Converter->TextBrowser->append(QString::fromWCharArray(L"Source file address: "));}
-		   if (Converter->SetLanguage==0){Converter->TextBrowser->append(QString::fromWCharArray(L"Адрес исходного файла: "));}
-		   Converter->AddTextDisplay(const_cast<char*>(Converter->File_Name_C));
-		   if (Converter->SetLanguage==1){Converter->TextBrowser->append(QString::fromWCharArray(L"Number of layers in source file: "));}
-		   if (Converter->SetLanguage==0){Converter->TextBrowser->append(QString::fromWCharArray(L"Число слоев исходного файла: "));}
+		   if (Converter->SetLanguage==1){Converter->AddTextDisplay(QString::fromWCharArray(L"Source file address: "));}
+		   if (Converter->SetLanguage==0){Converter->AddTextDisplay(QString::fromWCharArray(L"Адрес исходного файла: "));}
+		   Converter->AddTextDisplay(QString(Converter->File_Name_C));
+		   if (Converter->SetLanguage==1){Converter->AddTextDisplay(QString::fromWCharArray(L"Number of layers in source file: "));}
+		   if (Converter->SetLanguage==0){Converter->AddTextDisplay(QString::fromWCharArray(L"Число слоев исходного файла: "));}
 		   wchar_t m_reportFileName[256];
 		   swprintf_s(m_reportFileName, L"%d", NZSHL);
-		   Converter->TextBrowser->insertPlainText(QString::fromWCharArray(m_reportFileName));
+		   Converter->addPlainText(QString::fromWCharArray(m_reportFileName));
 	   }
    }
 
@@ -186,21 +133,21 @@ extern "C" void CALL ReadOld_C(int& nLayers,char* NewAdress2)
 
 extern "C" void CALL Run_C()
    {
-	   if (Converter->SetLanguage==1){Converter->TextBrowser->append(QString::fromWCharArray(L"Done "));}
-	   if (Converter->SetLanguage==0){Converter->TextBrowser->append(QString::fromWCharArray(L"Преобразование файла шлаков выполнено "));}
+	   if (Converter->SetLanguage==1){Converter->AddTextDisplay(QString::fromWCharArray(L"Done "));}
+	   if (Converter->SetLanguage==0){Converter->AddTextDisplay(QString::fromWCharArray(L"Преобразование файла шлаков выполнено "));}
 
-	   if (Converter->SetLanguage==1){Converter->TextBrowser->append(QString::fromWCharArray(L"Address of the converted file: "));}
-	   if (Converter->SetLanguage==0){Converter->TextBrowser->append(QString::fromWCharArray(L"Адрес преобразованного файла: "));}
+	   if (Converter->SetLanguage==1){Converter->AddTextDisplay(QString::fromWCharArray(L"Address of the converted file: "));}
+	   if (Converter->SetLanguage==0){Converter->AddTextDisplay(QString::fromWCharArray(L"Адрес преобразованного файла: "));}
 	   
-	   Converter->AddTextDisplay(const_cast<char*>(NewAdress));
+	   Converter->AddTextDisplay(NewAdress);
 
-	   if (Converter->SetLanguage==1){Converter->TextBrowser->append(QString::fromWCharArray(L"Number of layers in converted file: "));}
-	   if (Converter->SetLanguage==0){Converter->TextBrowser->append(QString::fromWCharArray(L"Число слоев преобразованного файла: "));}
+	   if (Converter->SetLanguage==1){Converter->AddTextDisplay(QString::fromWCharArray(L"Number of layers in converted file: "));}
+	   if (Converter->SetLanguage==0){Converter->AddTextDisplay(QString::fromWCharArray(L"Число слоев преобразованного файла: "));}
 	   
 	   wchar_t m_reportFileName[256];
 	   swprintf_s(m_reportFileName, L"%d", nLayersNew);
-	   Converter->TextBrowser->insertPlainText(QString::fromWCharArray(m_reportFileName));
-	   Converter->TransformSlags->setEnabled(false);
-	   Converter->OldRead->setEnabled(false);
-	   Converter->OpenDirect->setEnabled(true);
+	   Converter->addPlainText(QString::fromWCharArray(m_reportFileName));
+	   Converter->setEnabledTransformSlags(false);
+	   Converter->setEnabledSpinner(false);
+	   Converter->setEnabledOpenDirect(true);
    }

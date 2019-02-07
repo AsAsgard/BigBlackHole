@@ -1,12 +1,9 @@
-﻿#ifndef SECOND_WINDOW
-#define SECOND_WINDOW
+#ifndef CONVERTERSLAGS_H
+#define CONVERTERSLAGS_H
 
 #include <QWidget>
-#include <QPushButton>
-#include <QGroupBox>
-#include <QTextBrowser>
-#include <QSpinBox>
 #include <QFileDialog>
+#include "ui_converterslags.h"
 
 #define CALL __declspec(dllexport)
 
@@ -23,28 +20,31 @@ class ConverterSlags : public QWidget
 	Q_OBJECT
 
 public:
-	explicit ConverterSlags(int LanguageKey,int SetDebug = 0);
+	explicit ConverterSlags(int LanguageKey, int SetDebug = 0, QWidget *parent = 0);
 	~ConverterSlags();
-	
-	void ChangeSpiner(int NZSHL_C);
-	void AddTextDisplay(char* text);
 
-	QSpinBox *OldRead;
-	QTextBrowser *TextBrowser;
-	QPushButton *FileFound;
-	QPushButton *OpenDirect;
-	QPushButton *TransformSlags;
+	void ChangeSpiner(int NZSHL_C);
+	void AddTextDisplay(const QString& text);
+	void addPlainText(const QString& text);
+
+	void setEnabledOpenDirect(bool enabled) { ui.OpenDirect->setEnabled(enabled);}
+	void setEnabledTransformSlags(bool enabled) { ui.TransformSlags->setEnabled(enabled);}
+	void setEnabledFileFound(bool enabled) { ui.FileFound->setEnabled(enabled);}
+	void setEnabledSpinner(bool enabled) { ui.OldRead->setEnabled(enabled);}
+
 	int SetLanguage;
 	int Set_Debug;
 	char* File_Name_C;
 	char DirToSave[127];
 
 private slots:
-	void File_Founds();
-	void ReadOld_Function();
-	void Open_Direct();
-};
+	void on_FileFound_clicked();
+	void on_TransformSlags_clicked();
+	void on_OpenDirect_clicked();
 
+private:
+	Ui::ConverterSlags ui;
+};
 
 extern int nLayersNew;
 extern int LastPoint1;
@@ -56,4 +56,5 @@ extern char nLayersNewCh[2];
 
 extern ConverterSlags * Converter;
 
-#endif
+
+#endif // CONVERTERSLAGS_H

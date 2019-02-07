@@ -24,12 +24,34 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 CONFIG += c++11
 
+LIBS += -lgfortran
+
+VPATH += ../LibShlaki
+
+#FORTRAN_SOURCES += \
+#    ArrayOf10Numbers.f90    \
+#    ShlakiDataModule.f90    \
+#    Read_ShlakiNew.f90  \
+#    Read_ShlakiOld.f90  \
+#    Shlaki_DataRewrite.f90  \
+#    Shlaki_ListConversion.f90   \
+#    Shlaki_Normalization.f90    \
+#    TWIC.f90
+
+#gfortran.output = ${QMAKE_FILE_BASE}.o
+#gfortran.commands = gfortran ${QMAKE_FILE_NAME} -c -o ${QMAKE_FILE_OUT}
+#gfortran.input = FORTRAN_SOURCES
+#QMAKE_EXTRA_COMPILERS += gfortran
+
 SOURCES += \
         main.cpp \
     converterslags.cpp
 
 HEADERS += \
     converterslags.h
+
+FORMS += \
+    converterslags.ui
 
 CONFIG(debug, debug|release):LIBS += -L../../LibShlaki/Debug/  -lLibShlakid
 

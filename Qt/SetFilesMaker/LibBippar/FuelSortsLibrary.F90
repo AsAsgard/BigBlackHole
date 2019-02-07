@@ -45,9 +45,7 @@ INTERFACE
 END INTERFACE
 
 INTERFACE
-    SUBROUTINE error_C_bippar(string) BIND(C,NAME='error_C_bippar')
-        use iso_c_binding, only : C_CHAR
-        character ( kind = C_CHAR ) :: string ( * )
+    SUBROUTINE error_C_bippar() BIND(C,NAME='error_C_bippar')
     END SUBROUTINE error_C_bippar
 END INTERFACE
 
@@ -131,7 +129,7 @@ if(exists==.false.) then
     if (debug==1) then
         write(997,'(1x,a57)')'File bippar do not find in current folder! Program exit.'
     end if
- call error_C_bippar('File bippar do not find in current folder! Program exit.')
+ call error_C_bippar()
  print('(1x,a57)'),'File bippar do not find in current folder! Program exit.'
  goto 999
 endif
