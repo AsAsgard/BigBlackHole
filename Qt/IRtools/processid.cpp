@@ -1,4 +1,5 @@
 #include <QDir>
+#include <algorithm>
 #include "processid.h"
 #include "inidata.h"
 
@@ -38,6 +39,58 @@ bool processExists(qint64 pid) { return 0 == kill(pid,0);}
 bool processExists(qint64 pid) { return false;}
 
 #endif
+
+
+bool Find_last_version::operator()(const QString &lhs, const QString &rhs)
+{
+    if (lhs == processInfo.programName || lhs == processInfo.programName + ".exe") return true;
+    else if (rhs == processInfo.programName || rhs == processInfo.programName + ".exe") return false;
+    if (lhs.contains(VER_IDENT) && rhs.contains(VER_IDENT)) {
+        // пробуем найти максимальную версию
+        int lhs_ver_pos = lhs.indexOf(VER_IDENT) + QString(VER_IDENT).length() + 1;
+        int rhs_ver_pos = rhs.indexOf(VER_IDENT) + QString(VER_IDENT).length() + 1;
+        QMap<int,int> lhs_digits;
+        bool prevDigit = false;
+        int i = 0;
+        for (; lhs_ver_pos < lhs.size(); ++lhs_ver_pos) {
+            if (lhs[lhs_ver_pos].isDigit()) {
+                lhs_digits[i] = lhs_digits[i]*10 + lhs[lhs_ver_pos].digitValue();
+            } else if (prevDigit) {
+                ++i;
+                prevDigit = false;
+            }
+        }
+        QMap<int,int> rhs_digits;
+        prevDigit = false;
+        i = 0;
+        for (; rhs_ver_pos < rhs.size(); ++rhs_ver_pos) {
+            if (rhs[rhs_ver_pos].isDigit()) {
+                rhs_digits[i] = rhs_digits[i]*10 + rhs[rhs_ver_pos].digitValue();
+                prevDigit = true;
+            } else if (prevDigit) {
+                ++i;
+                prevDigit = false;
+            }
+        }
+        if (rhs_digits.empty()) return true;
+        else if (lhs_digits.empty()) return false;
+        auto lit = lhs_digits.begin();
+        auto rit = rhs_digits.begin();
+        while (lit != lhs_digits.end() || rit != rhs_digits.end()) {
+            if (lit.value() > rit.value()) return true;
+            else if (lit.value() < rit.value()) return false;
+            if (++lit == lhs_digits.end()) return true;
+            else if (++rit == rhs_digits.end()) return false;
+        }
+        return lhs < rhs;
+    } else if (lhs.contains(VER_IDENT)) {
+        return true;
+    } else if (rhs.contains(VER_IDENT)) {
+        return false;
+    } else {
+        return lhs < rhs;
+    }
+}
 
 
 bool startNewProcess(ProcessInfo& processInfo, QWidget * parent)
@@ -88,17 +141,41 @@ bool startNewProcess(ProcessInfo& processInfo, QWidget * parent)
                               QMessageBox::Ok);
         return false;
     }
+    QStringList executables = QDir("./").entryList(QStringList(processInfo.programName+"*"), QDir::Files | QDir::NoSymLinks);
+
+    executables.erase(std::remove_if(
+                          executables.begin() ,
+                          executables.end(),
+                          [] (const QString& filename) {
+                              return filename.toLower().contains(thisProgramName.toLower());
+                          }),
+                      executables.end());
+    if (executables.empty()) {
+        QMessageBox::critical(parent, QMessageBox::tr("Error!"),
+                              QMessageBox::tr("Error during executing program %1. " \
+                                              "Check existance of the executable file of this application in IRtools directory.")
+                                              .arg(processInfo.programName),
+                              QMessageBox::Ok);
+        return false;
+    }
+
+    std::sort(executables.begin(), executables.end(), Find_last_version(processInfo));
+
     qint64 new_pid = -1;
-    bool ProcessCreated = QProcess::startDetached(processInfo.programName,QStringList(),"./",&new_pid);
     bool ProcessExists = false;
-    if (ProcessCreated) ProcessExists = processExists(new_pid);
+    for (auto it = executables.begin(); it != executables.end() && !ProcessExists; ++it) {
+        new_pid = -1;
+        bool ProcessCreated = QProcess::startDetached(*it,QStringList(),"./",&new_pid);
+        ProcessExists = false;
+        if (ProcessCreated) ProcessExists = processExists(new_pid);
+    }
     if (ProcessExists)
     {
         processInfo.pid = new_pid;
         return true;
     } else {
         QMessageBox::critical(parent, QMessageBox::tr("Error!"),
-                              QMessageBox::tr("Error during executing program %1. See the log file for details.")
+                              QMessageBox::tr("Error during executing program %1. Try to start program by its executable file.")
                               .arg(processInfo.programName),
                               QMessageBox::Ok);
         return false;

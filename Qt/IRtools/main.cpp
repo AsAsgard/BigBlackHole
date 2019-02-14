@@ -6,6 +6,7 @@
 QMap<Programs::ProgramsEnum, ProcessInfo> ProcessID;
 InitialData IniData;
 QString IniFilename("IRtools.ini");
+QString thisProgramName("");
 
 int main(int argc, char *argv[])
 {
@@ -13,6 +14,7 @@ int main(int argc, char *argv[])
     checkIni();
 
     QApplication a(argc, argv);
+    thisProgramName = QApplication::applicationName();
     InitialWindow * w = new InitialWindow();
     w->setAttribute(Qt::WA_DeleteOnClose);
     w->show();

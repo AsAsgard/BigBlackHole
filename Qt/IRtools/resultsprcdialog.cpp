@@ -9,6 +9,15 @@ ResultsPrcDialog::ResultsPrcDialog(QWidget *parent) :
 {
     ui->setupUi(this);
     this->setFixedSize(this->size());
+
+    // Fonts
+    QFont font(ui->Choice_label->font());
+    font.setPixelSize(16);
+    ui->Choice_label->setFont(font);
+
+    font = ui->StateComparison->font();
+    font.setPixelSize(12);
+    ui->StateComparison->setFont(font);
 }
 
 ResultsPrcDialog::~ResultsPrcDialog()

@@ -8,6 +8,19 @@ PrepFilesDialog::PrepFilesDialog(QWidget *parent) :
 {
     ui->setupUi(this);
     this->setFixedSize(this->size());
+
+    // Fonts
+    QFont font(ui->Choice_label->font());
+    font.setPixelSize(16);
+    ui->Choice_label->setFont(font);
+
+    font = ui->SlagsConverter->font();
+    font.setPixelSize(12);
+    ui->SlagsConverter->setFont(font);
+
+    font = ui->SetFilesMaker->font();
+    font.setPixelSize(12);
+    ui->SetFilesMaker->setFont(font);
 }
 
 PrepFilesDialog::~PrepFilesDialog()

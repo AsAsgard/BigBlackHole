@@ -24,10 +24,22 @@ struct ProcessInfo {
     QString programName;
 };
 
+class Find_last_version {
+public:
+    explicit Find_last_version(const ProcessInfo& _processInfo) : processInfo(_processInfo) {}
+    bool operator()(const QString& lhs, const QString& rhs);
+
+private:
+    const ProcessInfo& processInfo;
+};
+
 extern QMap<Programs::ProgramsEnum, ProcessInfo> ProcessID;
+extern QString thisProgramName;
 
 void InitProcessID(void);
 bool processExists(const qint64& pid);
 bool startNewProcess(ProcessInfo& processInfo, QWidget * parent);
+
+#define VER_IDENT "-ver."
 
 #endif // PROCESSID_H

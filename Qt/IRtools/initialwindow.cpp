@@ -33,6 +33,43 @@ InitialWindow::InitialWindow(QWidget *parent) :
     } else {
         statusLabel->setText(InitialWindow::tr("Bad fuel load is opened. Open fuel load in the menu bar."));
     }
+
+    // Fonts
+    QFont font(ui->IRtools_label->font());
+    font.setPixelSize(64);
+    ui->IRtools_label->setFont(font);
+
+    font = ui->Choose_option_label->font();
+    font.setPixelSize(16);
+    ui->Choose_option_label->setFont(font);
+
+    font = ui->Greetings_label->font();
+    font.setPixelSize(16);
+    ui->Greetings_label->setFont(font);
+
+    font = ui->Happy_using_label->font();
+    font.setPixelSize(13);
+    ui->Happy_using_label->setFont(font);
+
+    font = statusLabel->font();
+    font.setPixelSize(13);
+    statusLabel->setFont(font);
+
+    font = ui->statusBar->font();
+    font.setPixelSize(13);
+    ui->statusBar->setFont(font);
+
+    font = ui->IRButton->font();
+    font.setPixelSize(13);
+    ui->IRButton->setFont(font);
+
+    font = ui->PrepFiles_button->font();
+    font.setPixelSize(13);
+    ui->PrepFiles_button->setFont(font);
+
+    font = ui->ResultsPrc_button->font();
+    font.setPixelSize(13);
+    ui->ResultsPrc_button->setFont(font);
 }
 
 InitialWindow::~InitialWindow()
@@ -59,7 +96,7 @@ void InitialWindow::to_hanging(void)
 
 void InitialWindow::on_IRButton_clicked()
 {
-    startNewProcess(ProcessID[Programs::IR], this);
+    if (startNewProcess(ProcessID[Programs::IR], this)) to_hanging();
 }
 
 void InitialWindow::on_PrepFiles_button_clicked()

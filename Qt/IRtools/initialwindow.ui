@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>420</width>
-    <height>354</height>
+    <height>364</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>IR-tools</string>
+   <string>IRtools</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QPushButton" name="IRButton">
@@ -23,8 +23,13 @@
       <height>31</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
     <property name="text">
-     <string>Запустить &quot;Имитатор Реактора&quot;</string>
+     <string>Запуск &quot;Имитатора Реактора&quot;</string>
     </property>
    </widget>
    <widget class="QPushButton" name="ResultsPrc_button">
@@ -35,6 +40,11 @@
       <width>260</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
     </property>
     <property name="text">
      <string>Обработка результатов</string>
@@ -48,6 +58,11 @@
       <width>260</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
     </property>
     <property name="text">
      <string>Подготовка файлов программы</string>
