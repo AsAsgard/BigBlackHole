@@ -24,7 +24,7 @@ signals:
 
 protected:
 	// перерисовать поле
-	void paintEvent(QPaintEvent *) override;
+    void paintEvent(QPaintEvent *) Q_DECL_OVERRIDE;
 
 private slots:
 	// получить значения

@@ -35,10 +35,12 @@ signals:
 	bool isKvDiagramActive();
 
 protected:
-	void paintEvent(QPaintEvent *) override;
-    void resizeEvent(QResizeEvent *) override;
+    void paintEvent(QPaintEvent *) Q_DECL_OVERRIDE;
+    void resizeEvent(QResizeEvent *) Q_DECL_OVERRIDE;
 	// нажатие мыши на поле - необходимо для выбора ТВС на гистограмме Kv
-	void mousePressEvent(QMouseEvent * mouse) override;
+    void mousePressEvent(QMouseEvent * mouse) Q_DECL_OVERRIDE;
+
+    void changeEvent(QEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
 	// изменение режима отображения (разность состояний или два состояния)

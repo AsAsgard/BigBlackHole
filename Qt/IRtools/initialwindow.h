@@ -17,12 +17,15 @@ public:
     explicit InitialWindow(QWidget *parent = nullptr);
     ~InitialWindow();
 
+protected:
+    void changeEvent(QEvent *event) Q_DECL_OVERRIDE;
+
 private slots:
     void on_IRButton_clicked();
 
-    void on_PrepFiles_button_clicked();
+    void on_PrepFilesButton_clicked();
 
-    void on_ResultsPrc_button_clicked();
+    void on_ResultsPrcButton_clicked();
 
     void on_openHangingWindow_triggered();
 
@@ -38,6 +41,7 @@ private:
     QScopedPointer<QLabel> statusLabel;
 
     void to_hanging(void);
+    void updateStatusBar(void);
 };
 
 

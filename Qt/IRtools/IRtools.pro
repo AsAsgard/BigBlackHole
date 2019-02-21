@@ -56,3 +56,7 @@ RESOURCES += \
     resources.qrc
 
 RC_FILE += icon.rc
+
+TRANSLATIONS += translations/IRtoolsTranslations_ru.ts
+
+CODECFORSRC   = UTF-8

@@ -1,10 +1,20 @@
 #ifndef INIDATA_H
 #define INIDATA_H
 
+#include <QApplication>
 #include <QMessageBox>
 #include <QDesktopWidget>
 #include <QString>
 #include <QPair>
+#include <QTranslator>
+
+namespace DoesntExist {
+    enum DoesntExistEnum {
+        ALL_EXIST,
+        DLL,
+        SET
+    };
+}
 
 namespace Lang {
     enum LangEnum {
@@ -14,19 +24,22 @@ namespace Lang {
 }
 
 struct InitialData {
-    bool TrueLang = false;
     Lang::LangEnum Lang = Lang::EN;
     bool TruePath = false;
     QString Path = "./";
 };
 
 extern InitialData IniData;
+extern QMap<Lang::LangEnum, QString> LangSuffixes;
 extern QString IniFilename;
+extern QTranslator translator;
 
 void checkIni(void);
 bool writeIni(void);
-QPair<bool, QString> checkPathIR(void);
+QPair<DoesntExist::DoesntExistEnum, QString> checkPathIR(void);
 QString LangToQString(const Lang::LangEnum& lang);
+void initLangSuffixes(void);
+void changeAppLanguage(Lang::LangEnum);
 
 
 #ifndef ALIGNMENT

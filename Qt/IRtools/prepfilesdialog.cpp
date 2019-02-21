@@ -21,6 +21,8 @@ PrepFilesDialog::PrepFilesDialog(QWidget *parent) :
     font = ui->SetFilesMaker->font();
     font.setPixelSize(12);
     ui->SetFilesMaker->setFont(font);
+
+    ui->retranslateUi(this);
 }
 
 PrepFilesDialog::~PrepFilesDialog()

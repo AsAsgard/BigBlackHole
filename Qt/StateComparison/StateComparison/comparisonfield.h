@@ -11,6 +11,7 @@
 #include "renderarea.h"
 #include "filebrowser.h"
 #include "cf_colorchanger.h"
+#include "globals.h"
 
 // класс формы - основное окно с картограммой
 class ComparisonField : public QMainWindow
@@ -37,11 +38,17 @@ signals:
 	void sendRenderAreaPointer(QWeakPointer<RenderArea>);
 
 protected:
-    void resizeEvent(QResizeEvent *) override;
+    void resizeEvent(QResizeEvent *) Q_DECL_OVERRIDE;
+
+    void changeEvent(QEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
 	// выбрать другие состояния
 	void on_otherStates_triggered();
+    // выбор языка
+    void on_English_triggered();
+    void on_Russian_triggered();
+    void langChanged(Lang::LangEnum lang);
 	// активировать гистограмму Kv
 	void on_Kv_diagramActivator_triggered();
 	// сделать скрин картограммы

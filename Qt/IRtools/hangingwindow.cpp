@@ -13,12 +13,8 @@ HangingWindow::HangingWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     this->setFixedSize(this->size());
-    if (IniData.TrueLang) {
-        if (IniData.Lang == Lang::RU) ui->Russian->trigger();
-        if (IniData.Lang == Lang::EN) ui->English->trigger();
-    } else {
-        ui->English->trigger();
-    }
+    if (IniData.Lang == Lang::RU) ui->Russian->trigger();
+    if (IniData.Lang == Lang::EN) ui->English->trigger();
 }
 
 HangingWindow::~HangingWindow()
@@ -63,23 +59,29 @@ void HangingWindow::on_English_triggered()
 {
     ui->English->setChecked(true);
     ui->Russian->setChecked(false);
-    IniData.TrueLang = true;
-    IniData.Lang = Lang::EN;
+    changeAppLanguage(Lang::EN);
 }
 
 void HangingWindow::on_Russian_triggered()
 {
     ui->English->setChecked(false);
     ui->Russian->setChecked(true);
-    IniData.TrueLang = true;
-    IniData.Lang = Lang::RU;
+    changeAppLanguage(Lang::RU);
+}
+
+void HangingWindow::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::LanguageChange) {
+        ui->retranslateUi(this);
+    }
+    QMainWindow::changeEvent(event);
 }
 
 void HangingWindow::on_openFuelLoad_triggered()
 {
     QString Path = QFileDialog::getExistingDirectory(
                         this,
-                        InitialWindow::tr("Open Fuel Load"),
+                        HangingWindow::tr("Open fuel load"),
                         IniData.TruePath ? IniData.Path : "./",
                         QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks
                         );
@@ -88,7 +90,7 @@ void HangingWindow::on_openFuelLoad_triggered()
         IniData.TruePath = true;
         IniData.Path = Path;
         QMessageBox::information(this, QMessageBox::tr("Information"),
-                                 QMessageBox::tr("Fuel Load was changed to: %1")
+                                 QMessageBox::tr("Fuel Load was changed to: \"%1\"")
                                  .arg(IniData.Path),
                                  QMessageBox::Ok);
     }

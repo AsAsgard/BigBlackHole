@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>Изменение цветов картограммы</string>
+   <string>Cartogram color change window</string>
   </property>
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
@@ -27,6 +27,9 @@
      <width>541</width>
      <height>23</height>
     </rect>
+   </property>
+   <property name="locale">
+    <locale language="English" country="UnitedKingdom"/>
    </property>
    <property name="orientation">
     <enum>Qt::Horizontal</enum>
@@ -70,7 +73,7 @@
  }</string>
    </property>
    <property name="title">
-    <string>Режим</string>
+    <string>Mode</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
@@ -178,7 +181,7 @@
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Цвет ячейки, если значение величины в protocol_theory.exp.dat меньше, чем в protocol_theory.exp.dat&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
   </widget>
   <widget class="QTextBrowser" name="textBrowser_Min">
@@ -235,7 +238,7 @@ p, li { white-space: pre-wrap; }
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Цвет ячейки, если значение величины в protocol_theory.exp.dat меньше, чем в protocol_theory.exp.dat&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
   </widget>
   <widget class="QPushButton" name="ChangeMaxColor">
@@ -248,7 +251,7 @@ p, li { white-space: pre-wrap; }
     </rect>
    </property>
    <property name="text">
-    <string>Изменить цвет...</string>
+    <string>Change color...</string>
    </property>
   </widget>
   <widget class="QPushButton" name="ChangeMinColor">
@@ -261,7 +264,7 @@ p, li { white-space: pre-wrap; }
     </rect>
    </property>
    <property name="text">
-    <string>Изменить цвет...</string>
+    <string>Change color...</string>
    </property>
   </widget>
   <widget class="demoAreaCF" name="ColorField_Max">
@@ -340,7 +343,7 @@ p, li { white-space: pre-wrap; }
     </palette>
    </property>
    <property name="text">
-    <string>В ячейках указаны цвета максимумов отклонения (значения - для примера)</string>
+    <string>The cells show the maximum deviation colors (values are for example)</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>

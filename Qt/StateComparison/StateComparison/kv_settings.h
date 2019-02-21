@@ -38,7 +38,7 @@ signals:
 	void sendNewSettings(const QPen& newState1Pen, const QPen& newState2Pen, AutoAxis::AutoAxisEnum newAutoAxisSetting);
 
 protected:
-	void closeEvent(QCloseEvent *) override;
+    void closeEvent(QCloseEvent *) Q_DECL_OVERRIDE;
 
 private slots:
 	// нажатие на кнопки снизу формы

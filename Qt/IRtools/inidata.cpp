@@ -3,6 +3,12 @@
 #include <QTextStream>
 #include "inidata.h"
 
+void initLangSuffixes()
+{
+    LangSuffixes[Lang::EN] = "en_EN";
+    LangSuffixes[Lang::RU] = "ru_RU";
+}
+
 void checkIni(void)
 {
     QFile IniFile(IniFilename);
@@ -29,10 +35,8 @@ void checkIni(void)
             }
         } else if (Var == "lang") {
             if (Value.toLower() == "en") {
-                IniData.TrueLang = true;
                 IniData.Lang = Lang::EN;
             } else if (Value.toLower() == "ru") {
-                IniData.TrueLang = true;
                 IniData.Lang = Lang::RU;
             }
         }
@@ -46,27 +50,27 @@ bool writeIni(void)
     if(!IniFile.open(QIODevice::WriteOnly | QIODevice::Text)) return false;
     QTextStream IniStream(&IniFile);
     IniStream << QString("PATH = \"%1\"\n").arg(IniData.TruePath ? IniData.Path : "./");
-    IniStream << QString("LANG = \"%1\"\n").arg(IniData.TrueLang ? LangToQString(IniData.Lang) : LangToQString(Lang::EN));
+    IniStream << QString("LANG = \"%1\"\n").arg(LangToQString(IniData.Lang));
     return true;
 }
 
-#define CHECK_FILE(filename) {  \
-    if (!UirDir.exists(filename)) return QPair<bool, QString>(false, filename); \
+#define CHECK_FILE(filename, type) {  \
+    if (!UirDir.exists(filename)) return QPair<DoesntExist::DoesntExistEnum, QString>(DoesntExist::type, filename); \
 }
 
-QPair<bool, QString> checkPathIR(void)
+QPair<DoesntExist::DoesntExistEnum, QString> checkPathIR(void)
 {
     QDir UirDir("./");
 #ifdef _WIN32
-    CHECK_FILE("archlib.dll");
-    CHECK_FILE("libicis.dll");
-    CHECK_FILE("sqlite3.dll");
+    CHECK_FILE("archlib.dll", DLL);
+    CHECK_FILE("libicis.dll", DLL);
+    CHECK_FILE("sqlite3.dll", DLL);
 #endif
-    if (!UirDir.cd(IniData.TruePath ? IniData.Path : "./")) return QPair<bool, QString>(false, "Fuel Load directory");
-    if (!UirDir.cd("SET")) return QPair<bool, QString>(false, "directory SET");
-    CHECK_FILE("master.set");
-    CHECK_FILE("user.set");
-    return QPair<bool, QString>(true, "");
+    if (!UirDir.cd(IniData.TruePath ? IniData.Path : "./")) return QPair<DoesntExist::DoesntExistEnum, QString>(DoesntExist::SET, "Fuel Load directory");
+    if (!UirDir.cd("SET")) return QPair<DoesntExist::DoesntExistEnum, QString>(DoesntExist::SET, "directory SET");
+    CHECK_FILE("master.set", SET);
+    CHECK_FILE("user.set", SET);
+    return QPair<DoesntExist::DoesntExistEnum, QString>(DoesntExist::ALL_EXIST, "");
 }
 
 
@@ -85,5 +89,16 @@ QString LangToQString(const Lang::LangEnum& lang)
     default:
         return "";
         break;
+    }
+}
+
+void changeAppLanguage(Lang::LangEnum lang)
+{
+    if (lang != IniData.Lang) {
+        IniData.Lang = lang;
+        translator.load("IRtoolsTranslations_"
+                        + ( (!LangSuffixes[lang].isEmpty()) ? LangSuffixes[lang] : LangSuffixes[Lang::EN] )
+                        ,":/translations");
+        qApp->installTranslator(&translator);
     }
 }

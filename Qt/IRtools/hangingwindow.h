@@ -19,6 +19,8 @@ public:
 protected:
     void closeEvent(QCloseEvent *) Q_DECL_OVERRIDE;
 
+    void changeEvent(QEvent *event) Q_DECL_OVERRIDE;
+
 private slots:
     void on_IRButton_clicked();
 

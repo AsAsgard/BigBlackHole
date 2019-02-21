@@ -13,6 +13,7 @@
 #include "ui_kv_distribution.h"
 #include "kv_settings.h"
 #include "renderarea.h"
+#include "globals.h"
 
 //класс формы - гистограмма распределения Kv
 class Kv_Distribution : public QMainWindow
@@ -35,8 +36,11 @@ signals:
 	int getSpinBoxValue();
 
 protected:
-	void closeEvent(QCloseEvent *) override;
-    void resizeEvent(QResizeEvent *) override;
+    void closeEvent(QCloseEvent *) Q_DECL_OVERRIDE;
+
+    void resizeEvent(QResizeEvent *) Q_DECL_OVERRIDE;
+
+    void changeEvent(QEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
 	//определение положения мыши на графике - отрисовка доп линий
@@ -89,7 +93,7 @@ private:
 	bool AxisSettingNeeded;
 	// МЕТОДЫ
 	// установить новое значение номера ТВС
-	void SetFAnum(const int& newFA_num) { CurrentFA = newFA_num; FA_Num->setText(QString::fromStdWString(L"ТВС " + ExtFunctions::to_wstring(newFA_num)));}
+    void SetFAnum(const int& newFA_num) { CurrentFA = newFA_num; FA_Num->setText(tr("FA %1").arg(newFA_num));}
 	// задание параметров оси X
 	void XAxisSetting(void);
 };

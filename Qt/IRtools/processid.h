@@ -31,12 +31,14 @@ public:
 
 private:
     const ProcessInfo& processInfo;
+
+    static QMap<int, int> programNameToDigits(const QString& name);
 };
 
 extern QMap<Programs::ProgramsEnum, ProcessInfo> ProcessID;
 extern QString thisProgramName;
 
-void InitProcessID(void);
+void initProcessID(void);
 bool processExists(const qint64& pid);
 bool startNewProcess(ProcessInfo& processInfo, QWidget * parent);
 

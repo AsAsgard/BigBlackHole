@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>IRtools</string>
+   <string>IR-tools</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QPushButton" name="IRButton">
@@ -29,10 +29,10 @@
      </font>
     </property>
     <property name="text">
-     <string>Запуск &quot;Имитатора Реактора&quot;</string>
+     <string>Run &quot;Reactor Imitator&quot;</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="ResultsPrc_button">
+   <widget class="QPushButton" name="ResultsPrcButton">
     <property name="geometry">
      <rect>
       <x>80</x>
@@ -47,10 +47,10 @@
      </font>
     </property>
     <property name="text">
-     <string>Обработка результатов</string>
+     <string>Results processing</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="PrepFiles_button">
+   <widget class="QPushButton" name="PrepFilesButton">
     <property name="geometry">
      <rect>
       <x>80</x>
@@ -65,10 +65,10 @@
      </font>
     </property>
     <property name="text">
-     <string>Подготовка файлов программы</string>
+     <string>Files preparation</string>
     </property>
    </widget>
-   <widget class="QLabel" name="IRtools_label">
+   <widget class="QLabel" name="IRtoolsLabel">
     <property name="geometry">
      <rect>
       <x>60</x>
@@ -104,7 +104,7 @@
      <enum>Qt::Horizontal</enum>
     </property>
    </widget>
-   <widget class="QLabel" name="Greetings_label">
+   <widget class="QLabel" name="GreetingsLabel">
     <property name="geometry">
      <rect>
       <x>60</x>
@@ -119,13 +119,13 @@
      </font>
     </property>
     <property name="text">
-     <string>Вас приветствует программа</string>
+     <string>Greetings from the program</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QLabel" name="Choose_option_label">
+   <widget class="QLabel" name="ChooseOptionLabel">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -140,13 +140,13 @@
      </font>
     </property>
     <property name="text">
-     <string>Выберете опцию, которую хотите использовать:</string>
+     <string>Select the option you want to use:</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QLabel" name="Happy_using_label">
+   <widget class="QLabel" name="HappyUsingLabel">
     <property name="geometry">
      <rect>
       <x>60</x>
@@ -161,7 +161,7 @@
      </font>
     </property>
     <property name="text">
-     <string>Приятного использования!</string>
+     <string>Happy using!</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -179,11 +179,11 @@
    </property>
    <widget class="QMenu" name="menu">
     <property name="title">
-     <string>Настройка</string>
+     <string>Settings</string>
     </property>
     <widget class="QMenu" name="Language">
      <property name="title">
-      <string>Язык</string>
+      <string>Language</string>
      </property>
      <addaction name="English"/>
      <addaction name="Russian"/>
@@ -210,7 +210,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Английский</string>
+    <string>English</string>
    </property>
   </action>
   <action name="Russian">
@@ -221,22 +221,22 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Русский</string>
+    <string>Russian</string>
    </property>
   </action>
   <action name="Exit">
    <property name="text">
-    <string>Выход</string>
+    <string>Exit</string>
    </property>
   </action>
   <action name="openHangingWindow">
    <property name="text">
-    <string>Свернуть в панель</string>
+    <string>Roll up into panel</string>
    </property>
   </action>
   <action name="openFuelLoad">
    <property name="text">
-    <string>Открыть загрузку</string>
+    <string>Open fuel load</string>
    </property>
   </action>
  </widget>

@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Настройка линий и осей</string>
+   <string>Lines and axis setting</string>
   </property>
   <widget class="QDoubleSpinBox" name="State1WidthBox">
    <property name="geometry">
@@ -48,7 +48,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Толщина линии:</string>
+    <string>Line thickness:</string>
    </property>
   </widget>
   <widget class="QLabel" name="ColorLabel">
@@ -61,7 +61,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Цвет линии:</string>
+    <string>Line color:</string>
    </property>
   </widget>
   <widget class="QLabel" name="StyleLabel">
@@ -74,7 +74,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Стиль линии:</string>
+    <string>Linestyle:</string>
    </property>
   </widget>
   <widget class="QComboBox" name="State1lineStyleBox">
@@ -91,32 +91,32 @@
    </property>
    <item>
     <property name="text">
-     <string>Нет линии</string>
+     <string>No line</string>
     </property>
    </item>
    <item>
     <property name="text">
-     <string>Сплошная</string>
+     <string>Solid</string>
     </property>
    </item>
    <item>
     <property name="text">
-     <string>Штрихи</string>
+     <string>Dash</string>
     </property>
    </item>
    <item>
     <property name="text">
-     <string>Точки</string>
+     <string>Dot</string>
     </property>
    </item>
    <item>
     <property name="text">
-     <string>Штрих-точка</string>
+     <string>Dash-dot</string>
     </property>
    </item>
    <item>
     <property name="text">
-     <string>Штрих-точка-точка</string>
+     <string>Dash-dot-dot</string>
     </property>
    </item>
   </widget>
@@ -194,32 +194,32 @@
    </property>
    <item>
     <property name="text">
-     <string>Нет линии</string>
+     <string>No line</string>
     </property>
    </item>
    <item>
     <property name="text">
-     <string>Сплошная</string>
+     <string>Solid</string>
     </property>
    </item>
    <item>
     <property name="text">
-     <string>Штрихи</string>
+     <string>Dash</string>
     </property>
    </item>
    <item>
     <property name="text">
-     <string>Точки</string>
+     <string>Dot</string>
     </property>
    </item>
    <item>
     <property name="text">
-     <string>Штрих-точка</string>
+     <string>Dash-dot</string>
     </property>
    </item>
    <item>
     <property name="text">
-     <string>Штрих-точка-точка</string>
+     <string>Dash-dot-dot</string>
     </property>
    </item>
   </widget>
@@ -231,6 +231,9 @@
      <width>471</width>
      <height>23</height>
     </rect>
+   </property>
+   <property name="locale">
+    <locale language="English" country="UnitedKingdom"/>
    </property>
    <property name="standardButtons">
     <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel|QDialogButtonBox::Discard|QDialogButtonBox::Ok|QDialogButtonBox::RestoreDefaults</set>
@@ -299,7 +302,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Изменить цвет...</string>
+    <string>Change color...</string>
    </property>
   </widget>
   <widget class="QPushButton" name="State2ColorChange">
@@ -312,7 +315,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Изменить цвет...</string>
+    <string>Change color...</string>
    </property>
   </widget>
   <widget class="QTextBrowser" name="State2Filename">
@@ -388,7 +391,7 @@
 }</string>
    </property>
    <property name="title">
-    <string>Автоматичекая настройка оси Kv</string>
+    <string>Kv axis auto-setting</string>
    </property>
    <widget class="QRadioButton" name="NoAuto">
     <property name="geometry">
@@ -400,7 +403,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Без автоматической настройки осей</string>
+     <string>Without axis auto-setting</string>
     </property>
    </widget>
    <widget class="QRadioButton" name="HighBorderAuto">
@@ -413,7 +416,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Автоматическая настройка оси только по верхней границе</string>
+     <string>Only Kv axis upper-bound auto-setting </string>
     </property>
    </widget>
    <widget class="QRadioButton" name="AllAuto">
@@ -426,7 +429,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Автоматическая настройка оси по верхней и нижней границам</string>
+     <string>Kv axis upper and lower bound auto-setting</string>
     </property>
    </widget>
   </widget>

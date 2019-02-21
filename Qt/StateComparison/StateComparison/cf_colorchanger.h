@@ -26,7 +26,7 @@ signals:
 	void sendDemoStates(const QPair<double,double>& demoStates);
 
 protected:
-	void closeEvent(QCloseEvent *) override;
+    void closeEvent(QCloseEvent *) Q_DECL_OVERRIDE;
 
 private slots:
 	// вызов ColorDialog-ов и считывание с них цветов

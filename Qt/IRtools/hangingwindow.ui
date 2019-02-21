@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>IRtools</string>
+   <string>IR-tools</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -39,7 +39,7 @@
        </sizepolicy>
       </property>
       <property name="toolTip">
-       <string>Запустить программу &quot;Имитатор Реактора&quot;</string>
+       <string>Run &quot;Reactor Imitator&quot;</string>
       </property>
       <property name="text">
        <string/>
@@ -65,7 +65,7 @@
        </sizepolicy>
       </property>
       <property name="toolTip">
-       <string>Выбрать и запустить программу подготовки файлов</string>
+       <string>Choose and run the files preparation program</string>
       </property>
       <property name="text">
        <string/>
@@ -91,7 +91,7 @@
        </sizepolicy>
       </property>
       <property name="toolTip">
-       <string>Выбрать и запустить программу обработки результатов</string>
+       <string>Choose and run the results processing program</string>
       </property>
       <property name="text">
        <string/>
@@ -121,11 +121,11 @@
    </property>
    <widget class="QMenu" name="menu">
     <property name="title">
-     <string>Настройка</string>
+     <string>Settings</string>
     </property>
     <widget class="QMenu" name="Language">
      <property name="title">
-      <string>Язык</string>
+      <string>Language</string>
      </property>
      <addaction name="English"/>
      <addaction name="Russian"/>
@@ -140,12 +140,12 @@
   </widget>
   <action name="openInitialWindow">
    <property name="text">
-    <string>Открыть основное окно</string>
+    <string>Open initial window</string>
    </property>
   </action>
   <action name="Exit">
    <property name="text">
-    <string>Выход</string>
+    <string>Exit</string>
    </property>
   </action>
   <action name="English">
@@ -153,7 +153,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Английский</string>
+    <string>English</string>
    </property>
   </action>
   <action name="Russian">
@@ -164,12 +164,12 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Русский</string>
+    <string>Russian</string>
    </property>
   </action>
   <action name="openFuelLoad">
    <property name="text">
-    <string>Открыть загрузку</string>
+    <string>Open fuel load</string>
    </property>
   </action>
  </widget>

@@ -9,7 +9,7 @@ QT       += printsupport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = StateComparison-gnu
+TARGET = StateComparison
 TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use
@@ -37,9 +37,9 @@ SOURCES += \
     kv_distribution.cpp \
     kv_settings.cpp \
     main.cpp \
-    pathandfiles.cpp \
     qcustomplot.cpp \
-    renderarea.cpp
+    renderarea.cpp \
+    globals.cpp
 
 HEADERS += \
     cdatastate.h \
@@ -53,9 +53,9 @@ HEADERS += \
     filebrowser.h \
     kv_distribution.h \
     kv_settings.h \
-    pathandfiles.h \
     qcustomplot.h \
-    renderarea.h
+    renderarea.h \
+    globals.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -73,3 +73,8 @@ RESOURCES += \
     filebrowser.qrc
 
 RC_FILE = myicon.rc
+
+TRANSLATIONS += \
+    translations/StateComparisonTranslations_ru.ts
+
+CODECFORSRC   = UTF-8

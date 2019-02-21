@@ -18,6 +18,8 @@ ResultsPrcDialog::ResultsPrcDialog(QWidget *parent) :
     font = ui->StateComparison->font();
     font.setPixelSize(12);
     ui->StateComparison->setFont(font);
+
+    ui->retranslateUi(this);
 }
 
 ResultsPrcDialog::~ResultsPrcDialog()

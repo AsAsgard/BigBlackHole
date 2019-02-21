@@ -5,7 +5,6 @@
 #include "comparisonfield.h"
 #include "kv_distribution.h"
 #include "extfunctions.h"
-#include "pathandfiles.h"
 
 // конструктор
 ComparisonField::ComparisonField(QWidget *parent, const cDataState &rState1, const cDataState &rState2, const QRect &ScreenParameters)
@@ -29,6 +28,10 @@ ComparisonField::ComparisonField(QWidget *parent, const cDataState &rState1, con
 	}
 	// двигаем окно в центр экрана
 	this->move(ScreenParameters.center().x() - this->width()/2,50);
+
+    // установка начального значения языка
+    if (langData.Lang == Lang::RU) ui.Russian->trigger();
+    if (langData.Lang == Lang::EN) ui.English->trigger();
 
 	// изменяем размеры статус-бара, создаем на нем Label, задаем его геометрию и выравнивание и обновляем текст
 	ui.statusBar->resize(this->width(), 20);
@@ -87,6 +90,8 @@ void ComparisonField::on_otherStates_triggered()
 	connect(fileBrowser.data(),SIGNAL(isComparisonFieldActive()),this,SLOT(ComparisonFieldAvaliability()));
 	// файлы выбраны - необходимо изменить состояния
 	connect(fileBrowser.data(),SIGNAL(ChangeStatesFB(const cDataState&, const cDataState&)),this,SLOT(StatesChanged(const cDataState&, const cDataState&)));
+    // оповещение о смене языка
+    connect(fileBrowser.data(),SIGNAL(changeLang(Lang::LangEnum)),this,SLOT(langChanged(Lang::LangEnum)));
 	// показываем обозреватель файлов
 	fileBrowser->show();
 }
@@ -218,7 +223,7 @@ void ComparisonField::on_Kv_diagramActivator_triggered()
 		// скрытие линии слоя
 		connect(this, SIGNAL(hideLayerLine()), KvDistrib.data(), SLOT(LayerLineHiding()));
 		// необходима перенастройка оси X гистограммы
-		connect(this, SIGNAL(resetAxisNeeded(int)), KvDistrib.data(), SLOT(ResetAxisNeededTrue()));
+        connect(this, SIGNAL(resetAxisNeeded()), KvDistrib.data(), SLOT(ResetAxisNeededTrue()));
 		// выбор ТВС на поле картограммы - перерисовка гистограммы Kv при ее наличии
 		connect(renderArea.data(), SIGNAL(select_FA(int)), KvDistrib.data(), SLOT(FA_selected(int)));
 		// получение гистограммой текущего значения высотного слоя
@@ -246,7 +251,7 @@ void ComparisonField::on_Screenshot_triggered()
 {
 	// вызываем диалог сохранения файла
 	QString ScreenFileName = QFileDialog::getSaveFileName(this,
-														  QString::fromStdWString(L"Сохранить как..."),
+                                                          tr("Save as..."),
 														  defaultPath(),
 														  tr("JPG Files (*.jpg);;PNG Files (*.png);;BMP Files (*.bmp);;All Files (*.*)")
 														  );
@@ -261,7 +266,7 @@ void ComparisonField::on_Screenshot_triggered()
 		{ 
 			LayersVisible = true; 
 			ui.groupBox->setVisible(false); 
-			ui.LayerLabel->setText(QString::fromStdWString( L"Слой " + ExtFunctions::to_wstring(ui.spinBox->value()) )); 
+            ui.LayerLabel->setText( tr("Layer %1").arg(ui.spinBox->value()) );
 			ui.LayerLabel->setVisible(true);
 		}
 		// сохраняем изображение
@@ -336,11 +341,13 @@ void ComparisonField::StatusBarUpdate(void)
 {
 	if (cFA_Box::ViewMode() == View::DeltaView)
 	{
-		statusLabel->setText(QString::fromWCharArray(L"Значение: ") + State1FileName() + 
-							 QString::fromWCharArray(L" - ") + State2FileName());
+        statusLabel->setText(tr("Value: %1 - %2")
+                             .arg(State1FileName())
+                             .arg(State2FileName()));
 	} else if (cFA_Box::ViewMode() == View::TwoStatesView) {
-		statusLabel->setText(QString::fromWCharArray(L"Значение 1: ") + State1FileName() + 
-							 QString::fromWCharArray(L", Значение 2: ") + State2FileName());
+        statusLabel->setText(tr("Value 1: %1, Value 2: %2")
+                             .arg(State1FileName())
+                             .arg(State2FileName()));
 	}
 }
 
@@ -381,7 +388,7 @@ void ComparisonField::ColorChangerClosed()
 // закрытие обозревателя файлов - обнуляем указатель на него
 void ComparisonField::FileBrowserClosed()
 {
-	fileBrowser.reset(nullptr);
+    fileBrowser.reset(nullptr);
 }
 
 // если поле есть - вернет true
@@ -407,4 +414,41 @@ void ComparisonField::StatesChanged(const cDataState& rState1, const cDataState&
 		emit resetAxisNeeded();
 		emit select_FA(KvDistrib->currentFA());
 	}
+}
+
+void ComparisonField::on_English_triggered()
+{
+    langChanged(Lang::EN);
+    changeAppLanguage(Lang::EN);
+}
+
+void ComparisonField::on_Russian_triggered()
+{
+    langChanged(Lang::RU);
+    changeAppLanguage(Lang::RU);
+}
+
+void ComparisonField::langChanged(Lang::LangEnum lang)
+{
+    switch (lang) {
+    case Lang::EN:
+        ui.English->setChecked(true);
+        ui.Russian->setChecked(false);
+        break;
+    case Lang::RU:
+        ui.English->setChecked(false);
+        ui.Russian->setChecked(true);
+        break;
+    default:
+        break;
+    }
+}
+
+void ComparisonField::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::LanguageChange) {
+        StatusBarUpdate();
+        ui.retranslateUi(this);
+    }
+    QMainWindow::changeEvent(event);
 }

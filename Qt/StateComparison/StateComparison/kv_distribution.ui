@@ -17,7 +17,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Гистограмма распределения Kv</string>
+   <string>Height Kv distribution graph</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QCustomPlot" name="plotArea" native="true">
@@ -54,10 +54,10 @@
      <normaloff>:/icons/icons/a_ChangeLine.xpm</normaloff>:/icons/icons/a_ChangeLine.xpm</iconset>
    </property>
    <property name="text">
-    <string>Настройка линий и осей</string>
+    <string>Setting lines and axis</string>
    </property>
    <property name="toolTip">
-    <string>Настройка линий  и осей</string>
+    <string>Setting lines and axis</string>
    </property>
   </action>
   <action name="Screenshot">
@@ -66,10 +66,10 @@
      <normaloff>:/icons/icons/a_Camera.xpm</normaloff>:/icons/icons/a_Camera.xpm</iconset>
    </property>
    <property name="text">
-    <string>Screenshot</string>
+    <string>Save screenshot</string>
    </property>
    <property name="toolTip">
-    <string>Сохранить график (Ctrl+P)</string>
+    <string>Save screenshot (Ctrl+P)</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+P</string>

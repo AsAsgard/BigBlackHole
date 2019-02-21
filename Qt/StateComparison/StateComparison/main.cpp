@@ -1,5 +1,5 @@
 ﻿// плагин Windows
-#ifdef WIN32
+#ifdef _WIN32
 #include <QtPlugin>
 Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin)
 #endif
@@ -8,15 +8,26 @@ Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin)
 #include <QTranslator>
 #include <QLibraryInfo>
 #include "filebrowser.h"
+#include "globals.h"
+
+LanguageData langData;
+QString IniFilename("IRtools.ini");
+QTranslator translator;
 
 int main(int argc, char *argv[])
 {
-	// создаем приложение
+    initLangSuffixes();
+    checkIni();
+
+    // создаем приложение
 	QApplication a(argc, argv);
-	// подключаем файлы с переводами и загружаем их в программу
-	QTranslator qtTranslator;
-    qtTranslator.load("qt_ru",":/translations/translations");
-    a.installTranslator(&qtTranslator);
+
+    // установка изначального значения языка приложения
+    translator.load("StateComparisonFullTranslations_"
+                    + ( (!langData.LangSuffixes[langData.Lang].isEmpty()) ? langData.LangSuffixes[langData.Lang] : langData.LangSuffixes[Lang::EN] )
+                    ,":/translations/translations");
+    qApp->installTranslator(&translator);
+
 	// создание нового окна 
 	FileBrowser *w = new FileBrowser;
 	// аттрибут для удаления памяти после закрытия окна

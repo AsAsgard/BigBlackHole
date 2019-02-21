@@ -17,7 +17,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Картограмма сравнения состояний</string>
+   <string>State comparison cartogram</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QGroupBox" name="groupBox">
@@ -52,7 +52,7 @@
  }</string>
     </property>
     <property name="title">
-     <string>Слой</string>
+     <string>Layer</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -117,7 +117,7 @@
      </font>
     </property>
     <property name="text">
-     <string>Слой </string>
+     <string>Layer:</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -147,9 +147,17 @@
      <string notr="true"/>
     </property>
     <property name="title">
-     <string>Файл</string>
+     <string>Settings</string>
     </property>
+    <widget class="QMenu" name="menuLanguage">
+     <property name="title">
+      <string>Language</string>
+     </property>
+     <addaction name="English"/>
+     <addaction name="Russian"/>
+    </widget>
     <addaction name="otherStates"/>
+    <addaction name="menuLanguage"/>
     <addaction name="separator"/>
     <addaction name="Exit"/>
    </widget>
@@ -263,12 +271,12 @@
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>Сравнить другие состояния</string>
+    <string>Compare another states</string>
    </property>
   </action>
   <action name="Exit">
    <property name="text">
-    <string>Выход</string>
+    <string>Exit</string>
    </property>
   </action>
   <action name="ColorFont">
@@ -280,10 +288,10 @@
      <normaloff>:/icons/icons/a_Palette.xpm</normaloff>:/icons/icons/a_Palette.xpm</iconset>
    </property>
    <property name="text">
-    <string/>
+    <string>Colorize</string>
    </property>
    <property name="toolTip">
-    <string>Показать картограмму в цвете</string>
+    <string>Colorize cartogram</string>
    </property>
    <property name="priority">
     <enum>QAction::NormalPriority</enum>
@@ -298,7 +306,7 @@
     <string>Kv_activator</string>
    </property>
    <property name="toolTip">
-    <string>Показать высотное распределение</string>
+    <string>Show Kv height distribution</string>
    </property>
   </action>
   <action name="activateKq">
@@ -312,7 +320,7 @@
     <string>Kq</string>
    </property>
    <property name="toolTip">
-    <string>Показать распределение Kq</string>
+    <string>Show Kq distribution</string>
    </property>
    <property name="font">
     <font>
@@ -333,7 +341,7 @@
     <string>Burn</string>
    </property>
    <property name="toolTip">
-    <string>Показать распределение выгорания</string>
+    <string>Show burnup distribution</string>
    </property>
    <property name="font">
     <font>
@@ -354,7 +362,7 @@
     <string>Kv</string>
    </property>
    <property name="toolTip">
-    <string>Показать распределение Kv</string>
+    <string>Show Kv distribution</string>
    </property>
    <property name="font">
     <font>
@@ -369,7 +377,7 @@
     <string>Max</string>
    </property>
    <property name="toolTip">
-    <string>Максимальное значение отклонения</string>
+    <string>Maximum deviation value</string>
    </property>
    <property name="font">
     <font>
@@ -385,10 +393,10 @@
      <normaloff>:/icons/icons/a_Camera.xpm</normaloff>:/icons/icons/a_Camera.xpm</iconset>
    </property>
    <property name="text">
-    <string>Скрин</string>
+    <string>Screenshot</string>
    </property>
    <property name="toolTip">
-    <string>Сделать скриншот картограммы (Ctrl+O)</string>
+    <string>Save screenshot (Ctrl+O)</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
@@ -403,7 +411,7 @@
     <string>ChangeColors</string>
    </property>
    <property name="toolTip">
-    <string>Настройка цвета ячеек</string>
+    <string>Cells color setting</string>
    </property>
   </action>
   <action name="ChangeViewMode">
@@ -421,10 +429,29 @@
     <string>ChangeViewMode</string>
    </property>
    <property name="toolTip">
-    <string>Показать разность (Ctrl+M)</string>
+    <string>Show as difference (Ctrl+M)</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+M</string>
+   </property>
+  </action>
+  <action name="English">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>English</string>
+   </property>
+  </action>
+  <action name="Russian">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Russian</string>
    </property>
   </action>
  </widget>

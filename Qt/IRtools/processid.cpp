@@ -3,7 +3,7 @@
 #include "processid.h"
 #include "inidata.h"
 
-void InitProcessID(void)
+void initProcessID(void)
 {
     ProcessID.insert(Programs::IR, ProcessInfo(-1, "IR"));
     ProcessID.insert(Programs::SlagsConverter, ProcessInfo(-1, "SlagsConverter"));
@@ -41,46 +41,49 @@ bool processExists(qint64 pid) { return false;}
 #endif
 
 
+QMap<int, int> Find_last_version::programNameToDigits(const QString& name) {
+    bool prevDigit = false;
+    int i = 0;
+    int lhs_ver_pos = name.indexOf(VER_IDENT) + QString(VER_IDENT).length() + 1;
+    QMap<int, int> digits;
+
+    for (; lhs_ver_pos < name.size(); ++lhs_ver_pos) {
+        if (name[lhs_ver_pos].isDigit()) {
+            digits[i] = digits[i]*10 + name[lhs_ver_pos].digitValue();
+            prevDigit = true;
+        } else if (prevDigit) {
+            ++i;
+            prevDigit = false;
+        }
+    }
+
+    return digits;
+}
+
+
 bool Find_last_version::operator()(const QString &lhs, const QString &rhs)
 {
     if (lhs == processInfo.programName || lhs == processInfo.programName + ".exe") return true;
     else if (rhs == processInfo.programName || rhs == processInfo.programName + ".exe") return false;
     if (lhs.contains(VER_IDENT) && rhs.contains(VER_IDENT)) {
         // пробуем найти максимальную версию
-        int lhs_ver_pos = lhs.indexOf(VER_IDENT) + QString(VER_IDENT).length() + 1;
-        int rhs_ver_pos = rhs.indexOf(VER_IDENT) + QString(VER_IDENT).length() + 1;
-        QMap<int,int> lhs_digits;
-        bool prevDigit = false;
-        int i = 0;
-        for (; lhs_ver_pos < lhs.size(); ++lhs_ver_pos) {
-            if (lhs[lhs_ver_pos].isDigit()) {
-                lhs_digits[i] = lhs_digits[i]*10 + lhs[lhs_ver_pos].digitValue();
-            } else if (prevDigit) {
-                ++i;
-                prevDigit = false;
-            }
-        }
-        QMap<int,int> rhs_digits;
-        prevDigit = false;
-        i = 0;
-        for (; rhs_ver_pos < rhs.size(); ++rhs_ver_pos) {
-            if (rhs[rhs_ver_pos].isDigit()) {
-                rhs_digits[i] = rhs_digits[i]*10 + rhs[rhs_ver_pos].digitValue();
-                prevDigit = true;
-            } else if (prevDigit) {
-                ++i;
-                prevDigit = false;
-            }
-        }
+        QMap<int,int> lhs_digits = programNameToDigits(lhs);
+        QMap<int,int> rhs_digits = programNameToDigits(rhs);
+
         if (rhs_digits.empty()) return true;
         else if (lhs_digits.empty()) return false;
         auto lit = lhs_digits.begin();
         auto rit = rhs_digits.begin();
         while (lit != lhs_digits.end() || rit != rhs_digits.end()) {
-            if (lit.value() > rit.value()) return true;
-            else if (lit.value() < rit.value()) return false;
-            if (++lit == lhs_digits.end()) return true;
-            else if (++rit == rhs_digits.end()) return false;
+            if (lit.value() > rit.value()) {
+                return true;
+            } else if (lit.value() < rit.value()) {
+                return false;
+            } else if (++lit == lhs_digits.end()) {
+                return true;
+            } else if (++rit == rhs_digits.end()) {
+                return false;
+            }
         }
         return lhs < rhs;
     } else if (lhs.contains(VER_IDENT)) {
@@ -124,9 +127,14 @@ bool startNewProcess(ProcessInfo& processInfo, QWidget * parent)
     }
     if (processInfo.programName.contains("IR"))
     {
-        QPair<bool, QString> checkPathIRresult = checkPathIR();
-        if (!checkPathIRresult.first)
-        {
+        QPair<DoesntExist::DoesntExistEnum, QString> checkPathIRresult = checkPathIR();
+        if (checkPathIRresult.first == DoesntExist::DLL) {
+            QMessageBox::critical(parent, QMessageBox::tr("Error!"),
+                                  QMessageBox::tr("The IR-tools path doesn't contain %1, necessary for IR. Add %1 to the IR-tools path and run application again.")
+                                  .arg(checkPathIRresult.second),
+                                  QMessageBox::Ok);
+            return false;
+        } else if (checkPathIRresult.first == DoesntExist::SET) {
             QMessageBox::critical(parent, QMessageBox::tr("Error!"),
                                   QMessageBox::tr("The currently selected path to fuel load doesn't contain %1, necessary for IR. Try to change path to fuel load or add %1.")
                                   .arg(checkPathIRresult.second),

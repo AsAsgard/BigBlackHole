@@ -1,7 +1,6 @@
 ﻿#include "kv_distribution.h"
 #include "filebrowser.h"
 #include "fa_box.h"
-#include "pathandfiles.h"
 
 Kv_Distribution::Kv_Distribution(const QPen& oldState1Pen, const QPen& oldState2Pen, const AutoAxis::AutoAxisEnum& oldAutoAxisSetting, QWidget *parent)
 	: QMainWindow(parent),
@@ -29,7 +28,7 @@ Kv_Distribution::Kv_Distribution(const QPen& oldState1Pen, const QPen& oldState2
 	QFont font = ui.plotArea->xAxis->labelFont();
 	font.setPointSize(font.pointSize() + 1);
 	FA_Num->setFont(font);
-	FA_Num->setText(QString::fromStdWString(L"ТВС      " + ExtFunctions::to_wstring(CurrentFA)));
+    FA_Num->setText(tr("FA      %1").arg(CurrentFA));
 	FA_Num->setMinimumSize(FA_Num->rect().width(), FA_Num->rect().height());
 
 	// выравнивание легенды графика и номера ТВС
@@ -65,7 +64,7 @@ Kv_Distribution::Kv_Distribution(const QPen& oldState1Pen, const QPen& oldState2
 	ui.plotArea->clearGraphs();
 	// задаем названия осей
 	ui.plotArea->xAxis->setLabel("Kv");
-	ui.plotArea->yAxis->setLabel(QString::fromWCharArray(L"H, %Hаз"));
+    ui.plotArea->yAxis->setLabel("H, %Hcore");
 
 	// выставляем пределы оси Y
 	ui.plotArea->yAxis->setRange(0, 100);
@@ -134,7 +133,7 @@ void Kv_Distribution::on_Screenshot_triggered()
 {
 	// вызываем диалог сохранения файла
 	QString ScreenFileName = QFileDialog::getSaveFileName(this,
-														  QString::fromStdWString(L"Сохранить как..."),
+                                                          tr("Save as..."),
 														  defaultPath(),
 														  tr("JPG Files (*.jpg);;PNG Files (*.png);;BMP Files (*.bmp);;All Files (*.*)")
 														  );
@@ -440,4 +439,14 @@ void Kv_Distribution::FA_selected(int FA_Number)
 
 	// перерисовываем график
 	ui.plotArea->replot();
+}
+
+void Kv_Distribution::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::LanguageChange) {
+        SetFAnum(currentFA());
+        ui.retranslateUi(this);
+        ui.plotArea->replot();
+    }
+    QMainWindow::changeEvent(event);
 }

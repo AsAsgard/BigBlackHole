@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Выбор программы обработки результатов</string>
+   <string>Choose the results processing program</string>
   </property>
   <widget class="QLabel" name="Choice_label">
    <property name="geometry">
@@ -28,7 +28,7 @@
     </font>
    </property>
    <property name="text">
-    <string>Выберете приложение для запуска:</string>
+    <string>Choose the application to run:</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
@@ -49,7 +49,7 @@
     </font>
    </property>
    <property name="text">
-    <string>Сравнение состояний</string>
+    <string>State comparison</string>
    </property>
    <property name="autoDefault">
     <bool>false</bool>

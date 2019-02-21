@@ -1,6 +1,5 @@
 #include <QDesktopWidget>
 #include <QFileDialog>
-#include <QDebug>
 #include "initialwindow.h"
 #include "ui_initialwindow.h"
 #include "prepfilesdialog.h"
@@ -22,34 +21,26 @@ InitialWindow::InitialWindow(QWidget *parent) :
     statusLabel.reset(new QLabel(ui->statusBar));
     statusLabel->setGeometry(4, 0, this->width(), ui->statusBar->height());
     statusLabel->setAlignment(Qt::AlignVCenter);
-    if (IniData.TrueLang) {
-        if (IniData.Lang == Lang::RU) ui->Russian->trigger();
-        if (IniData.Lang == Lang::EN) ui->English->trigger();
-    } else {
-        ui->English->trigger();
-    }
-    if (IniData.TruePath) {
-        statusLabel->setText(InitialWindow::tr("Fuel load: \"%1\"").arg(IniData.Path));
-    } else {
-        statusLabel->setText(InitialWindow::tr("Bad fuel load is opened. Open fuel load in the menu bar."));
-    }
+    if (IniData.Lang == Lang::RU) ui->Russian->trigger();
+    if (IniData.Lang == Lang::EN) ui->English->trigger();
+    updateStatusBar();
 
     // Fonts
-    QFont font(ui->IRtools_label->font());
+    QFont font(ui->IRtoolsLabel->font());
     font.setPixelSize(64);
-    ui->IRtools_label->setFont(font);
+    ui->IRtoolsLabel->setFont(font);
 
-    font = ui->Choose_option_label->font();
+    font = ui->ChooseOptionLabel->font();
     font.setPixelSize(16);
-    ui->Choose_option_label->setFont(font);
+    ui->ChooseOptionLabel->setFont(font);
 
-    font = ui->Greetings_label->font();
+    font = ui->GreetingsLabel->font();
     font.setPixelSize(16);
-    ui->Greetings_label->setFont(font);
+    ui->GreetingsLabel->setFont(font);
 
-    font = ui->Happy_using_label->font();
+    font = ui->HappyUsingLabel->font();
     font.setPixelSize(13);
-    ui->Happy_using_label->setFont(font);
+    ui->HappyUsingLabel->setFont(font);
 
     font = statusLabel->font();
     font.setPixelSize(13);
@@ -63,13 +54,13 @@ InitialWindow::InitialWindow(QWidget *parent) :
     font.setPixelSize(13);
     ui->IRButton->setFont(font);
 
-    font = ui->PrepFiles_button->font();
+    font = ui->PrepFilesButton->font();
     font.setPixelSize(13);
-    ui->PrepFiles_button->setFont(font);
+    ui->PrepFilesButton->setFont(font);
 
-    font = ui->ResultsPrc_button->font();
+    font = ui->ResultsPrcButton->font();
     font.setPixelSize(13);
-    ui->ResultsPrc_button->setFont(font);
+    ui->ResultsPrcButton->setFont(font);
 }
 
 InitialWindow::~InitialWindow()
@@ -94,12 +85,21 @@ void InitialWindow::to_hanging(void)
     this->close();
 }
 
+void InitialWindow::updateStatusBar()
+{
+    if (IniData.TruePath) {
+        statusLabel->setText(InitialWindow::tr("Fuel load: \"%1\"").arg(IniData.Path));
+    } else {
+        statusLabel->setText(InitialWindow::tr("Bad fuel load is opened. Open fuel load in the menu bar."));
+    }
+}
+
 void InitialWindow::on_IRButton_clicked()
 {
     if (startNewProcess(ProcessID[Programs::IR], this)) to_hanging();
 }
 
-void InitialWindow::on_PrepFiles_button_clicked()
+void InitialWindow::on_PrepFilesButton_clicked()
 {
     PrepFilesDialog prepfilesdialog(this);
     ALIGNMENT(prepfilesdialog, this);
@@ -107,7 +107,7 @@ void InitialWindow::on_PrepFiles_button_clicked()
     if (dial_result) to_hanging();
 }
 
-void InitialWindow::on_ResultsPrc_button_clicked()
+void InitialWindow::on_ResultsPrcButton_clicked()
 {
     ResultsPrcDialog resultprcdialog(this);
     ALIGNMENT(resultprcdialog, this);
@@ -124,23 +124,30 @@ void InitialWindow::on_English_triggered()
 {
     ui->English->setChecked(true);
     ui->Russian->setChecked(false);
-    IniData.TrueLang = true;
-    IniData.Lang = Lang::EN;
+    changeAppLanguage(Lang::EN);
 }
 
 void InitialWindow::on_Russian_triggered()
 {
     ui->English->setChecked(false);
     ui->Russian->setChecked(true);
-    IniData.TrueLang = true;
-    IniData.Lang = Lang::RU;
+    changeAppLanguage(Lang::RU);
+}
+
+void InitialWindow::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::LanguageChange) {
+        ui->retranslateUi(this);
+        updateStatusBar();
+    }
+    QMainWindow::changeEvent(event);
 }
 
 void InitialWindow::on_openFuelLoad_triggered()
 {
     QString Path = QFileDialog::getExistingDirectory(
                         this,
-                        InitialWindow::tr("Open Fuel Load"),
+                        InitialWindow::tr("Open fuel load"),
                         IniData.TruePath ? IniData.Path : "./",
                         QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks
                         );
@@ -148,7 +155,7 @@ void InitialWindow::on_openFuelLoad_triggered()
     {
         IniData.TruePath = true;
         IniData.Path = Path;
-        statusLabel->setText(InitialWindow::tr("Fuel load: \"%1\"").arg(IniData.Path));
+        updateStatusBar();
         QMessageBox::information(this, QMessageBox::tr("Information"),
                                  QMessageBox::tr("Fuel Load was changed to: \"%1\"")
                                  .arg(IniData.Path),

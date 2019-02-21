@@ -6,6 +6,7 @@
 #include <QtWidgets/QMainWindow>
 #include "cdatastate.h"
 #include "ui_filebrowser.h"
+#include "globals.h"
 
 // класс формы - выбор файлов с состояниями для сравнения
 class FileBrowser : public QMainWindow
@@ -24,11 +25,19 @@ signals:
 	void ChangeStatesFB(const cDataState& State1, const cDataState& State2);
 	// закрытие окна
 	void closing();
+    // оповещение о смене языка
+    void changeLang(Lang::LangEnum);
 
 protected:
-	void closeEvent(QCloseEvent *) override;
+    void closeEvent(QCloseEvent *) Q_DECL_OVERRIDE;
+
+    void changeEvent(QEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
+    // выбор языка
+    void on_English_triggered();
+    void on_Russian_triggered();
+
 	// выбор файлов через обозреватель
 	void on_File1Button_clicked();
 	void on_File2Button_clicked();
@@ -50,6 +59,7 @@ private:
 	//МЕТОДЫ
 	// проверить правильность входных данных (для статус-бара)
 	void CheckingFileNames(void); 
+    bool errCheck(ErrCode ErrFlag, QString FileName);
 };
 
 #endif // FILEBROWSER_H

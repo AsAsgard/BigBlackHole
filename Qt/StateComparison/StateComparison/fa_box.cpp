@@ -310,6 +310,16 @@ void cFA_Box::recolor(const double &newValue)
 	}
 }
 
+void cFA_Box::resetTitleFAText(void)
+{
+    if (titleFA) {
+        FA_Number.setText(tr("No."));
+        Delta.setText(tr("Value"));
+        State1.setText(tr("Value 1"));
+        State2.setText(tr("Value 2"));
+    }
+}
+
 // выравнивание текста всегда посередине, установка значений шрифтов для нужных Label-ов (в зависимости от режима просмотра)
 void cFA_Box::SetLabelParameters(void)
 {

@@ -1,7 +1,7 @@
 ﻿#include <QColorDialog>
 #include "kv_settings.h"
 #include "filebrowser.h"
-#include "pathandfiles.h"
+#include "globals.h"
 
 // конструктор
 // задаем параметры отрисовки и автоматической настройки оси X
@@ -190,7 +190,7 @@ void KV_Settings::on_State1ColorChange_clicked()
 	// вызываем ColorDialog
 	QColor newState1Color = QColorDialog::getColor( newState1Pen.color(),
 													this,
-													QString::fromWCharArray(L"Выберете цвет"));
+                                                    tr("Select color"));
 	// если цвет выбран
 	if (newState1Color.isValid())
 	{
@@ -208,7 +208,7 @@ void KV_Settings::on_State2ColorChange_clicked()
 	// вызываем ColorDialog
 	QColor newState2Color = QColorDialog::getColor( newState2Pen.color(),
 													this,
-													QString::fromWCharArray(L"Выберете цвет"));
+                                                    tr("Select color"));
 	// если цвет выбран
 	if (newState2Color.isValid())
 	{

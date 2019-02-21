@@ -4,7 +4,6 @@
 #include <QFont>
 #include "filebrowser.h"
 #include "comparisonfield.h"
-#include "pathandfiles.h"
 
 using namespace std;
 
@@ -18,12 +17,16 @@ FileBrowser::FileBrowser(QWidget *parent)
 	FileBrowser::setFixedSize(FileBrowser::size());
 	FileBrowser::setWindowModality(Qt::ApplicationModal);
 
+    // установка начального значения языка
+    if (langData.Lang == Lang::RU) ui.Russian->trigger();
+    if (langData.Lang == Lang::EN) ui.English->trigger();
+
 	// изменяем размеры статус-бара, создаем на нем Label, задаем его геометрию и выравнивание и вписываем текст
 	ui.statusBar->resize(this->width(), 20);
 	statusLabel.reset(new QLabel(ui.statusBar));
 	statusLabel->setGeometry(4, 0, this->width(), ui.statusBar->height());
 	statusLabel->setAlignment(Qt::AlignVCenter);
-	statusLabel->setText(QString::fromStdWString(L"Введите названия файлов с состояниями, которые необходимо сравнить."));
+    CheckingFileNames();
 	
 	// параметры шрифтов для совместимости с high dpi
 	QFont font(ui.File1Label->font());
@@ -46,11 +49,11 @@ FileBrowser::~FileBrowser() {}
 void FileBrowser::on_File1Button_clicked() 
 {
 	// обновляем статус-бар
-	statusLabel->setText(QString::fromStdWString(L"Выберете файл с первым состоянием."));
+    statusLabel->setText(tr("Select file with the first state."));
 	// вызываем диалог открытия файла
 	QString FileName = QFileDialog::getOpenFileName(
 		this,
-		QString::fromStdWString(L"Выберете файл со первым состоянием."),
+        tr("Select file with the first state."),
 		defaultPath(),
 		"All files (*.*);;Dat file (*.dat);;Text file (*.txt);;Exp files (*.exp)"
 		);
@@ -62,7 +65,8 @@ void FileBrowser::on_File1Button_clicked()
 		// заносим имя файла в LineEdit
 		ui.File1lineEdit->setText(FileName);
 		// делаем запись в TextBrowser-е
-		ui.textBrowser->append(QString::fromStdWString(L"В графу \"Первое состояние\" помещен файл "+ FileName.toStdWString() + L"."));
+        ui.textBrowser->append(tr("File %1 is placed to the line \"First state\".")
+                               .arg(FileName));
 	}
 	// обновляем статус-бар
 	CheckingFileNames();
@@ -72,11 +76,11 @@ void FileBrowser::on_File1Button_clicked()
 void FileBrowser::on_File2Button_clicked() 
 {
 	// обновляем статус-бар
-	statusLabel->setText(QString::fromStdWString(L"Выберете файл со вторым состоянием."));
+    statusLabel->setText(tr("Select file with the second state."));
 	// вызываем диалог открытия файла
 	QString FileName = QFileDialog::getOpenFileName(
 		this,
-		QString::fromStdWString(L"Выберете файл со вторым состоянием."),
+        tr("Select file with the second state."),
 		defaultPath(),
 		"All files (*.*);;Dat file (*.dat);;Text file (*.txt);;Exp files (*.exp)"
 		);
@@ -88,7 +92,8 @@ void FileBrowser::on_File2Button_clicked()
 		// заносим имя файла в LineEdit
 		ui.File2lineEdit->setText(FileName);
 		// делаем запись в TextBrowser-е
-		ui.textBrowser->append(QString::fromStdWString(L"В графу \"Второе состояние\" помещен файл "+ FileName.toStdWString() + L"."));
+        ui.textBrowser->append(tr("File %1 is placed to the line \"Second state\".")
+                               .arg(FileName));
 	}
 	// обновляем статус-бар
 	CheckingFileNames();
@@ -109,7 +114,8 @@ void FileBrowser::on_File1lineEdit_editingFinished()
 			// задаем новый стандартный путь
 			setDefaultPath(FileName.left(FileName.lastIndexOf('/')+1));
 			// делаем запись в TextBrowser-е
-			ui.textBrowser->append(QString::fromStdWString(L"В графу \"Первое состояние\" помещен файл "+ FileName.toStdWString() + L"."));
+            ui.textBrowser->append(tr("File %1 is placed to the line \"First state\".")
+                                   .arg(FileName));
 		}
 		// обновляем статус-бар
 		CheckingFileNames();
@@ -134,7 +140,8 @@ void FileBrowser::on_File2lineEdit_editingFinished()
 			// задаем новый стандартный путь
 			setDefaultPath(FileName.left(FileName.lastIndexOf('/')+1));
 			// делаем запись в TextBrowser-е
-			ui.textBrowser->append(QString::fromStdWString(L"В графу \"Второе состояние\" помещен файл "+ FileName.toStdWString() + L"."));
+            ui.textBrowser->append(tr("File %1 is placed to the line \"Second state\".")
+                                   .arg(FileName));
 		}
 		// обновляем статус-бар
 		CheckingFileNames();
@@ -146,32 +153,35 @@ void FileBrowser::on_File2lineEdit_textEdited(QString) { CheckingFileNames();}
 
 
 // макрос проверки ошибок при считывании файлов
-#define ERR_CHECK(ErrFlag, FileName)			{	\
-	/* если функция завершилась неудачно	*/		\
-	if (ErrFlag != 0) {								\
-		/* выводим сообщение об ошибке		*/		\
-		ui.textBrowser->append("");					\
-		ui.textBrowser->append(QString::fromWCharArray(L"ОШИБКА!"));		\
-		if (ErrFlag == 1)		{											\
-			/* выводим сообщение об ошибке в пути к файлу		*/			\
-			ui.textBrowser->append(QString::fromWCharArray(L"Ошибка при открытии файла! Такого файла не существует!"));			\
-			ui.textBrowser->append(QString::fromWCharArray(L"Проблема с файлом ")+FileName+QString::fromWCharArray(L". Проверьте правильность указанного пути."));			\
-			statusLabel->setText(QString::fromWCharArray(L"Проверьте правильность пути файла с проблемой."));					\
-		} else if (ErrFlag == 2) {					\
-			/* выводим сообщение об ошибке в формате файла		*/			\
-			ui.textBrowser->append(QString::fromWCharArray(L"Ошибка при считывании файла! Неверный формат файла! Данные не были считаны!"));		\
-			ui.textBrowser->append(QString::fromWCharArray(L"Проблема с файлом ")+FileName+QString::fromWCharArray(L". Проверьте правильность формата файла."));			\
-			statusLabel->setText(QString::fromWCharArray(L"Проверьте правильность формата файла с проблемой."));				\
-		} else {									\
-			/* выводим сообщение о непредвиденной ошибке		*/			\
-			ui.textBrowser->append(QString::fromWCharArray(L"Проблема с файлом ")+FileName);									\
-			ui.textBrowser->append(QString::fromWCharArray(L"Попробуйте изменить файл и перезапустить программу. Если проблема останется, свяжитесь с разработчиком."));	\
-			statusLabel->setText(QString::fromWCharArray(L"Попробуйте изменить файл с проблемой и перезапустить программу."));	\
-		}											\
-		/* возвращаем предыдущее число слоев и выходим из функции	*/		\
-		cDataState::setRememberedNumLayers();		\
-		return;										\
-	}												\
+bool FileBrowser::errCheck(ErrCode ErrFlag, QString FileName)
+{
+    /* если функция завершилась неудачно	*/
+    if (ErrFlag != 0) {
+        /* выводим сообщение об ошибке		*/
+        ui.textBrowser->append("");
+        ui.textBrowser->append(tr("Error!"));
+        if (ErrFlag == 1) {
+            /* выводим сообщение об ошибке в пути к файлу		*/
+            ui.textBrowser->append(tr("Error during opening the file! This file doesn't exist!"));
+            ui.textBrowser->append(tr("Problem with the file %1. Check the correctness of the path.").arg(FileName));
+            statusLabel->setText(tr("Check the correctness of the path to the file with problem."));
+        } else if (ErrFlag == 2) {
+            /* выводим сообщение об ошибке в формате файла		*/
+            ui.textBrowser->append(tr("Error during reading the file! Wrong data format! The data wasn't read!"));
+            ui.textBrowser->append(tr("Problem with the file %1. Check the correctness of the data format.").arg(FileName));
+            statusLabel->setText(tr("Check the data format of the file with problem."));
+        } else {
+            /* выводим сообщение о непредвиденной ошибке		*/
+            ui.textBrowser->append(tr("Problem with the file %1.").arg(FileName));
+            ui.textBrowser->append(tr("Try to change the file with problem and restart the program. If the problem persists, contact the developer."));
+            statusLabel->setText(tr("Try to change the file with problem and restart the program."));
+        }
+        /* возвращаем предыдущее число слоев и выходим из функции	*/
+        cDataState::setRememberedNumLayers();
+        return false;
+    } else {
+        return true;
+    }
 }
 
 
@@ -181,26 +191,26 @@ void FileBrowser::on_Compare_clicked()
 	// начальная проверка - как при обновлении статус-бара, только с занесением данных также и в TextBrowser
 	if (ui.File1lineEdit->text().isEmpty() && ui.File2lineEdit->text().isEmpty())
 	{
-		ui.textBrowser->append(QString::fromStdWString(L"Введите названия файлов с состояниями в графы \"Первое состояние\" и \"Второе состояние\"."));
-		statusLabel->setText(QString::fromStdWString(L"Введите названия файлов с состояниями, которые необходимо сравнить."));
+        ui.textBrowser->append(tr("Enter the names of the files with reactor states to the lines \"First state\" and \"Second state\"."));
+        statusLabel->setText(tr("Enter the names of the files with reactor states you want to compare."));
 		return;
 	}
 	if (ui.File1lineEdit->text().isEmpty())
 	{
-		ui.textBrowser->append(QString::fromStdWString(L"Введите название файла с первым состоянием в графу \"Первое состояние\"."));
-		statusLabel->setText(QString::fromStdWString(L"Введите название файла с первым состоянием в графу \"Первое состояние\"."));
+        ui.textBrowser->append(tr("Enter the name of the file with the first state into the line \"First state\"."));
+        statusLabel->setText(tr("Enter the name of the file with the first state into the line \"First state\"."));
 		return;
 	}
 	if (ui.File2lineEdit->text().isEmpty())
 	{
-		ui.textBrowser->append(QString::fromStdWString(L"Введите название файла со вторым состоянием в графу \"Второе состояние\"."));
-		statusLabel->setText(QString::fromStdWString(L"Введите название файла со вторым состоянием в графу \"Второе состояние\"."));
+        ui.textBrowser->append(tr("Enter the name of the file with the second state into the line \"Second state\"."));
+        statusLabel->setText(tr("Enter the name of the file with the second state into the line \"Second state\"."));
 		return;
 	}
 	if (ui.File1lineEdit->text() == ui.File2lineEdit->text())
 	{
-		ui.textBrowser->append(QString::fromStdWString(L"Выберете для сравнения различные файлы."));
-		statusLabel->setText(QString::fromStdWString(L"Необходимо выбрать различные файлы для сравнения."));
+        ui.textBrowser->append(tr("Select different files to compare."));
+        statusLabel->setText(tr("Select different files to compare."));
 		return;
 	}
 	// создаем состояния, в которые будем считывать, а также переменные с именами файлов и флаг ошибки
@@ -218,14 +228,14 @@ void FileBrowser::on_Compare_clicked()
 	// пытаемся считать первое состояние
     ErrFlag = State1.ReadDataFromFile(FileName1);
 	//проверка на отсутствие ошибок
-	ERR_CHECK(ErrFlag, FileName1);
+    if (!errCheck(ErrFlag, FileName1)) return;
 
 	// считываем второе имя файла
 	FileName2 = ui.File2lineEdit->text();
 	// пытаемся считать второе состояние
     ErrFlag = State2.ReadDataFromFile(FileName2);
 	//проверка на отсутствие ошибок
-	ERR_CHECK(ErrFlag, FileName2);
+    if (!errCheck(ErrFlag, FileName2)) return;
 	
 	// если все хорошо - запоминаем имена файлов со считанными состояниями
 	setState1FileName(FileName1.mid(FileName1.lastIndexOf('/')+1));
@@ -254,33 +264,59 @@ void FileBrowser::CheckingFileNames(void)
 	// если оба LineEdit-а пусты
 	if (ui.File1lineEdit->text().isEmpty() && ui.File2lineEdit->text().isEmpty())
 	{
-		statusLabel->setText(QString::fromStdWString(L"Введите названия файлов с состояниями, которые необходимо сравнить."));
+        statusLabel->setText(tr("Enter the names of the files with reactor states you want to compare."));
 		return;
 	}
 	// если пуст только первый LineEdit
 	if (ui.File1lineEdit->text().isEmpty())
 	{
-		statusLabel->setText(QString::fromStdWString(L"Введите название файла с первым состоянием в графу \"Первое состояние\"."));
+        statusLabel->setText(tr("Enter the name of the file with the first state into the line \"First state\"."));
 		return;
 	}
 	// если пуст только второй LineEdit
 	if (ui.File2lineEdit->text().isEmpty())
 	{
-		statusLabel->setText(QString::fromStdWString(L"Введите название файла со вторым состоянием в графу \"Второе состояние\"."));
+        statusLabel->setText(tr("Enter the name of the file with the second state into the line \"Second state\"."));
 		return;
 	}
 	// если в LineEdit-ах одинаковые названия файлов
 	if (ui.File1lineEdit->text() == ui.File2lineEdit->text())
 	{
-		statusLabel->setText(QString::fromStdWString(L"Необходимо выбрать различные файлы для сравнения."));
+        statusLabel->setText(tr("Select different files to compare."));
 		return;
 	}
 	// ничего из вышеперечисленного
-	statusLabel->setText(QString::fromStdWString(L"Нажмите кнопку \"Сравнить\" для сравнения состояний."));
+    statusLabel->setText(tr("Click the button \"Compare\" to compare states."));
 }
 
 // оповещение картограммы о закрытии обозревателя файлов
 void FileBrowser::closeEvent(QCloseEvent *)
 {
 	emit closing();
+}
+
+
+void FileBrowser::on_English_triggered()
+{
+    ui.English->setChecked(true);
+    ui.Russian->setChecked(false);
+    changeAppLanguage(Lang::EN);
+}
+
+void FileBrowser::on_Russian_triggered()
+{
+    ui.English->setChecked(false);
+    ui.Russian->setChecked(true);
+    changeAppLanguage(Lang::RU);
+}
+
+void FileBrowser::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::LanguageChange) {
+        ui.textBrowser->append(tr("The language is changed to %1. Subsequent messages will be displayed using this language.")
+                               .arg(LangToQString(langData.Lang)));
+        CheckingFileNames();
+        ui.retranslateUi(this);
+    }
+    QMainWindow::changeEvent(event);
 }

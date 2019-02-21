@@ -256,3 +256,12 @@ void RenderArea::StatesBinding(const cDataState& rState1, const cDataState& rSta
     if(maxBurn > DBL_CALIBRATION)	cFA_Box::SetLimiters(Parameters::Burn, maxBurn);
     if(maxKv > DBL_CALIBRATION)	cFA_Box::SetLimiters(Parameters::Kv, maxKv);
 }
+
+
+void RenderArea::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::LanguageChange) {
+        titleFA.resetTitleFAText();
+    }
+    QWidget::changeEvent(event);
+}

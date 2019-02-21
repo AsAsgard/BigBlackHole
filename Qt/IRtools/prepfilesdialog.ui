@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Выбор программы подготовки файлов</string>
+   <string>Choose the files preparation program</string>
   </property>
   <widget class="QPushButton" name="SlagsConverter">
    <property name="geometry">
@@ -28,7 +28,7 @@
     </font>
    </property>
    <property name="text">
-    <string>Конвертирование шлаков</string>
+    <string>Slags converter</string>
    </property>
    <property name="autoDefault">
     <bool>false</bool>
@@ -49,7 +49,7 @@
     </font>
    </property>
    <property name="text">
-    <string>Выберете приложение для запуска:</string>
+    <string>Choose the application to run:</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
@@ -70,7 +70,7 @@
     </font>
    </property>
    <property name="text">
-    <string>Создание master.set и user.set</string>
+    <string>Master.set and user.set creator</string>
    </property>
    <property name="autoDefault">
     <bool>false</bool>

@@ -2,6 +2,7 @@
 #define FA_BOX_H
 
 #include <map>
+#include <QCoreApplication>
 #include <QLabel>
 #include <QPainterPath>
 
@@ -24,6 +25,9 @@ namespace View {
 
 // ТВС, отрисовывающаяся на поле
 class cFA_Box{
+
+    Q_DECLARE_TR_FUNCTIONS(cFA_Box)
+
 private : 
 	// ПОЛЯ
 	// 
@@ -150,11 +154,8 @@ public :
 					if (defaultLimitColors.empty()) SetDefaultLimitColors();
 					if (LimitColors.empty()) SetLimitColorsFromDefaults();
 					if (titleFA) {
-						FA_Number.setText(QString::fromWCharArray(L"№"));
-						Delta.setText(QString::fromWCharArray(L"Значение"));
-						State1.setText(QString::fromWCharArray(L"Значение 1"));
-						State2.setText(QString::fromWCharArray(L"Значение 2"));
-						SetColor(Qt::white);
+                        resetTitleFAText();
+                        SetColor(Qt::white);
 					}
 				}
 	cFA_Box(const cFA_Box &rFA);
@@ -199,6 +200,7 @@ public :
 	// установка родителей для всех Label-ов и нового значения переменной
 	void SetParent(QWidget * parent) {Parent = parent; Delta.setParent(Parent); FA_Number.setParent(Parent); State1.setParent(Parent); State2.setParent(Parent);}
 	void SetVisible(bool visible);
+    void resetTitleFAText(void);
 	static void SetColorful(bool colorful);
 	static void SetMinColor(const Parameters::ParametersEnum& parameter, const QColor& NewMinColor);
 	static void SetMaxColor(const Parameters::ParametersEnum& parameter, const QColor& NewMaxColor);

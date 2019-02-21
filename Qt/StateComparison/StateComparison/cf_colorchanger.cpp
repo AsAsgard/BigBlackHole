@@ -3,7 +3,7 @@
 #include "cf_colorchanger.h"
 #include "fa_box.h"
 #include "filebrowser.h"
-#include "pathandfiles.h"
+#include "globals.h"
 
 // конструктор
 CF_ColorChanger::CF_ColorChanger(QWidget *parent)
@@ -15,10 +15,13 @@ CF_ColorChanger::CF_ColorChanger(QWidget *parent)
 	CF_ColorChanger::setWindowModality(Qt::ApplicationModal);
 
 	// вставляем имена файлов в соответствующие поля
-	ui.textBrowser_Max->setText(QString::fromWCharArray(L"Значение величины в ") + State1FileName() +
-								QString::fromWCharArray(L" больше, чем в ") + State2FileName());
-	ui.textBrowser_Min->setText(QString::fromWCharArray(L"Значение величины в ") + State1FileName() +
-								QString::fromWCharArray(L" меньше, чем в ") + State2FileName());
+    ui.textBrowser_Max->setText(tr("Value in %1 is more than in %2")
+                                .arg(State1FileName())
+                                .arg(State2FileName()));
+    ui.textBrowser_Min->setText(tr("Value in %1 is less than in %2")
+                                .arg(State1FileName())
+                                .arg(State2FileName()));
+
 	// копируем настройки цветов из текущих значений картограммы
 	newLimitColors[Parameters::Kq].maxColor = cFA_Box::GetMaxColor(Parameters::Kq);
 	newLimitColors[Parameters::Kq].minColor = cFA_Box::GetMinColor(Parameters::Kq);
@@ -134,7 +137,7 @@ void CF_ColorChanger::on_ChangeMaxColor_clicked()
 	// вызываем ColorDialog
 	QColor newMaxColor = QColorDialog::getColor( newLimitColors.at(activeMode).maxColor,
 												 this,
-											 	 QString::fromWCharArray(L"Выберете цвет"));
+                                                 tr("Select color"));
 	// если цвет выбран
 	if (newMaxColor.isValid())
 	{
@@ -151,7 +154,7 @@ void CF_ColorChanger::on_ChangeMinColor_clicked()
 	// вызываем ColorDialog
 	QColor newMinColor = QColorDialog::getColor( newLimitColors.at(activeMode).minColor,
 												 this,
-												 QString::fromWCharArray(L"Выберете цвет"));
+                                                 tr("Select color"));
 	// если цвет выбран
 	if (newMinColor.isValid())
 	{
