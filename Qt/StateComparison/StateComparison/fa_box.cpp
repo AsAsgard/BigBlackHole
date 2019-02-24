@@ -1,4 +1,14 @@
-﻿#include <sstream>
+﻿/*
+ * class cFA_Box (implementation)
+ *
+ * Version 1.13
+ *
+ * Writed by Brylkin Dmitry. 03.12.2018
+ *
+ * Last changed by Brylkin Dmitry. 22.02.2019
+ */
+
+#include <sstream>
 #include <iomanip>
 #include <cmath>
 #include "fa_box.h"

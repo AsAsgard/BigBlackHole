@@ -1,4 +1,14 @@
-﻿#include <QColorDialog>
+﻿/*
+ * class CF_ColorChanger (implementation)
+ *
+ * Version 1.7
+ *
+ * Writed by Brylkin Dmitry. 11.12.2018
+ *
+ * Last changed by Brylkin Dmitry. 22.02.2019
+ */
+
+#include <QColorDialog>
 #include "extfunctions.h"
 #include "cf_colorchanger.h"
 #include "fa_box.h"

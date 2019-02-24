@@ -1,6 +1,16 @@
 ﻿#ifndef CSTATE_H
 #define CSTATE_H
 
+/*
+ * class cState
+ *
+ * Version 1.3
+ *
+ * Writed by Brylkin Dmitry. 28.11.2018
+ *
+ * Last changed by Brylkin Dmitry. 22.02.2019
+ */
+
 #include <vector>
 #include <string>
 #include <limits>
@@ -8,7 +18,14 @@
 
 class cDataState;
 
-// данные для конкретной ТВС
+/*
+ * Класс cState
+ *
+ * Используется для хранения данных состояния конкретной ТВС в активной зоне
+ *
+ * Хранимые данные: Kq, Burn, Kv (по слоям)
+ * Данные хранятся для всех слоев, реализованы методы работы с данными
+ */
 class cState
 {
     // друзья
@@ -36,9 +53,9 @@ private:
 public:
     // конструкторы
     cState() 
-	: Kq(std::numeric_limits<double>::quiet_NaN())
-	, Burn(std::numeric_limits<double>::quiet_NaN())
-	, quiet_NaN(std::numeric_limits<double>::quiet_NaN()) {}
+        : Kq(std::numeric_limits<double>::quiet_NaN())
+        , Burn(std::numeric_limits<double>::quiet_NaN())
+        , quiet_NaN(std::numeric_limits<double>::quiet_NaN()) {}
 
     cState(const double &newKq,
            const double &newBurn,
@@ -49,16 +66,16 @@ public:
 		   , quiet_NaN(std::numeric_limits<double>::quiet_NaN()) {}
     
 	explicit cState(const std::vector<double> &newKv) 
-	: Kq(std::numeric_limits<double>::quiet_NaN())
-	, Burn(std::numeric_limits<double>::quiet_NaN())
-	, Kv(newKv) 
-	, quiet_NaN(std::numeric_limits<double>::quiet_NaN()) {}
+        : Kq(std::numeric_limits<double>::quiet_NaN())
+        , Burn(std::numeric_limits<double>::quiet_NaN())
+        , Kv(newKv)
+        , quiet_NaN(std::numeric_limits<double>::quiet_NaN()) {}
     
 	cState(const cState &newState) 
-	: Kq(newState.Kq)
-	, Burn(newState.Burn)
-	, Kv(newState.Kv)
-	, quiet_NaN(std::numeric_limits<double>::quiet_NaN()) {}
+        : Kq(newState.Kq)
+        , Burn(newState.Burn)
+        , Kv(newState.Kv)
+        , quiet_NaN(std::numeric_limits<double>::quiet_NaN()) {}
     // получение значений
     const double& GetKq() const { return Kq;}
     const double& GetBurn() const { return Burn;}

@@ -1,4 +1,14 @@
-﻿#include <stdexcept>
+﻿/*
+ * class cState (implementation)
+ *
+ * Version 1.1
+ *
+ * Writed by Brylkin Dmitry. 28.11.2018
+ *
+ * Last changed by Brylkin Dmitry. 22.02.2019
+ */
+
+#include <stdexcept>
 
 #include "cstate.h"
 #include "extfunctions.h"

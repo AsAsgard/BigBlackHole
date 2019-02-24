@@ -1,6 +1,16 @@
 ﻿#ifndef KV_DISTRIBUTION_H
 #define KV_DISTRIBUTION_H
 
+/*
+ * class Kv_Distribution
+ *
+ * Version 1.8
+ *
+ * Writed by Brylkin Dmitry. 08.12.2018
+ *
+ * Last changed by Brylkin Dmitry. 22.02.2019
+ */
+
 #include <QMainWindow>
 #include <QScopedPointer>
 #include <QWeakPointer>
@@ -15,7 +25,17 @@
 #include "renderarea.h"
 #include "globals.h"
 
-//класс формы - гистограмма распределения Kv
+/*
+ * Класс Kv_Distribution
+ *
+ * Окно с графиком распределения Kv по высоте
+ * для конкретной ТВС.
+ *
+ * При открытии - ТВС с максимальным отклонением
+ * величины Kv для двух состояний.
+ *
+ * Выбор ТВС ощуществляется щелчком по нужной ТВС на картограмме.
+ */
 class Kv_Distribution : public QMainWindow
 {
 	Q_OBJECT
@@ -36,10 +56,11 @@ signals:
 	int getSpinBoxValue();
 
 protected:
+    // закрыти окна
     void closeEvent(QCloseEvent *) Q_DECL_OVERRIDE;
-
+    // событие изменения размеров окна
     void resizeEvent(QResizeEvent *) Q_DECL_OVERRIDE;
-
+    // событие изменения чего-либо (используется для изменения языка формы)
     void changeEvent(QEvent *event) Q_DECL_OVERRIDE;
 
 private slots:

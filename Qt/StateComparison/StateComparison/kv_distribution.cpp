@@ -1,4 +1,14 @@
-﻿#include "kv_distribution.h"
+﻿/*
+ * class Kv_Distribution (implementation)
+ *
+ * Version 1.8
+ *
+ * Writed by Brylkin Dmitry. 08.12.2018
+ *
+ * Last changed by Brylkin Dmitry. 22.02.2019
+ */
+
+#include "kv_distribution.h"
 #include "filebrowser.h"
 #include "fa_box.h"
 
@@ -441,12 +451,16 @@ void Kv_Distribution::FA_selected(int FA_Number)
 	ui.plotArea->replot();
 }
 
+// событие изменения чего-либо (используется для изменения языка окна)
 void Kv_Distribution::changeEvent(QEvent *event)
 {
+    // если событие - изменение языка, то делаем перевод формы
     if (event->type() == QEvent::LanguageChange) {
         SetFAnum(currentFA());
         ui.retranslateUi(this);
+        // перестраиваем графики - для обновления текста
         ui.plotArea->replot();
     }
+    // отправка сигнала классу родителю
     QMainWindow::changeEvent(event);
 }

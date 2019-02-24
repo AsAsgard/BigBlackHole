@@ -1,6 +1,16 @@
 ﻿#ifndef FILEBROWSER_H
 #define FILEBROWSER_H
 
+/*
+ * class FileBrowser
+ *
+ * Version 1.11
+ *
+ * Writed by Brylkin Dmitry. 30.11.2018
+ *
+ * Last changed by Brylkin Dmitry. 22.02.2019
+ */
+
 #include <QLabel>
 #include <QScopedPointer>
 #include <QtWidgets/QMainWindow>
@@ -8,7 +18,17 @@
 #include "ui_filebrowser.h"
 #include "globals.h"
 
-// класс формы - выбор файлов с состояниями для сравнения
+/*
+ * Класс FileBrowser
+ *
+ * Окно выбора файлов с состояниями для сравнения
+ *
+ * Используется как начальное окно программы
+ * и для изменения сравниваемых состояний.
+ *
+ * Предоставляет возможность смены языка программы,
+ * а также отображает действия пользователя.
+ */
 class FileBrowser : public QMainWindow
 {
 	Q_OBJECT
@@ -25,12 +45,11 @@ signals:
 	void ChangeStatesFB(const cDataState& State1, const cDataState& State2);
 	// закрытие окна
 	void closing();
-    // оповещение о смене языка
-    void changeLang(Lang::LangEnum);
 
 protected:
+    // закрытие окна
     void closeEvent(QCloseEvent *) Q_DECL_OVERRIDE;
-
+    // событие изменения чего-либо (используется для изменения языка формы)
     void changeEvent(QEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
@@ -59,7 +78,8 @@ private:
 	//МЕТОДЫ
 	// проверить правильность входных данных (для статус-бара)
 	void CheckingFileNames(void); 
-    bool errCheck(ErrCode ErrFlag, QString FileName);
+    // проверка кода ошибки после считывания файлов
+    bool errCheck(ErrCode ErrFlag, const QString& FileName);
 };
 
 #endif // FILEBROWSER_H

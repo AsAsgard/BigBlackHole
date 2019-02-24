@@ -1,13 +1,33 @@
 ﻿#ifndef DEMOAREACF_H
 #define DEMOAREACF_H
 
+/*
+ * class demoAreaCF
+ *
+ * Version 1.1
+ *
+ * Writed by Brylkin Dmitry. 15.12.2018
+ *
+ * Last changed by Brylkin Dmitry. 22.02.2019
+ */
+
 #include <QFrame>
 #include <QPaintEvent>
 #include <QPainter>
 #include <QPair>
 #include "fa_box.h"
 
-// демонстрационное поле для настройки картограммы ТВС
+/*
+ * Класс demoAreaCF
+ *
+ * Демонстрационное поле для настройки картограммы ТВС
+ *
+ * Показывает ТВС с некими значениями (для примера) в цвете,
+ * который выбрал пользователь
+ *
+ * Используется окном настройки цветов картограммы
+ * для демонстрации измененного цвета
+ */
 class demoAreaCF : public QFrame
 {
 	Q_OBJECT

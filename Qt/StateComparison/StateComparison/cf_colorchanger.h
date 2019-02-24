@@ -1,11 +1,34 @@
 ﻿#ifndef CF_COLORCHANGER_H
 #define CF_COLORCHANGER_H
 
+/*
+ * class CF_ColorChanger
+ *
+ * Version 1.5
+ *
+ * Writed by Brylkin Dmitry. 11.12.2018
+ *
+ * Last changed by Brylkin Dmitry. 22.02.2019
+ */
+
 #include <QWidget>
 #include "fa_box.h"
 #include "ui_cf_colorchanger.h"
 
-// класс формы - меню настройки окна картограммы
+
+/*
+ * Класс CF_ColorChanger
+ *
+ * Настройка параметров окна картограммы
+ *
+ * Включает в себя возможность изменения
+ * цветов ТВС, в зависимости от отклонения
+ * значений параметров.
+ *
+ * Цвета можно изменить для каждого параметра.
+ *
+ * Отображает ТВС с выбранными параметрами.
+ */
 class CF_ColorChanger : public QWidget
 {
 	Q_OBJECT
@@ -26,6 +49,7 @@ signals:
 	void sendDemoStates(const QPair<double,double>& demoStates);
 
 protected:
+    // закрытие окна
     void closeEvent(QCloseEvent *) Q_DECL_OVERRIDE;
 
 private slots:

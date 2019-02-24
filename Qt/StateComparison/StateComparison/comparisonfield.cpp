@@ -1,4 +1,14 @@
-﻿#include <sstream>
+﻿/*
+ * class ComparisonField (implementation)
+ *
+ * Version 1.18
+ *
+ * Writed by Brylkin Dmitry. 01.12.2019
+ *
+ * Last changed by Brylkin Dmitry. 22.02.2019
+ */
+
+#include <sstream>
 #include <iomanip>
 #include <QFileDialog>
 #include <QDesktopWidget>
@@ -90,8 +100,6 @@ void ComparisonField::on_otherStates_triggered()
 	connect(fileBrowser.data(),SIGNAL(isComparisonFieldActive()),this,SLOT(ComparisonFieldAvaliability()));
 	// файлы выбраны - необходимо изменить состояния
 	connect(fileBrowser.data(),SIGNAL(ChangeStatesFB(const cDataState&, const cDataState&)),this,SLOT(StatesChanged(const cDataState&, const cDataState&)));
-    // оповещение о смене языка
-    connect(fileBrowser.data(),SIGNAL(changeLang(Lang::LangEnum)),this,SLOT(langChanged(Lang::LangEnum)));
 	// показываем обозреватель файлов
 	fileBrowser->show();
 }
@@ -416,20 +424,28 @@ void ComparisonField::StatesChanged(const cDataState& rState1, const cDataState&
 	}
 }
 
+// выбран английский язык
 void ComparisonField::on_English_triggered()
 {
+    // установка значений для checkable action-ов меню языка
     langChanged(Lang::EN);
+    // изменение языка приложения
     changeAppLanguage(Lang::EN);
 }
 
+// выбран русский язык
 void ComparisonField::on_Russian_triggered()
 {
+    // установка значений для checkable action-ов меню языка
     langChanged(Lang::RU);
+    // изменение языка приложения
     changeAppLanguage(Lang::RU);
 }
 
+// задание значений checkable action-ов меню языка на текущее значение
 void ComparisonField::langChanged(Lang::LangEnum lang)
 {
+    // задание значений checkable action-ов меню языка на пришедшее значение
     switch (lang) {
     case Lang::EN:
         ui.English->setChecked(true);
@@ -444,11 +460,15 @@ void ComparisonField::langChanged(Lang::LangEnum lang)
     }
 }
 
+// событие изменения чего-либо (используется для изменения языка окна)
 void ComparisonField::changeEvent(QEvent *event)
 {
+    // если событие - изменение языка, то делаем перевод формы
     if (event->type() == QEvent::LanguageChange) {
+        langChanged(langData.Lang);
         StatusBarUpdate();
         ui.retranslateUi(this);
     }
+    // отправка сигнала классу родителю
     QMainWindow::changeEvent(event);
 }

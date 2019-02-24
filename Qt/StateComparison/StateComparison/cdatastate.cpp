@@ -1,4 +1,14 @@
-﻿#include <QFile>
+﻿/*
+ * class cDataState (implementation)
+ *
+ * Version 1.8
+ *
+ * Writed by Brylkin Dmitry. 28.11.2018
+ *
+ * Last changed by Brylkin Dmitry. 22.02.2019
+ */
+
+#include <QFile>
 #include <QTextStream>
 
 #include "cdatastate.h"

@@ -1,4 +1,14 @@
-﻿#include "demoareakv.h"
+﻿/*
+ * class demoAreaKv (implementation)
+ *
+ * Version 1.1
+ *
+ * Writed by Brylkin Dmitry. 15.12.2018
+ *
+ * Last changed by Brylkin Dmitry. 22.02.2019
+ */
+
+#include "demoareakv.h"
 
 // конструктор - задаем пустые параметры отрисовки
 demoAreaKv::demoAreaKv(QWidget *parent)

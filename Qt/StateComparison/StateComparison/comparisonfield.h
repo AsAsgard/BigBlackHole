@@ -1,6 +1,16 @@
 ﻿#ifndef COMPARISONFIELD_H
 #define COMPARISONFIELD_H
 
+/*
+ * class ComparisonField
+ *
+ * Version 1.14
+ *
+ * Writed by Brylkin Dmitry. 01.12.2019
+ *
+ * Last changed by Brylkin Dmitry. 22.02.2019
+ */
+
 #include <QLabel>
 #include <QScopedPointer>
 #include <QSharedPointer>
@@ -13,7 +23,22 @@
 #include "cf_colorchanger.h"
 #include "globals.h"
 
-// класс формы - основное окно с картограммой
+
+/*
+ * Класс ComparisonField
+ *
+ * Основное окно с картограммой.
+ * Включает в себя поле для рисования
+ * и возможности управления им.
+ *
+ * Также через него осуществляется смена языка
+ * приложения и возможность вызова
+ * графика распределения Kv по высоте
+ * для конкретной ТВС.
+ *
+ * Выбор ТВС для графика Kv
+ * осуществляется путем нажатия на ТВС на картограмме.
+ */
 class ComparisonField : public QMainWindow
 {
 	Q_OBJECT
@@ -38,8 +63,9 @@ signals:
 	void sendRenderAreaPointer(QWeakPointer<RenderArea>);
 
 protected:
+    // произошло изменение размеров окна
     void resizeEvent(QResizeEvent *) Q_DECL_OVERRIDE;
-
+    // событие изменения чего-либо (используется для изменения языка формы)
     void changeEvent(QEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
@@ -48,7 +74,6 @@ private slots:
     // выбор языка
     void on_English_triggered();
     void on_Russian_triggered();
-    void langChanged(Lang::LangEnum lang);
 	// активировать гистограмму Kv
 	void on_Kv_diagramActivator_triggered();
 	// сделать скрин картограммы
@@ -104,6 +129,8 @@ private:
 	// МЕТОДЫ
 	// обновить статус-бар
 	void StatusBarUpdate(void);
+    // задание значений checkable action-ов меню языка на текущее значение
+    void langChanged(Lang::LangEnum lang);
 };
 
 #endif // COMPARISONFIELD_H

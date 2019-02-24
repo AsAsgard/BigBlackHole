@@ -1,4 +1,14 @@
-﻿#include "demoareacf.h"
+﻿/*
+ * class demoAreaCF (implementation)
+ *
+ * Version 1.1
+ *
+ * Writed by Brylkin Dmitry. 15.12.2018
+ *
+ * Last changed by Brylkin Dmitry. 22.02.2019
+ */
+
+#include "demoareacf.h"
 
 // конструктор - цвет не задаем, задаем основные параметры демонстрационной ТВС
 demoAreaCF::demoAreaCF(QWidget *parent)

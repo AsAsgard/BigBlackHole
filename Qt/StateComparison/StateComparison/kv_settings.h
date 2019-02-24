@@ -1,6 +1,16 @@
 ﻿#ifndef KV_SETTINGS_H
 #define KV_SETTINGS_H
 
+/*
+ * class KV_Settings
+ *
+ * Version 1.4
+ *
+ * Writed by Brylkin Dmitry. 14.12.2018
+ *
+ * Last changed by Brylkin Dmitry. 22.02.2019
+ */
+
 #include <QPair>
 #include <QWidget>
 #include <QPen>
@@ -15,7 +25,17 @@ namespace AutoAxis {
 	};
 }
 
-// класс формы - настройка параметров гистограммы Kv
+/*
+ * Класс KV_Settings
+ *
+ * Настройка параметров гистограммы Kv
+ *
+ * Включает в себя возможность изменения
+ * толщины, цвета и типа линии, а
+ * также параметра автоматической настройки оси Kv.
+ *
+ * Отображает линии с выбранными параметрами.
+ */
 class KV_Settings : public QWidget
 {
 	Q_OBJECT
@@ -38,6 +58,7 @@ signals:
 	void sendNewSettings(const QPen& newState1Pen, const QPen& newState2Pen, AutoAxis::AutoAxisEnum newAutoAxisSetting);
 
 protected:
+    // событие закрытия окна
     void closeEvent(QCloseEvent *) Q_DECL_OVERRIDE;
 
 private slots:

@@ -1,6 +1,16 @@
 ﻿#ifndef RENDERAREA_H
 #define RENDERAREA_H
 
+/*
+ * class RenderArea
+ *
+ * Version 1.10
+ *
+ * Writed by Brylkin Dmitry. 02.12.2018
+ *
+ * Last changed by Brylkin Dmitry. 22.02.2019
+ */
+
 #include <QPaintEvent>
 #include <QResizeEvent>
 #include <QMouseEvent>
@@ -9,7 +19,14 @@
 #include "cdatastate.h"
 #include "fa_box.h"
 
-// класс области рисования на виджете
+/*
+ * Класс RenderArea
+ *
+ * Поле для рисования в окне картограммы ТВС
+ *
+ * Используется для отображения всех рисуемых объектов:
+ * ТВС с надписями и ТВС-легенда
+ */
 class RenderArea : public QWidget
 {
     Q_OBJECT
@@ -35,11 +52,13 @@ signals:
 	bool isKvDiagramActive();
 
 protected:
+    // перерисовка поля
     void paintEvent(QPaintEvent *) Q_DECL_OVERRIDE;
+    // событие изменения размеров окна
     void resizeEvent(QResizeEvent *) Q_DECL_OVERRIDE;
 	// нажатие мыши на поле - необходимо для выбора ТВС на гистограмме Kv
     void mousePressEvent(QMouseEvent * mouse) Q_DECL_OVERRIDE;
-
+    // событие изменения чего-либо (используется для изменения языка формы)
     void changeEvent(QEvent *event) Q_DECL_OVERRIDE;
 
 private slots:

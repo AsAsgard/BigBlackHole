@@ -1,6 +1,16 @@
 ﻿#ifndef CDATASTATE_H
 #define CDATASTATE_H
 
+/*
+ * class cDataState
+ *
+ * Version 1.5
+ *
+ * Writed by Brylkin Dmitry. 28.11.2018
+ *
+ * Last changed by Brylkin Dmitry. 22.02.2019
+ */
+
 #include <QString>
 #include <map>
 
@@ -8,7 +18,14 @@
 
 typedef unsigned int ErrCode;
 
-// данные конкретного состояния в активной зоне
+/*
+ * Класс cDataState
+ *
+ * Используется для хранения данных конкретного состояния в активной зоне
+ *
+ * Хранимые данные: Kq, Burn, Kv (по слоям)
+ * Данные хранятся для всех ТВС и слоев, реализованы методы работы с данными
+ */
 class cDataState
 {
 	// друзья

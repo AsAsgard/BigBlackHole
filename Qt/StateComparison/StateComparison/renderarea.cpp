@@ -1,4 +1,14 @@
-﻿#include <algorithm>
+﻿/*
+ * class RenderArea (implementation)
+ *
+ * Version 1.11
+ *
+ * Writed by Brylkin Dmitry. 02.12.2018
+ *
+ * Last changed by Brylkin Dmitry. 22.02.2019
+ */
+
+#include <algorithm>
 
 #include "renderarea.h"
 #include "comparisonfield.h"
@@ -257,11 +267,13 @@ void RenderArea::StatesBinding(const cDataState& rState1, const cDataState& rSta
     if(maxKv > DBL_CALIBRATION)	cFA_Box::SetLimiters(Parameters::Kv, maxKv);
 }
 
-
+// событие изменения чего-либо (используется для изменения языка окна)
 void RenderArea::changeEvent(QEvent *event)
 {
+    // если событие - изменение языка, то делаем перевод формы
     if (event->type() == QEvent::LanguageChange) {
         titleFA.resetTitleFAText();
     }
+    // отправка сигнала классу родителю
     QWidget::changeEvent(event);
 }

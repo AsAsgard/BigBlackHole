@@ -1,11 +1,30 @@
 ﻿#ifndef DEMOAREAKV_H
 #define DEMOAREAKV_H
 
+/*
+ * class demoAreaKv
+ *
+ * Version 1.1
+ *
+ * Writed by Brylkin Dmitry. 15.12.2018
+ *
+ * Last changed by Brylkin Dmitry. 22.02.2019
+ */
+
 #include <QFrame>
 #include <QPaintEvent>
 #include <QPainter>
 
-// демонстрационное поле для настройки гистограммы Kv
+/*
+ * Класс demoAreaKv
+ *
+ * Демонстрационное поле для настройки графика высотного распределения Kv
+ *
+ * Показывает линии графика, цвет, размер и тип которой выбрал пользователь
+ *
+ * Используется окном настройки графика высотного распределения Kv
+ * для демонстрации изменений линий графика
+ */
 class demoAreaKv : public QFrame
 {
 	Q_OBJECT

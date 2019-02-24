@@ -1,6 +1,16 @@
 ﻿#ifndef EXTFUNCTIONS
 #define EXTFUNCTIONS
 
+/*
+ * Вспомогательные шаблоные функции для переводов
+ *
+ * Version 1.5
+ *
+ * Writed by Brylkin Dmitry. 28.11.2018
+ *
+ * Last changed by Brylkin Dmitry. 22.02.2019
+ */
+
 #include <QString>
 #include <sstream>
 #include <string>
@@ -10,7 +20,9 @@
 #define DBL_CALIBRATION 1.e-07
 #endif // DBL_CALIBRATION
 
-// шаблонные функции перевода в строки (отсутствуют в компиляторе msvc-2010)
+/*
+ *  Шаблонные функции перевода в строки (отсутствуют в компиляторе msvc-2010)
+ */
 namespace ExtFunctions {
 	template<typename T> std::string to_string(const T &inparam)
 	{

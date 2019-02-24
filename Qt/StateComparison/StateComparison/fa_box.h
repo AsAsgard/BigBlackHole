@@ -1,12 +1,24 @@
 ﻿#ifndef FA_BOX_H
 #define FA_BOX_H
 
-#include <map>
+/*
+ * class cFA_Box
+ *
+ * Version 1.10
+ *
+ * Writed by Brylkin Dmitry. 03.12.2018
+ *
+ * Last changed by Brylkin Dmitry. 22.02.2019
+ */
+
 #include <QCoreApplication>
 #include <QLabel>
 #include <QPainterPath>
+#include <map>
 
-// перечисление параметров, отображаемых в программе
+/*
+ *  Перечисление параметров, отображаемых в программе
+ */
 namespace  Parameters {
 	enum ParametersEnum {
 		Kq = 0,
@@ -15,7 +27,9 @@ namespace  Parameters {
 	};
 }
 
-// перечисление режимов вывода данных
+/*
+ * Перечисление режимов вывода данных на картограмме
+ */
 namespace View {
 	enum ViewEnum {
 		DeltaView = 0,
@@ -23,14 +37,21 @@ namespace View {
 	};
 }
 
-// ТВС, отрисовывающаяся на поле
+/*
+ * Класс cFA_Box
+ *
+ * ТВС, отображающаяся на поле для рисования
+ *
+ * Хранит в себе все поля и методы управления
+ * ТВС на поле.
+ */
 class cFA_Box{
 
     Q_DECLARE_TR_FUNCTIONS(cFA_Box)
 
 private : 
 	// ПОЛЯ
-	// 
+    // рамка ТВС для отрисовки
 	QPainterPath painterPath;
 	// надпись с номером ТВС
 	QLabel FA_Number;
@@ -113,37 +134,21 @@ public :
 	cFA_Box(int x_cent, int y_cent, 
 			int newWidth, int newHeight,
 			int newFA_Number, const QString& newDeltaText,
-			QWidget *parent = 0) : 
-				FA_Number(parent), Delta(parent),
-				State1(parent), State2(parent),
-				_width(newWidth), _height(newHeight), Visible(false),
-				center(x_cent, y_cent), Color(Qt::gray), Parent(parent), titleFA(false)
-				{ 
-					recalculate(); 
-					if (Limiters.empty()) SetDefaultLimiters(); 
-					if (defaultLimitColors.empty()) SetDefaultLimitColors();
-					if (LimitColors.empty()) SetLimitColorsFromDefaults();
-					SetFA_Number(newFA_Number);
-					SetDelta(newDeltaText);
-				}
+            QWidget *parent = 0)
+                : cFA_Box(x_cent, y_cent, newWidth, newHeight, newFA_Number, parent)
+                {
+                    SetDelta(newDeltaText);
+                }
 	cFA_Box(int x_cent, int y_cent, 
 			int newWidth, int newHeight,
 			int newFA_Number, double newDelta,
-			QWidget *parent = 0) : 
-				FA_Number(parent), Delta(parent),
-				State1(parent), State2(parent),
-				_width(newWidth), _height(newHeight), Visible(false),
-				center(x_cent, y_cent), Color(Qt::gray), Parent(parent), titleFA(false) 
-				{ 
-					recalculate(); 
-					if (Limiters.empty()) SetDefaultLimiters(); 
-					if (defaultLimitColors.empty()) SetDefaultLimitColors();
-					if (LimitColors.empty()) SetLimitColorsFromDefaults();
-					SetFA_Number(newFA_Number); 
-					SetDelta(newDelta);
-				}
+            QWidget *parent = 0)
+                : cFA_Box(x_cent, y_cent, newWidth, newHeight, newFA_Number, parent)
+                {
+                    SetDelta(newDelta);
+                }
 	cFA_Box(bool _titleFA, int x_cent = 0, int y_cent = 0, 
-			int newWidth = 0, int newHeight = 0, QWidget *parent = 0) :
+            int newWidth = 0, int newHeight = 0, QWidget *parent = 0) :
 				FA_Number(parent), Delta(parent),
 				State1(parent), State2(parent),
 				_width(newWidth), _height(newHeight), Visible(false),

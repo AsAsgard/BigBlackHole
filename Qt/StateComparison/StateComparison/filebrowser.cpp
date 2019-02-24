@@ -1,4 +1,14 @@
-﻿#include <QDesktopWidget>
+﻿/*
+ * class FileBrowser (implementation)
+ *
+ * Version 1.15
+ *
+ * Writed by Brylkin Dmitry. 30.11.2018
+ *
+ * Last changed by Brylkin Dmitry. 22.02.2019
+ */
+
+#include <QDesktopWidget>
 #include <QFileDialog>
 #include <QString>
 #include <QFont>
@@ -152,8 +162,8 @@ void FileBrowser::on_File2lineEdit_editingFinished()
 void FileBrowser::on_File2lineEdit_textEdited(QString) { CheckingFileNames();}
 
 
-// макрос проверки ошибок при считывании файлов
-bool FileBrowser::errCheck(ErrCode ErrFlag, QString FileName)
+// проверка ошибок при считывании файлов
+bool FileBrowser::errCheck(ErrCode ErrFlag, const QString& FileName)
 {
     /* если функция завершилась неудачно	*/
     if (ErrFlag != 0) {
@@ -295,28 +305,37 @@ void FileBrowser::closeEvent(QCloseEvent *)
 	emit closing();
 }
 
-
+// выбран английский язык
 void FileBrowser::on_English_triggered()
 {
+    // установка значений для checkable action-ов меню языка
     ui.English->setChecked(true);
     ui.Russian->setChecked(false);
+    // изменение языка приложения
     changeAppLanguage(Lang::EN);
 }
 
+// выбран русский язык
 void FileBrowser::on_Russian_triggered()
 {
+    // установка значений для checkable action-ов меню языка
     ui.English->setChecked(false);
     ui.Russian->setChecked(true);
+
+    // изменение языка приложения
     changeAppLanguage(Lang::RU);
 }
 
+// событие изменения чего-либо (используется для изменения языка окна)
 void FileBrowser::changeEvent(QEvent *event)
 {
+    // если событие - изменение языка, то делаем перевод формы и выводим сообщение
     if (event->type() == QEvent::LanguageChange) {
         ui.textBrowser->append(tr("The language is changed to %1. Subsequent messages will be displayed using this language.")
-                               .arg(LangToQString(langData.Lang)));
+                               .arg(langToQString(langData.Lang)));
         CheckingFileNames();
         ui.retranslateUi(this);
     }
+    // отправка сигнала классу родителю
     QMainWindow::changeEvent(event);
 }

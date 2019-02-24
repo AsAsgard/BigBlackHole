@@ -54,18 +54,18 @@ p, li { white-space: pre-wrap; }
         <translation>В ячейках указаны цвета максимумов отклонения (значения - для примера)</translation>
     </message>
     <message>
-        <location filename="../cf_colorchanger.cpp" line="18"/>
+        <location filename="../cf_colorchanger.cpp" line="26"/>
         <source>Value in %1 is more than in %2</source>
         <translation>Значение в файле %1 больше, чем в файле %2</translation>
     </message>
     <message>
-        <location filename="../cf_colorchanger.cpp" line="21"/>
+        <location filename="../cf_colorchanger.cpp" line="29"/>
         <source>Value in %1 is less than in %2</source>
         <translation>Значение в файле %1 меньше, чем в файле %2</translation>
     </message>
     <message>
-        <location filename="../cf_colorchanger.cpp" line="140"/>
-        <location filename="../cf_colorchanger.cpp" line="157"/>
+        <location filename="../cf_colorchanger.cpp" line="148"/>
+        <location filename="../cf_colorchanger.cpp" line="165"/>
         <source>Select color</source>
         <translation>Выберете цвет</translation>
     </message>
@@ -73,27 +73,27 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>ComparisonField</name>
     <message>
-        <location filename="../comparisonfield.cpp" line="254"/>
+        <location filename="../comparisonfield.cpp" line="260"/>
         <source>Save as...</source>
         <translation>Сохранить как...</translation>
     </message>
     <message>
-        <location filename="../comparisonfield.cpp" line="256"/>
+        <location filename="../comparisonfield.cpp" line="262"/>
         <source>JPG Files (*.jpg);;PNG Files (*.png);;BMP Files (*.bmp);;All Files (*.*)</source>
         <translation>JPG Files (*.jpg);;PNG Files (*.png);;BMP Files (*.bmp);;All Files (*.*)</translation>
     </message>
     <message>
-        <location filename="../comparisonfield.cpp" line="269"/>
+        <location filename="../comparisonfield.cpp" line="275"/>
         <source>Layer %1</source>
         <translation>Слой %1</translation>
     </message>
     <message>
-        <location filename="../comparisonfield.cpp" line="344"/>
+        <location filename="../comparisonfield.cpp" line="350"/>
         <source>Value: %1 - %2</source>
         <translation>Значение: %1 - %2</translation>
     </message>
     <message>
-        <location filename="../comparisonfield.cpp" line="348"/>
+        <location filename="../comparisonfield.cpp" line="354"/>
         <source>Value 1: %1, Value 2: %2</source>
         <translation>Значение1: %1, Значение 2: %2</translation>
     </message>
@@ -259,71 +259,71 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>FileBrowser</name>
     <message>
-        <location filename="../filebrowser.cpp" line="52"/>
-        <location filename="../filebrowser.cpp" line="56"/>
+        <location filename="../filebrowser.cpp" line="60"/>
+        <location filename="../filebrowser.cpp" line="64"/>
         <source>Select file with the first state.</source>
         <translation>Выберете файл с первым состоянием.</translation>
     </message>
     <message>
-        <location filename="../filebrowser.cpp" line="68"/>
-        <location filename="../filebrowser.cpp" line="117"/>
+        <location filename="../filebrowser.cpp" line="76"/>
+        <location filename="../filebrowser.cpp" line="125"/>
         <source>File %1 is placed to the line &quot;First state&quot;.</source>
         <translation>В графу &quot;Первое состояние&quot; помещен файл %1.</translation>
     </message>
     <message>
-        <location filename="../filebrowser.cpp" line="79"/>
-        <location filename="../filebrowser.cpp" line="83"/>
+        <location filename="../filebrowser.cpp" line="87"/>
+        <location filename="../filebrowser.cpp" line="91"/>
         <source>Select file with the second state.</source>
         <translation>Выберете файл со вторым состоянием.</translation>
     </message>
     <message>
-        <location filename="../filebrowser.cpp" line="95"/>
-        <location filename="../filebrowser.cpp" line="143"/>
+        <location filename="../filebrowser.cpp" line="103"/>
+        <location filename="../filebrowser.cpp" line="151"/>
         <source>File %1 is placed to the line &quot;Second state&quot;.</source>
         <translation>В графу &quot;Второе состояние&quot; помещен файл %1.</translation>
     </message>
     <message>
-        <location filename="../filebrowser.cpp" line="162"/>
+        <location filename="../filebrowser.cpp" line="170"/>
         <source>Error!</source>
         <translation>Ошибка!</translation>
     </message>
     <message>
-        <location filename="../filebrowser.cpp" line="165"/>
+        <location filename="../filebrowser.cpp" line="173"/>
         <source>Error during opening the file! This file doesn&apos;t exist!</source>
         <translation>Ошибка при открытии файла! Указанный файл не существует!</translation>
     </message>
     <message>
-        <location filename="../filebrowser.cpp" line="166"/>
+        <location filename="../filebrowser.cpp" line="174"/>
         <source>Problem with the file %1. Check the correctness of the path.</source>
         <translation>Проблема с файлом %1. Проверьте правильность пути к файлу.</translation>
     </message>
     <message>
-        <location filename="../filebrowser.cpp" line="167"/>
+        <location filename="../filebrowser.cpp" line="175"/>
         <source>Check the correctness of the path to the file with problem.</source>
         <translation>Проверьте правильность пути к файлу с проблемой.</translation>
     </message>
     <message>
-        <location filename="../filebrowser.cpp" line="170"/>
+        <location filename="../filebrowser.cpp" line="178"/>
         <source>Error during reading the file! Wrong data format! The data wasn&apos;t read!</source>
         <translation>Ошибка при чтении файла! Неверный формат данных в файле! Данные не были считаны!</translation>
     </message>
     <message>
-        <location filename="../filebrowser.cpp" line="171"/>
+        <location filename="../filebrowser.cpp" line="179"/>
         <source>Problem with the file %1. Check the correctness of the data format.</source>
         <translation>Проблема с файлом %1. Проверьте правильность формата данных в файле.</translation>
     </message>
     <message>
-        <location filename="../filebrowser.cpp" line="172"/>
+        <location filename="../filebrowser.cpp" line="180"/>
         <source>Check the data format of the file with problem.</source>
         <translation>Проверьте правильность формата данных в файле с проблемой.</translation>
     </message>
     <message>
-        <location filename="../filebrowser.cpp" line="175"/>
+        <location filename="../filebrowser.cpp" line="183"/>
         <source>Problem with the file %1.</source>
         <translation>Проблема с файлом %1.</translation>
     </message>
     <message>
-        <location filename="../filebrowser.cpp" line="316"/>
+        <location filename="../filebrowser.cpp" line="332"/>
         <source>The language is changed to %1. Subsequent messages will be displayed using this language.</source>
         <translation>Язык был изменен на %1. Последующие сообщения будут выводиться на этом языке.</translation>
     </message>
@@ -332,49 +332,49 @@ p, li { white-space: pre-wrap; }
         <translation type="vanished">Проблема с файлом %1</translation>
     </message>
     <message>
-        <location filename="../filebrowser.cpp" line="176"/>
+        <location filename="../filebrowser.cpp" line="184"/>
         <source>Try to change the file with problem and restart the program. If the problem persists, contact the developer.</source>
         <translation>Попробуйте заменить файл с проблемой и перезапустить программу. Если проблема не решена, обратитесь к разработчику.</translation>
     </message>
     <message>
-        <location filename="../filebrowser.cpp" line="177"/>
+        <location filename="../filebrowser.cpp" line="185"/>
         <source>Try to change the file with problem and restart the program.</source>
         <translation>Попробуйте заменить файл с проблемой и перезапустить программу.</translation>
     </message>
     <message>
-        <location filename="../filebrowser.cpp" line="194"/>
+        <location filename="../filebrowser.cpp" line="202"/>
         <source>Enter the names of the files with reactor states to the lines &quot;First state&quot; and &quot;Second state&quot;.</source>
         <translation>Введите названия файлов с состояниями реактора в графы &quot;Первое состояние&quot; и &quot;Второе состояние&quot;.</translation>
     </message>
     <message>
-        <location filename="../filebrowser.cpp" line="195"/>
-        <location filename="../filebrowser.cpp" line="267"/>
+        <location filename="../filebrowser.cpp" line="203"/>
+        <location filename="../filebrowser.cpp" line="275"/>
         <source>Enter the names of the files with reactor states you want to compare.</source>
         <translation>Введите названия файлов с состояниями, которые хотите сравнить.</translation>
     </message>
     <message>
-        <location filename="../filebrowser.cpp" line="200"/>
-        <location filename="../filebrowser.cpp" line="201"/>
-        <location filename="../filebrowser.cpp" line="273"/>
+        <location filename="../filebrowser.cpp" line="208"/>
+        <location filename="../filebrowser.cpp" line="209"/>
+        <location filename="../filebrowser.cpp" line="281"/>
         <source>Enter the name of the file with the first state into the line &quot;First state&quot;.</source>
         <translation>Введить название файла с первым состоянием в графу &quot;Первое состояние&quot;.</translation>
     </message>
     <message>
-        <location filename="../filebrowser.cpp" line="206"/>
-        <location filename="../filebrowser.cpp" line="207"/>
-        <location filename="../filebrowser.cpp" line="279"/>
+        <location filename="../filebrowser.cpp" line="214"/>
+        <location filename="../filebrowser.cpp" line="215"/>
+        <location filename="../filebrowser.cpp" line="287"/>
         <source>Enter the name of the file with the second state into the line &quot;Second state&quot;.</source>
         <translation>Введить название файла со вторым состоянием в графу &quot;Второе состояние&quot;.</translation>
     </message>
     <message>
-        <location filename="../filebrowser.cpp" line="212"/>
-        <location filename="../filebrowser.cpp" line="213"/>
-        <location filename="../filebrowser.cpp" line="285"/>
+        <location filename="../filebrowser.cpp" line="220"/>
+        <location filename="../filebrowser.cpp" line="221"/>
+        <location filename="../filebrowser.cpp" line="293"/>
         <source>Select different files to compare.</source>
         <translation>Выберете различные файлы для сравнения состояний.</translation>
     </message>
     <message>
-        <location filename="../filebrowser.cpp" line="289"/>
+        <location filename="../filebrowser.cpp" line="297"/>
         <source>Click the button &quot;Compare&quot; to compare states.</source>
         <translation>Нажмите кнопку &quot;Сравнить&quot; для сравнения состояний.</translation>
     </message>
@@ -527,8 +527,8 @@ p, li { white-space: pre-wrap; }
         <translation>Автоматическая настройка оси по верхней и нижней границам</translation>
     </message>
     <message>
-        <location filename="../kv_settings.cpp" line="193"/>
-        <location filename="../kv_settings.cpp" line="211"/>
+        <location filename="../kv_settings.cpp" line="201"/>
+        <location filename="../kv_settings.cpp" line="219"/>
         <source>Select color</source>
         <translation>Выберете цвет</translation>
     </message>
@@ -536,22 +536,22 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>Kv_Distribution</name>
     <message>
-        <location filename="../kv_distribution.cpp" line="31"/>
+        <location filename="../kv_distribution.cpp" line="39"/>
         <source>FA      %1</source>
         <translation>ТВС      %1</translation>
     </message>
     <message>
-        <location filename="../kv_distribution.cpp" line="136"/>
+        <location filename="../kv_distribution.cpp" line="144"/>
         <source>Save as...</source>
         <translation>Сохранить как...</translation>
     </message>
     <message>
-        <location filename="../kv_distribution.cpp" line="138"/>
+        <location filename="../kv_distribution.cpp" line="146"/>
         <source>JPG Files (*.jpg);;PNG Files (*.png);;BMP Files (*.bmp);;All Files (*.*)</source>
         <translation>JPG Files (*.jpg);;PNG Files (*.png);;BMP Files (*.bmp);;All Files (*.*)</translation>
     </message>
     <message>
-        <location filename="../kv_distribution.h" line="96"/>
+        <location filename="../kv_distribution.h" line="107"/>
         <source>FA %1</source>
         <translation>ТВС %1</translation>
     </message>
@@ -588,35 +588,33 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>QCoreApplication</name>
     <message>
-        <location filename="../globals.cpp" line="52"/>
         <source>English</source>
-        <translation>Английский</translation>
+        <translation type="vanished">Английский</translation>
     </message>
     <message>
-        <location filename="../globals.cpp" line="56"/>
         <source>Russian</source>
-        <translation>Русский</translation>
+        <translation type="vanished">Русский</translation>
     </message>
 </context>
 <context>
     <name>cFA_Box</name>
     <message>
-        <location filename="../fa_box.cpp" line="316"/>
+        <location filename="../fa_box.cpp" line="324"/>
         <source>No.</source>
         <translation>№</translation>
     </message>
     <message>
-        <location filename="../fa_box.cpp" line="317"/>
+        <location filename="../fa_box.cpp" line="325"/>
         <source>Value</source>
         <translation>Значение</translation>
     </message>
     <message>
-        <location filename="../fa_box.cpp" line="318"/>
+        <location filename="../fa_box.cpp" line="326"/>
         <source>Value 1</source>
         <translation>Значение 1</translation>
     </message>
     <message>
-        <location filename="../fa_box.cpp" line="319"/>
+        <location filename="../fa_box.cpp" line="327"/>
         <source>Value 2</source>
         <translation>Значение 2</translation>
     </message>

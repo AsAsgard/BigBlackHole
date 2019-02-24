@@ -1,4 +1,14 @@
-﻿#include <QColorDialog>
+﻿/*
+ * class KV_Settings (implementation)
+ *
+ * Version 1.5
+ *
+ * Writed by Brylkin Dmitry. 14.12.2018
+ *
+ * Last changed by Brylkin Dmitry. 22.02.2019
+ */
+
+#include <QColorDialog>
 #include "kv_settings.h"
 #include "filebrowser.h"
 #include "globals.h"
