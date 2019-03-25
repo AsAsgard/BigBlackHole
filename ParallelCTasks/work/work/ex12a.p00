@@ -1,0 +1,4 @@
+Netsize: 1, process: 0, system: localhost.localdomain, tick=1.000000e-09
+xa=0.000000e+00 xb=1.000000e+00 ua=1.000000e+00 ub=2.718282e+00 alf=1.000000e+00 eps=1.000000e-13 itm=100 nx=1000000 lp=0
+i1=0 i2=1000000 nc=1000001
+nx=1000000 it=2 time=1.207158e-01 dmax=1.043147e-03
