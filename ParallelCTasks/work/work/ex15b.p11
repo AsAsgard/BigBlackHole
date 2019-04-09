@@ -1,0 +1,6 @@
+Netsize: 16, process: 11, system: localhost.localdomain, tick=1.000000e-09
+Grid=2x8 coord=(1,5)
+i11=65 i12=128 nc1=64
+i21=65 i22=128 nc2=32
+n1=128 n2=256 h1=7.812500e-03 h2=3.906250e-03
+t1=1.295851e+01 dmax=3.137508e-05
